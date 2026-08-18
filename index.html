@@ -177,6 +177,7 @@
       .request-row b { color: var(--green); font-weight: 500; }
       .request-row .path, .request-row .range { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .request-row .path { color: #a6aea6; }
+      .request-row .path i { margin-right: 6px; color: var(--amber); font-style: normal; }
       .request-row .range { color: var(--cyan); }
       .request-row .time { justify-self: end; color: var(--amber); }
       .request-empty { height: 250px; display: grid; place-items: center; color: #444c44; font-size: 10px; }
@@ -385,9 +386,9 @@
         transferred += Number.isFinite(bytes) ? bytes : 0
         requestTotal += 1
         if (range) rangeTotal += 1
-        requests.unshift({ method, path: compactPath(url.pathname), range: range?.replace('bytes=', '') ?? 'complete', elapsed, status: response.status })
-        requests = requests.slice(0, 24)
-        renderRequests()
+        const trace = { method, scope: requestScope(url.pathname), path: compactPath(url.pathname), range: range?.replace('bytes=', '') ?? 'complete', elapsed, status: response.status }
+        requests.push(trace)
+        appendRequest(trace)
         if (url.pathname.endsWith('/index/manifest.json')) setPhase('manifest', 'done', `${response.status} · ${bytes.toLocaleString()} B`)
         return response
       }
@@ -538,6 +539,7 @@
           byId('trace-state').textContent = 'FAULT'
           byId('output').innerHTML = '<div class="empty">$ query failed — inspect SYS output</div>'
         } finally {
+          byId('request-log').scrollTop = 0
           searchButton.disabled = false
         }
       }
@@ -581,10 +583,28 @@
       }
       function defaultPhaseText(name) { return ({ embedding: 'text → 384d in ONNX/WASM', manifest: 'manifest.json', routing: 'global LVQ8 centroid top-nprobe', ranges: 'footer → selected row groups', wasm: 'LVQ8 distance + bounded top-k', source: 'doc_id → Wikipedia rows' })[name] }
       function compactPath(path) { return path.replace('/wiki/', 'wiki/').replace('/assets/', 'assets/') }
+      function requestScope(path) {
+        if (path.includes('/wiki/index/')) return 'INDEX'
+        if (path.endsWith('/wiki/documents.parquet') || path.endsWith('/wiki/source-manifest.json')) return 'SOURCE'
+        if (path.includes('/wiki/models/') || path.endsWith('/wiki/model.json')) return 'MODEL'
+        return 'RUNTIME'
+      }
+      function requestRow(request) {
+        return `<div class="request-row"><b>${request.method}</b><span class="path"><i>${request.scope}</i>${request.status} ${escape(request.path)}</span><span class="range">${escape(request.range)}</span><span class="time">${request.elapsed.toFixed(1)}ms</span></div>`
+      }
       function renderRequests() {
+        const log = byId('request-log')
         byId('request-count').textContent = requestTotal.toLocaleString()
         byId('byte-total').textContent = formatBytes(transferred)
-        byId('request-log').innerHTML = requests.length ? requests.map(request => `<div class="request-row"><b>${request.method}</b><span class="path">${request.status} ${escape(request.path)}</span><span class="range">${escape(request.range)}</span><span class="time">${request.elapsed.toFixed(1)}ms</span></div>`).join('') : '<div class="request-empty">$ waiting for browser requests_</div>'
+        log.innerHTML = requests.length ? requests.map(requestRow).join('') : '<div class="request-empty">$ waiting for browser requests_</div>'
+      }
+      function appendRequest(request) {
+        const log = byId('request-log')
+        if (requests.length === 1) log.innerHTML = ''
+        log.insertAdjacentHTML('beforeend', requestRow(request))
+        byId('request-count').textContent = requestTotal.toLocaleString()
+        byId('byte-total').textContent = formatBytes(transferred)
+        log.scrollTop = log.scrollHeight
       }
       function renderFacts(manifest) { byId('encoding').textContent = manifest.index.postingEncoding.toUpperCase(); byId('dimension').textContent = manifest.index.dimension.toLocaleString(); byId('ntotal').textContent = manifest.index.ntotal.toLocaleString(); byId('nprobe-limit').textContent = `nlist ${manifest.index.nlist.toLocaleString()}`; byId('k-limit').textContent = `max ${Math.min(manifest.index.ntotal, 100).toLocaleString()}` }
       function renderRows(rows) {
