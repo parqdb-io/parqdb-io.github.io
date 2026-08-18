@@ -45,6 +45,30 @@
       button { color: inherit; }
       a { color: inherit; text-decoration: none; }
 
+      .startup {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: rgba(7, 9, 7, .9);
+        backdrop-filter: blur(7px);
+      }
+      .startup[hidden] { display: none; }
+      .startup-panel { width: min(680px, 100%); border: 1px solid #334033; background: #090c09; box-shadow: 0 0 80px rgba(71, 255, 117, .07); }
+      .startup-head { display: flex; justify-content: space-between; gap: 20px; padding: 11px 13px; border-bottom: 1px solid var(--line); color: var(--green); font-size: 10px; letter-spacing: .08em; }
+      .startup-head span:last-child { color: #596259; }
+      .startup-body { padding: 24px 18px 20px; }
+      .startup-stage { color: #dce5dc; font-size: clamp(15px, 3vw, 22px); letter-spacing: -.025em; }
+      .startup-detail { min-height: 34px; margin: 10px 0 18px; color: #747e74; font-size: 10px; line-height: 1.6; overflow-wrap: anywhere; }
+      .startup-track { height: 10px; padding: 2px; border: 1px solid #344034; background: #050705; }
+      .startup-track i { display: block; width: 3%; height: 100%; background: var(--green); box-shadow: 0 0 14px rgba(123,255,158,.45); transition: width .12s linear; }
+      .startup-foot { display: flex; justify-content: space-between; gap: 16px; margin-top: 9px; color: #4f594f; font-size: 9px; }
+      .startup-percent { color: var(--green); }
+      .startup.error .startup-head, .startup.error .startup-percent { color: var(--red); }
+      .startup.error .startup-track i { background: var(--red); box-shadow: none; }
+
       .topbar {
         position: sticky;
         top: 0;
@@ -211,6 +235,17 @@
     </style>
   </head>
   <body>
+    <section class="startup" id="startup" role="status" aria-live="polite" aria-busy="true">
+      <div class="startup-panel">
+        <div class="startup-head"><span>PARQDB / LOCAL MODEL BOOT</span><span>FIRST LOAD IS CACHED</span></div>
+        <div class="startup-body">
+          <div class="startup-stage" id="startup-stage">LOADING TRANSFORMER</div>
+          <div class="startup-detail" id="startup-detail">Preparing the local MiniLM embedding runtime…</div>
+          <div class="startup-track" aria-hidden="true"><i id="startup-bar"></i></div>
+          <div class="startup-foot"><span>QUERY TEXT NEVER LEAVES THIS TAB</span><span class="startup-percent" id="startup-percent">0%</span></div>
+        </div>
+      </div>
+    </section>
     <header class="topbar">
       <strong>PARQDB://CONSOLE</strong>
       <span class="topbar-center">PARQUET_INDEX / HTTP_RANGE / WASM</span>
@@ -317,6 +352,8 @@
       let requestTotal = 0
       let rangeTotal = 0
       let transferred = 0
+      let startupProgress = 0
+      let startupComplete = false
 
       env.allowRemoteModels = false
       env.allowLocalModels = true
@@ -368,13 +405,14 @@
 
       async function embed(text) {
         setPhase('embedding', 'active', embedderPromise ? 'encoding query locally' : 'loading 23 MiB quantized MiniLM')
-        embedderPromise ??= pipeline('feature-extraction', 'all-MiniLM-L6-v2', { quantized: true })
+        embedderPromise ??= pipeline('feature-extraction', 'all-MiniLM-L6-v2', { quantized: true, progress_callback: onModelProgress })
         const extractor = await embedderPromise
         modelMetadataPromise ??= tracedFetch(new URL('./wiki/model.json', location.href)).then(response => {
           if (!response.ok) throw new Error(`model manifest request failed with HTTP ${response.status}`)
           return response.json()
         })
         if (!parityVerified) {
+          updateStartup(96, 'VERIFYING EMBEDDING PARITY', 'Checking the browser vector against the offline index builder…')
           const metadata = await modelMetadataPromise
           const observed = await extractVector(extractor, metadata['parity-probe'].text)
           const expected = metadata['parity-probe'].vector
@@ -382,6 +420,7 @@
           const error = observed.reduce((maximum, value, index) => Math.max(maximum, Math.abs(value - expected[index])), 0)
           if (error > metadata['parity-probe']['max-absolute-error']) throw new Error(`browser/offline embedding mismatch (${error})`)
           parityVerified = true
+          finishStartup()
         }
         const vector = await extractVector(extractor, text)
         if (vector.length !== 384 || vector.some(value => !Number.isFinite(value))) throw new Error('local embedding model returned an invalid vector')
@@ -492,6 +531,7 @@
           if (k !== requestedK) caps.push(`top-k ${requestedK}→${k}`)
           status.textContent = `${rows.length} articles · ${rangeTotal} range requests · ${formatBytes(transferred)} transferred${caps.length ? ` · capped ${caps.join(' / ')}` : ''}`
         } catch (error) {
+          failStartup(error)
           status.className = 'status error'
           status.textContent = error instanceof Error ? error.message : String(error)
           byId('trace-state').textContent = 'FAULT'
@@ -502,6 +542,42 @@
       }
 
       function setPhase(name, state, detail) { phases[name].dataset.state = state; phases[name].querySelector('.phase-detail').textContent = detail }
+      function onModelProgress(event) {
+        if (startupComplete) return
+        const file = String(event.file ?? '')
+        if (event.status === 'progress' && Number.isFinite(event.loaded) && Number.isFinite(event.total) && event.total > 0) {
+          const fileProgress = event.loaded / event.total
+          const percent = file.endsWith('.onnx') ? 8 + fileProgress * 84 : 3 + fileProgress * 5
+          const label = file.split('/').at(-1) || 'model data'
+          updateStartup(percent, 'DOWNLOADING LOCAL TRANSFORMER', `${label} · ${formatBytes(event.loaded)} / ${formatBytes(event.total)}`)
+        } else if (event.status === 'ready') {
+          updateStartup(94, 'INITIALIZING ONNX / WASM', 'Model files loaded. Initializing the local inference graph…')
+        } else if (event.status === 'initiate' && startupProgress < 3) {
+          updateStartup(3, 'LOCATING MODEL FILES', file || 'MiniLM model manifest')
+        }
+      }
+      function updateStartup(percent, stage, detail) {
+        if (startupComplete) return
+        startupProgress = Math.max(startupProgress, Math.min(100, percent))
+        byId('startup-stage').textContent = stage
+        byId('startup-detail').textContent = detail
+        byId('startup-bar').style.width = `${startupProgress}%`
+        byId('startup-percent').textContent = `${Math.round(startupProgress)}%`
+      }
+      function finishStartup() {
+        if (startupComplete) return
+        updateStartup(100, 'LOCAL EMBEDDING READY', 'MiniLM parity verified. Executing the first query…')
+        startupComplete = true
+        byId('startup').setAttribute('aria-busy', 'false')
+        setTimeout(() => { byId('startup').hidden = true }, 320)
+      }
+      function failStartup(error) {
+        if (startupComplete) return
+        const message = error instanceof Error ? error.message : String(error)
+        byId('startup').classList.add('error')
+        updateStartup(100, 'MODEL BOOT FAILED', message)
+        byId('startup').setAttribute('aria-busy', 'false')
+      }
       function defaultPhaseText(name) { return ({ embedding: 'text → 384d in ONNX/WASM', manifest: 'manifest.json', routing: 'global LVQ8 centroid top-nprobe', ranges: 'footer → selected row groups', wasm: 'LVQ8 distance + bounded top-k', source: 'doc_id → Wikipedia rows' })[name] }
       function compactPath(path) { return path.replace('/wiki/', 'wiki/').replace('/assets/', 'assets/') }
       function renderRequests() {
