@@ -10,7 +10,8 @@ database server is involved.
 
 ## Deployment
 
-The Pages workflow builds a pinned ParqDB revision, packages the browser client,
+The demo page is maintained in [`index.html`](./index.html). The Pages workflow
+combines it with a pinned ParqDB revision, packages the browser client,
 WebAssembly kernel, and conformance fixtures, then deploys the static artifact
 with GitHub Pages.
 

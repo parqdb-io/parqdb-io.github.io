@@ -23,6 +23,12 @@ jobs:
     timeout-minutes: 20
 
     steps:
+      - name: Check out demo source
+        uses: actions/checkout@v4
+        with:
+          path: site
+          persist-credentials: false
+
       - name: Check out pinned ParqDB source
         uses: actions/checkout@v4
         with:
@@ -30,6 +36,9 @@ jobs:
           ref: ${{ env.PARQDB_REVISION }}
           path: parqdb
           persist-credentials: false
+
+      - name: Install demo entry point
+        run: cp site/index.html parqdb/browser/demo/index.html
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
