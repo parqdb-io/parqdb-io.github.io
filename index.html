@@ -198,7 +198,7 @@
   <body>
     <header class="topbar">
       <strong>PARQDB://CONSOLE</strong>
-      <span class="topbar-center">STATIC_HTTP_INDEX_PACKAGE_V1</span>
+      <span class="topbar-center">PARQUET_INDEX / HTTP_RANGE / WASM</span>
       <span class="topbar-right"><span><i class="pulse"></i> CLIENT ONLINE</span><a class="repo-link" href="https://github.com/parqdb-io/parqdb" target="_blank" rel="noreferrer">GITHUB ↗</a></span>
     </header>
 
@@ -217,7 +217,7 @@
         <aside class="pane controls">
           <div class="pane-head"><span>01 / query input</span><code>ctrl+enter to run</code></div>
           <form class="form" id="query-form">
-            <div class="field"><label for="manifest">PACKAGE URI <span>immutable manifest</span></label><input id="manifest" value="./fixtures/lvq8/manifest.json" spellcheck="false" autocapitalize="off" /></div>
+            <div class="field"><label for="manifest">INDEX URL <span>manifest.json</span></label><input id="manifest" value="./fixtures/lvq8/manifest.json" spellcheck="false" autocapitalize="off" /></div>
             <div class="field"><label for="query">QUERY VECTOR <span>float32[]</span></label><input id="query" value="0, 0, 0" spellcheck="false" inputmode="decimal" /></div>
             <div class="pair">
               <div class="field"><label for="nprobe">NPROBE</label><input id="nprobe" type="number" min="1" value="1" /></div>
@@ -231,7 +231,7 @@
               <div class="kv"><span>transport</span><b>HTTP RANGE</b></div>
               <div class="kv"><span>compute</span><b>LOCAL WASM</b></div>
             </div>
-            <p class="status" id="status">Ready. No package loaded.</p>
+            <p class="status" id="status">Ready. No index loaded.</p>
           </form>
         </aside>
 
@@ -323,7 +323,7 @@
         searchButton.disabled = true
         byId('trace-state').textContent = 'EXECUTING'
         status.className = 'status'
-        status.textContent = 'Opening immutable package…'
+        status.textContent = 'Opening remote index…'
         byId('latency').textContent = ''
         byId('query-time').textContent = '—'
         byId('cid-count').textContent = '—'
