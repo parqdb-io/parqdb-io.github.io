@@ -255,8 +255,8 @@
     <main>
       <section class="boot">
         <div class="prompt">100,000 Wikipedia articles online</div>
-        <h1>SEARCH WIKIPEDIA. THE DATABASE IS THIS TAB.</h1>
-        <p class="boot-copy">Type a question. Your browser embeds it with the same MiniLM ONNX model used to build the index, reads only the necessary Parquet byte ranges, ranks LVQ8 vectors in WASM, and fetches the matching articles by integer <code>doc_id</code>. <b>No query server sees your text.</b></p>
+        <h1>SEARCH WIKIPEDIA. YOUR BROWSER IS THE QUERY ENGINE.</h1>
+        <p class="boot-copy">Type a question to search 100,000 Wikipedia articles. ParqDB indexes their MiniLM embeddings with IVF-LVQ8, and the immutable Parquet index is published to object storage. Your browser embeds the query, reads only the required byte ranges, and ranks results in WASM. <b>No query server sees your data.</b></p>
         <div class="routes" aria-label="Architecture comparison">
           <div class="route legacy"><span class="route-name">LEGACY</span><span class="route-path">browser ──<del>RPC──&gt; vector DB</del> ──GET──&gt; object storage</span><span class="route-state">RPC + DB ×</span></div>
           <div class="route direct"><span class="route-name">PARQDB</span><span class="route-path">browser + WASM ──HTTP RANGE──&gt; object storage / Parquet</span><span class="route-state">DIRECT</span></div>
