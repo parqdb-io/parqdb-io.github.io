@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#070907" />
+    <meta name="description" content="Search a 100,000-article ParqDB index directly in the browser with MiniLM, HTTP Range, Parquet, and WebAssembly." />
+    <meta property="og:title" content="ParqDB // Browser-native vector search" />
+    <meta property="og:description" content="No query server: embed, route, prune, rank, and look up Wikipedia results inside the browser." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://parqdb-io.github.io/" />
     <title>ParqDB // HTTP index console</title>
     <style>
       :root {
@@ -156,6 +161,14 @@
       .result-head { height: 42px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; border-bottom: 1px solid var(--line); color: #8e978e; font-size: 10px; }
       .latency { color: var(--green); }
       .table-wrap { min-height: 150px; overflow-x: auto; }
+      .result-card { display: grid; grid-template-columns: 58px minmax(0,1fr) auto; gap: 14px; padding: 15px 14px; border-bottom: 1px solid #1a1f1a; }
+      .result-rank { color: #4f584f; font-size: 10px; }
+      .result-body { min-width: 0; }
+      .result-title { display: inline-block; color: #d8e1d8; font-size: 12px; }
+      .result-title:hover, .result-title:focus-visible { color: var(--green); }
+      .result-text { display: -webkit-box; margin: 7px 0 0; overflow: hidden; color: #788278; font-size: 10px; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+      .result-meta { color: var(--green); font-size: 9px; text-align: right; white-space: nowrap; }
+      .result-meta small { display: block; margin-top: 6px; color: #515a51; }
       table { width: 100%; border-collapse: collapse; font-size: 10px; }
       th, td { padding: 11px 14px; border-bottom: 1px solid #1a1f1a; text-align: left; white-space: nowrap; }
       th { color: #596159; font-size: 8px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
@@ -187,6 +200,8 @@
         .request-row { grid-template-columns: 44px minmax(0,1fr) 55px; padding: 7px 10px; }
         .request-row .range { grid-column: 2 / 4; font-size: 8px; }
         .request-row .time { grid-column: 3; grid-row: 1; }
+        .result-card { grid-template-columns: 28px minmax(0,1fr); gap: 8px; padding: 13px 10px; }
+        .result-meta { grid-column: 2; text-align: left; }
         .footer { align-items: flex-start; flex-direction: column; gap: 4px; padding: 12px 10px calc(12px + env(safe-area-inset-bottom)); }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -204,9 +219,9 @@
 
     <main>
       <section class="boot">
-        <div class="prompt">live query attached</div>
-        <h1>THIS QUERY NEVER HITS A VECTOR DATABASE.</h1>
-        <p class="boot-copy">It runs in this tab. ParqDB reads selected Parquet byte ranges straight from object storage, ranks candidates in WASM, and accounts for every transferred byte below. <b>Change the query and execute it yourself.</b></p>
+        <div class="prompt">100,000 Wikipedia articles online</div>
+        <h1>SEARCH WIKIPEDIA. THE DATABASE IS THIS TAB.</h1>
+        <p class="boot-copy">Type a question. Your browser embeds it with the same MiniLM ONNX model used to build the index, reads only the necessary Parquet byte ranges, ranks LVQ8 vectors in WASM, and fetches the matching articles by integer <code>doc_id</code>. <b>No query server sees your text.</b></p>
         <div class="routes" aria-label="Architecture comparison">
           <div class="route legacy"><span class="route-name">LEGACY</span><span class="route-path">browser ──<del>RPC──&gt; vector DB</del> ──GET──&gt; object storage</span><span class="route-state">RPC + DB ×</span></div>
           <div class="route direct"><span class="route-name">PARQDB</span><span class="route-path">browser + WASM ──HTTP RANGE──&gt; object storage / Parquet</span><span class="route-state">DIRECT</span></div>
@@ -217,17 +232,18 @@
         <aside class="pane controls">
           <div class="pane-head"><span>01 / query input</span><code>ctrl+enter to run</code></div>
           <form class="form" id="query-form">
-            <div class="field"><label for="manifest">INDEX URL <span>manifest.json</span></label><input id="manifest" value="https://parqdb-io.github.io/fixtures/lvq8/manifest.json" spellcheck="false" autocapitalize="off" /></div>
-            <div class="field"><label for="query">QUERY VECTOR <span>float32[]</span></label><input id="query" value="0, 0, 0" spellcheck="false" inputmode="decimal" /></div>
+            <div class="field"><label for="query">SEARCH TEXT <span>local MiniLM embedding</span></label><input id="query" value="How do anarchist movements view political authority?" spellcheck="true" /></div>
+            <div class="field"><label for="manifest">IMMUTABLE INDEX <span>manifest.json</span></label><input id="manifest" value="https://parqdb-io.github.io/wiki/index/manifest.json" readonly spellcheck="false" /></div>
             <div class="pair">
-              <div class="field"><label for="nprobe">NPROBE <span id="nprobe-limit">nlist 2</span></label><input id="nprobe" type="number" min="1" value="1" /></div>
-              <div class="field"><label for="k">TOP_K <span id="k-limit">max 3</span></label><input id="k" type="number" min="1" value="2" /></div>
+              <div class="field"><label for="nprobe">NPROBE <span id="nprobe-limit">nlist 4,096</span></label><input id="nprobe" type="number" min="1" value="64" /></div>
+              <div class="field"><label for="k">TOP_K <span id="k-limit">max 100</span></label><input id="k" type="number" min="1" value="10" /></div>
             </div>
-            <div class="actions"><button class="run" id="search" type="submit">EXECUTE QUERY ↵</button><button id="lvq4" type="button">USE LVQ4</button></div>
+            <div class="actions"><button class="run" id="search" type="submit">SEARCH LOCALLY ↵</button><button id="random" type="button">TRY QUERY</button></div>
             <div class="package-info">
               <div class="kv"><span>encoding</span><b id="encoding">—</b></div>
               <div class="kv"><span>dimension</span><b id="dimension">—</b></div>
-              <div class="kv"><span>rows</span><b id="ntotal">—</b></div>
+              <div class="kv"><span>articles</span><b id="ntotal">—</b></div>
+              <div class="kv"><span>embedding</span><b>MINILM / ONNX</b></div>
               <div class="kv"><span>transport</span><b>HTTP RANGE</b></div>
               <div class="kv"><span>compute</span><b>LOCAL WASM</b></div>
             </div>
@@ -245,10 +261,12 @@
             <div class="metric"><span>query time</span><b class="accent" id="query-time">—</b></div>
           </div>
           <div class="plan" aria-label="Query execution plan">
-            <div class="plan-row" id="phase-manifest" data-step="00" data-state="idle"><span class="phase-name">DISCOVER</span><span class="phase-detail">manifest.json</span><span class="phase-status"></span></div>
-            <div class="plan-row" id="phase-routing" data-step="01" data-state="idle"><span class="phase-name">ROUTE</span><span class="phase-detail">global centroid top-nprobe</span><span class="phase-status"></span></div>
-            <div class="plan-row" id="phase-ranges" data-step="02" data-state="idle"><span class="phase-name">PRUNE</span><span class="phase-detail">footer → selected row groups</span><span class="phase-status"></span></div>
-            <div class="plan-row" id="phase-wasm" data-step="03" data-state="idle"><span class="phase-name">RANK</span><span class="phase-detail">LVQ distance + bounded top-k</span><span class="phase-status"></span></div>
+            <div class="plan-row" id="phase-embedding" data-step="00" data-state="idle"><span class="phase-name">EMBED</span><span class="phase-detail">text → 384d in ONNX/WASM</span><span class="phase-status"></span></div>
+            <div class="plan-row" id="phase-manifest" data-step="01" data-state="idle"><span class="phase-name">DISCOVER</span><span class="phase-detail">manifest.json</span><span class="phase-status"></span></div>
+            <div class="plan-row" id="phase-routing" data-step="02" data-state="idle"><span class="phase-name">ROUTE</span><span class="phase-detail">global LVQ8 centroid top-nprobe</span><span class="phase-status"></span></div>
+            <div class="plan-row" id="phase-ranges" data-step="03" data-state="idle"><span class="phase-name">PRUNE</span><span class="phase-detail">footer → selected row groups</span><span class="phase-status"></span></div>
+            <div class="plan-row" id="phase-wasm" data-step="04" data-state="idle"><span class="phase-name">RANK</span><span class="phase-detail">LVQ8 distance + bounded top-k</span><span class="phase-status"></span></div>
+            <div class="plan-row" id="phase-source" data-step="05" data-state="idle"><span class="phase-name">LOOKUP</span><span class="phase-detail">doc_id → Wikipedia rows</span><span class="phase-status"></span></div>
           </div>
           <div class="activity">
             <div class="pane-head"><span>03 / HTTP trace</span><code>METHOD · OBJECT · BYTE RANGE · RTT</code></div>
@@ -258,34 +276,61 @@
       </section>
 
       <section class="results">
-        <div class="result-head"><span>04 / RESULT SET · SOURCE KEYS + _DISTANCE</span><span class="latency" id="latency"></span></div>
+        <div class="result-head"><span>04 / WIKIPEDIA RESULTS · RANGE-LOOKED-UP BY DOC_ID</span><span class="latency" id="latency"></span></div>
         <div class="table-wrap" id="output"><div class="empty">$ no rows materialized</div></div>
       </section>
-      <footer class="footer"><span><b>NO LIST</b> · NO API · NO REMOTE COMPUTE</span><span><a class="repo-link" href="https://github.com/parqdb-io/parqdb" target="_blank" rel="noreferrer">SOURCE ON GITHUB ↗</a> · HTTP RANGE / PARQUET / WEBASSEMBLY</span></footer>
+      <footer class="footer"><span><b>100K ENGLISH WIKIPEDIA LEADS</b> · CC BY-SA 3.0 / GFDL</span><span><a class="repo-link" href="https://github.com/parqdb-io/parqdb" target="_blank" rel="noreferrer">PARQDB ON GITHUB ↗</a> · HTTP RANGE / PARQUET / WEBASSEMBLY</span></footer>
     </main>
 
     <script type="module">
-      import { ParqDB } from '../src/index.ts'
+      import { env, pipeline } from '@xenova/transformers'
+      import { parquetMetadataAsync, parquetReadObjects } from 'hyparquet'
+      import { compressors } from 'hyparquet-compressors'
+      import { ParqDB } from '@parqdb/index'
+      import { HttpRangeBuffer } from '@parqdb/http'
 
+      const nativeFetch = globalThis.fetch.bind(globalThis)
       const byId = id => document.getElementById(id)
       const manifestInput = byId('manifest')
       const searchButton = byId('search')
       const status = byId('status')
-      const phases = { manifest: byId('phase-manifest'), routing: byId('phase-routing'), ranges: byId('phase-ranges'), wasm: byId('phase-wasm') }
+      const phases = {
+        embedding: byId('phase-embedding'), manifest: byId('phase-manifest'),
+        routing: byId('phase-routing'), ranges: byId('phase-ranges'),
+        wasm: byId('phase-wasm'), source: byId('phase-source'),
+      }
+      const sampleQueries = [
+        'How do anarchist movements view political authority?',
+        'spacecraft missions that explored the outer planets',
+        'women who made foundational discoveries in physics',
+        'ancient cities destroyed by volcanic eruptions',
+        'how neural networks learn representations from data',
+      ]
       let wasm
+      let embedderPromise
+      let modelMetadataPromise
+      let parityVerified = false
       let openedIndex
       let openedUrl = ''
+      let sourcePromise
       let requests = []
+      let requestTotal = 0
+      let rangeTotal = 0
       let transferred = 0
+
+      env.allowRemoteModels = false
+      env.allowLocalModels = true
+      env.localModelPath = new URL('./wiki/models/', location.href).href
+      env.backends.onnx.wasm.wasmPaths = new URL('./ort/', location.href).href
+      globalThis.fetch = tracedFetch
 
       byId('query-form').addEventListener('submit', event => { event.preventDefault(); run() })
       document.addEventListener('keydown', event => {
         if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { event.preventDefault(); run() }
       })
-      byId('lvq4').addEventListener('click', () => {
-        manifestInput.value = 'https://parqdb-io.github.io/fixtures/lvq4/manifest.json'
-        openedIndex = undefined
-        openedUrl = ''
+      byId('random').addEventListener('click', () => {
+        const current = byId('query').value
+        byId('query').value = sampleQueries[(sampleQueries.indexOf(current) + 1) % sampleQueries.length]
         run()
       })
 
@@ -295,75 +340,157 @@
         const range = request.headers.get('range')
         const method = range ? 'RANGE' : 'GET'
         const started = performance.now()
-        if (url.pathname.endsWith('/manifest.json') && !url.pathname.includes('/ivf_postings/')) setPhase('manifest', 'active', 'GET manifest.json')
-        const response = await fetch(request)
+        if (url.pathname.endsWith('/index/manifest.json')) setPhase('manifest', 'active', 'GET index/manifest.json')
+        const response = await nativeFetch(request)
         const elapsed = performance.now() - started
         const bytes = Number(response.headers.get('content-length') ?? 0)
         transferred += Number.isFinite(bytes) ? bytes : 0
+        requestTotal += 1
+        if (range) rangeTotal += 1
         requests.unshift({ method, path: compactPath(url.pathname), range: range?.replace('bytes=', '') ?? 'complete', elapsed, status: response.status })
         requests = requests.slice(0, 24)
         renderRequests()
-        if (url.pathname.endsWith('/manifest.json') && !url.pathname.includes('/ivf_postings/')) setPhase('manifest', 'done', `${response.status} · ${bytes} B`)
+        if (url.pathname.endsWith('/index/manifest.json')) setPhase('manifest', 'done', `${response.status} · ${bytes.toLocaleString()} B`)
         return response
       }
 
       function onTrace(event) {
         if (event.phase === 'routing') {
-          setPhase('routing', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.selectedCids} CIDs selected` : 'loading leaf centroids')
+          setPhase('routing', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.selectedCids} CIDs selected globally` : 'loading LVQ8 leaf centroids')
           if (event.selectedCids !== undefined) byId('cid-count').textContent = event.selectedCids.toLocaleString()
         } else if (event.phase === 'planning') {
           setPhase('ranges', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.files} files / ${event.candidateRows} rows` : `${event.files} candidate files`)
           if (event.candidateRows !== undefined) byId('candidate-count').textContent = event.candidateRows.toLocaleString()
         } else {
-          setPhase('wasm', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.candidateRows} vectors ranked` : 'executing distance kernel')
+          setPhase('wasm', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.candidateRows} LVQ8 vectors ranked` : 'executing WASM distance kernel')
         }
       }
 
+      async function embed(text) {
+        setPhase('embedding', 'active', embedderPromise ? 'encoding query locally' : 'loading 23 MiB quantized MiniLM')
+        embedderPromise ??= pipeline('feature-extraction', 'all-MiniLM-L6-v2', { quantized: true })
+        const extractor = await embedderPromise
+        modelMetadataPromise ??= tracedFetch(new URL('./wiki/model.json', location.href)).then(response => {
+          if (!response.ok) throw new Error(`model manifest request failed with HTTP ${response.status}`)
+          return response.json()
+        })
+        if (!parityVerified) {
+          const metadata = await modelMetadataPromise
+          const observed = await extractVector(extractor, metadata['parity-probe'].text)
+          const expected = metadata['parity-probe'].vector
+          if (observed.length !== expected.length) throw new Error('embedding parity probe has the wrong dimension')
+          const error = observed.reduce((maximum, value, index) => Math.max(maximum, Math.abs(value - expected[index])), 0)
+          if (error > metadata['parity-probe']['max-absolute-error']) throw new Error(`browser/offline embedding mismatch (${error})`)
+          parityVerified = true
+        }
+        const vector = await extractVector(extractor, text)
+        if (vector.length !== 384 || vector.some(value => !Number.isFinite(value))) throw new Error('local embedding model returned an invalid vector')
+        setPhase('embedding', 'done', '384d · parity verified · L2 normalized')
+        return vector
+      }
+
+      async function extractVector(extractor, text) {
+        const output = await extractor(text, { pooling: 'mean', normalize: true })
+        return Float32Array.from(output.data)
+      }
+
+      async function openSource() {
+        sourcePromise ??= (async () => {
+          const url = new URL('./wiki/source-manifest.json', location.href)
+          const response = await tracedFetch(url)
+          if (!response.ok) throw new Error(`source manifest request failed with HTTP ${response.status}`)
+          const manifest = await response.json()
+          if (manifest['format-version'] !== 1 || manifest.key?.name !== 'doc_id') throw new Error('invalid source manifest')
+          const objectUrl = new URL(manifest.object.path, url)
+          const file = new HttpRangeBuffer(objectUrl, manifest.object.size, { fetch: tracedFetch })
+          const metadata = await parquetMetadataAsync(file)
+          if (Number(metadata.num_rows) !== manifest.rows) throw new Error('source row count does not match manifest')
+          return { manifest, file, metadata }
+        })()
+        return sourcePromise
+      }
+
+      async function lookupDocuments(hits) {
+        setPhase('source', 'active', 'planning integer doc_id row groups')
+        const source = await openSource()
+        const ids = new Set(hits.map(hit => Number(hit.doc_id)))
+        const groups = [...new Set([...ids].map(id => Math.floor(id / source.manifest['row-group-rows'])))].sort((a, b) => a - b)
+        const starts = []
+        let row = 0
+        for (const group of source.metadata.row_groups) { starts.push(row); row += Number(group.num_rows) }
+        const documents = new Map()
+        for (let offset = 0; offset < groups.length; offset += 6) {
+          const batches = await Promise.all(groups.slice(offset, offset + 6).map(async group => {
+            if (group < 0 || group >= starts.length) throw new Error('doc_id is outside source row groups')
+            return parquetReadObjects({
+              file: source.file, metadata: source.metadata, compressors,
+              columns: ['doc_id', 'page_id', 'title', 'text', 'url'],
+              rowStart: starts[group], rowEnd: starts[group] + Number(source.metadata.row_groups[group].num_rows),
+            })
+          }))
+          for (const batch of batches) for (const document of batch) {
+            const id = Number(document.doc_id)
+            if (ids.has(id)) documents.set(id, document)
+          }
+        }
+        const rows = hits.map(hit => {
+          const id = Number(hit.doc_id)
+          const document = documents.get(id)
+          if (!document) throw new Error(`source row missing for doc_id ${id}`)
+          return { ...document, doc_id: id, _distance: hit._distance }
+        })
+        setPhase('source', 'done', `${rows.length} rows · ${groups.length} row groups · concurrency 6`)
+        return rows
+      }
+
       async function run() {
+        if (searchButton.disabled) return
         searchButton.disabled = true
         byId('trace-state').textContent = 'EXECUTING'
         status.className = 'status'
-        status.textContent = 'Opening remote index…'
+        status.textContent = 'Embedding your text in this tab…'
         byId('latency').textContent = ''
         byId('query-time').textContent = '—'
         byId('cid-count').textContent = '—'
         byId('candidate-count').textContent = '—'
-        requests = []
-        transferred = 0
+        requests = []; requestTotal = 0; rangeTotal = 0; transferred = 0
         renderRequests()
         Object.keys(phases).forEach(name => setPhase(name, 'idle', defaultPhaseText(name)))
         try {
+          const text = byId('query').value.trim()
+          if (!text) throw new Error('search text must not be empty')
+          const totalStarted = performance.now()
+          const embeddingStarted = performance.now()
+          const vector = await embed(text)
+          const embeddingMs = performance.now() - embeddingStarted
           const manifestUrl = new URL(manifestInput.value, location.href)
-          let openMs
           if (openedIndex === undefined || openedUrl !== manifestUrl.href) {
-            const openStarted = performance.now()
-            wasm ??= await fetch(new URL('./parqdb_browser_kernels.wasm', location.href)).then(response => response.arrayBuffer())
-            openedIndex = await ParqDB.open(manifestUrl, { wasm, allowHttp: true, fetch: tracedFetch })
+            wasm ??= await tracedFetch(new URL('./parqdb_browser_kernels.wasm', location.href)).then(response => response.arrayBuffer())
+            openedIndex = await ParqDB.open(manifestUrl, { wasm, fetch: tracedFetch })
             openedUrl = manifestUrl.href
-            openMs = performance.now() - openStarted
           } else {
-            setPhase('manifest', 'done', 'metadata cache hit')
+            setPhase('manifest', 'done', 'index metadata cache hit')
           }
-          const vector = byId('query').value.split(',').map(value => Number(value.trim()))
-          const queryStarted = performance.now()
           const requestedNprobe = Number(byId('nprobe').value)
           const requestedK = Number(byId('k').value)
-          const nprobe = Math.min(requestedNprobe, openedIndex.manifest.index.nlist)
-          const k = Math.min(requestedK, openedIndex.manifest.index.ntotal, 100)
+          const nprobe = Math.min(Math.max(1, requestedNprobe), openedIndex.manifest.index.nlist)
+          const k = Math.min(Math.max(1, requestedK), openedIndex.manifest.index.ntotal, 100)
           byId('nprobe').value = String(nprobe)
           byId('k').value = String(k)
+          const searchStarted = performance.now()
           const hits = await openedIndex.search(vector, { nprobe, k, trace: onTrace })
-          const queryMs = performance.now() - queryStarted
+          const searchMs = performance.now() - searchStarted
+          const rows = await lookupDocuments(hits)
+          const totalMs = performance.now() - totalStarted
           renderFacts(openedIndex.manifest)
-          renderRows(hits)
-          byId('query-time').textContent = `${queryMs.toFixed(1)} ms`
-          byId('latency').textContent = openMs === undefined ? `${queryMs.toFixed(1)} ms / CACHE HIT` : `${openMs.toFixed(1)} ms OPEN / ${queryMs.toFixed(1)} ms QUERY`
+          renderRows(rows)
+          byId('query-time').textContent = `${totalMs.toFixed(1)} ms`
+          byId('latency').textContent = `${embeddingMs.toFixed(1)} ms EMBED / ${searchMs.toFixed(1)} ms SEARCH / ${totalMs.toFixed(1)} ms TOTAL`
           byId('trace-state').textContent = 'COMPLETE'
-          const rangeCount = requests.filter(request => request.method === 'RANGE').length
           const caps = []
           if (nprobe !== requestedNprobe) caps.push(`nprobe ${requestedNprobe}→${nprobe}`)
           if (k !== requestedK) caps.push(`top-k ${requestedK}→${k}`)
-          status.textContent = `${hits.length.toLocaleString()} hits · ${rangeCount.toLocaleString()} range requests · ${formatBytes(transferred)} transferred${caps.length ? ` · capped ${caps.join(' / ')}` : ''}`
+          status.textContent = `${rows.length} articles · ${rangeTotal} range requests · ${formatBytes(transferred)} transferred${caps.length ? ` · capped ${caps.join(' / ')}` : ''}`
         } catch (error) {
           status.className = 'status error'
           status.textContent = error instanceof Error ? error.message : String(error)
@@ -375,20 +502,19 @@
       }
 
       function setPhase(name, state, detail) { phases[name].dataset.state = state; phases[name].querySelector('.phase-detail').textContent = detail }
-      function defaultPhaseText(name) { return ({ manifest: 'manifest.json', routing: 'global centroid top-nprobe', ranges: 'footer → selected row groups', wasm: 'LVQ distance + bounded top-k' })[name] }
-      function compactPath(path) { return path.replace('/fixtures/lvq8/', '').replace('/fixtures/lvq4/', '') }
+      function defaultPhaseText(name) { return ({ embedding: 'text → 384d in ONNX/WASM', manifest: 'manifest.json', routing: 'global LVQ8 centroid top-nprobe', ranges: 'footer → selected row groups', wasm: 'LVQ8 distance + bounded top-k', source: 'doc_id → Wikipedia rows' })[name] }
+      function compactPath(path) { return path.replace('/wiki/', 'wiki/').replace('/assets/', 'assets/') }
       function renderRequests() {
-        byId('request-count').textContent = requests.length.toLocaleString()
+        byId('request-count').textContent = requestTotal.toLocaleString()
         byId('byte-total').textContent = formatBytes(transferred)
-        byId('request-log').innerHTML = requests.length ? requests.map(request => `<div class="request-row"><b>${request.method}</b><span class="path">${request.status} ${escape(request.path)}</span><span class="range">${escape(request.range)}</span><span class="time">${request.elapsed.toFixed(1)}ms</span></div>`).join('') : '<div class="request-empty">$ waiting for range requests_</div>'
+        byId('request-log').innerHTML = requests.length ? requests.map(request => `<div class="request-row"><b>${request.method}</b><span class="path">${request.status} ${escape(request.path)}</span><span class="range">${escape(request.range)}</span><span class="time">${request.elapsed.toFixed(1)}ms</span></div>`).join('') : '<div class="request-empty">$ waiting for browser requests_</div>'
       }
       function renderFacts(manifest) { byId('encoding').textContent = manifest.index.postingEncoding.toUpperCase(); byId('dimension').textContent = manifest.index.dimension.toLocaleString(); byId('ntotal').textContent = manifest.index.ntotal.toLocaleString(); byId('nprobe-limit').textContent = `nlist ${manifest.index.nlist.toLocaleString()}`; byId('k-limit').textContent = `max ${Math.min(manifest.index.ntotal, 100).toLocaleString()}` }
       function renderRows(rows) {
         if (!rows.length) { byId('output').innerHTML = '<div class="empty">$ query returned 0 rows</div>'; return }
-        const columns = Object.keys(rows[0])
-        byId('output').innerHTML = `<table><thead><tr>${columns.map(column => `<th>${escape(column)}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${columns.map(column => `<td>${escape(format(row[column]))}</td>`).join('')}</tr>`).join('')}</tbody></table>`
+        byId('output').innerHTML = rows.map((row, index) => `<article class="result-card"><span class="result-rank">${String(index + 1).padStart(2, '0')}</span><div class="result-body"><a class="result-title" href="${escape(wikipediaUrl(row.url))}" target="_blank" rel="noreferrer">${escape(String(row.title))} ↗</a><p class="result-text">${escape(String(row.text))}</p></div><span class="result-meta">d=${Number(row._distance).toFixed(5)}<small>doc_id ${row.doc_id}</small></span></article>`).join('')
       }
-      function format(value) { if (typeof value === 'number') return Number.isInteger(value) ? String(value) : value.toFixed(6); if (typeof value === 'bigint') return value.toString(); if (value instanceof Uint8Array) return [...value].map(byte => byte.toString(16).padStart(2,'0')).join(''); return String(value) }
+      function wikipediaUrl(value) { try { const url = new URL(String(value)); return url.protocol === 'https:' && (url.hostname === 'wikipedia.org' || url.hostname.endsWith('.wikipedia.org')) ? url.href : '#' } catch { return '#' } }
       function formatBytes(bytes) { if (bytes < 1024) return `${bytes} B`; if (bytes < 1048576) return `${(bytes/1024).toFixed(1)} KiB`; return `${(bytes/1048576).toFixed(1)} MiB` }
       function escape(value) { return value.replace(/[&<>"']/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]) }
 

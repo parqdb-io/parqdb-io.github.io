@@ -1,0 +1,678 @@
+{
+  "format-version": 1,
+  "package-uuid": "700e9cae-e47d-5c58-ac38-733cfb0e4b93",
+  "index": {
+    "metric": "cosine",
+    "posting-encoding": "lvq8",
+    "dimension": 384,
+    "nlist": 4096,
+    "ntotal": 100000,
+    "source-key-fields": [
+      {
+        "name": "doc_id",
+        "type": "long"
+      }
+    ]
+  },
+  "hierarchy": {
+    "root-count": 64,
+    "cid-offsets": [
+      0,
+      70,
+      109,
+      162,
+      262,
+      329,
+      404,
+      472,
+      539,
+      620,
+      659,
+      746,
+      781,
+      900,
+      984,
+      1032,
+      1067,
+      1128,
+      1220,
+      1280,
+      1337,
+      1408,
+      1473,
+      1534,
+      1613,
+      1678,
+      1715,
+      1787,
+      1830,
+      1870,
+      1919,
+      1987,
+      2099,
+      2152,
+      2220,
+      2242,
+      2291,
+      2375,
+      2420,
+      2510,
+      2593,
+      2675,
+      2712,
+      2771,
+      2816,
+      2930,
+      3030,
+      3144,
+      3269,
+      3317,
+      3373,
+      3403,
+      3459,
+      3539,
+      3591,
+      3649,
+      3684,
+      3752,
+      3833,
+      3855,
+      3901,
+      3940,
+      4008,
+      4040,
+      4096
+    ],
+    "centroid-encoding": "lvq8",
+    "roots": {
+      "path": "roots.parquet",
+      "size": 139775,
+      "sha256": "74d8e78c436116c3b32139135148f90184eacfb2267da3fbb5f7c1bc6f6f4a3a"
+    },
+    "centroids": {
+      "path": "centroids.parquet",
+      "size": 1632169,
+      "sha256": "f13801087aeff1b436f6de3a2ccc13c88e9977afc0baa5363bf8a67b3f5c249e"
+    }
+  },
+  "postings": {
+    "files": [
+      {
+        "path": "ivf_postings/cid_bucket=000000/part-00000.parquet",
+        "cid-bucket": 0,
+        "min-cid": 0,
+        "max-cid": 69,
+        "rows": 1791,
+        "size": 767159,
+        "sha256": "da5c8d8cc4fbd69f78de4fdcc96311dbf813bd19c2c30f433043878e1ef2babf"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000001/part-00000.parquet",
+        "cid-bucket": 1,
+        "min-cid": 70,
+        "max-cid": 108,
+        "rows": 918,
+        "size": 396733,
+        "sha256": "45b7aea493f1e0776530dfcb81cbb946ef52d9127f894b2668dd95d9b180e69d"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000002/part-00000.parquet",
+        "cid-bucket": 2,
+        "min-cid": 109,
+        "max-cid": 161,
+        "rows": 1326,
+        "size": 569849,
+        "sha256": "63fc73c2798f765f1bba4a863e8df9c5a119bb4c40a0337f7ccf3f3093859cd9"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000003/part-00000.parquet",
+        "cid-bucket": 3,
+        "min-cid": 162,
+        "max-cid": 261,
+        "rows": 2433,
+        "size": 1048103,
+        "sha256": "c76816b6a76d497cee40ff76b9f0513a4f56a5edab5f5140f92d0be1d2c9e48b"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000004/part-00000.parquet",
+        "cid-bucket": 4,
+        "min-cid": 262,
+        "max-cid": 328,
+        "rows": 1630,
+        "size": 702874,
+        "sha256": "87fe41eae9ecf2a1441ab01192300bd3f7ff626fa79960dd77320e7df3901fb3"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000005/part-00000.parquet",
+        "cid-bucket": 5,
+        "min-cid": 329,
+        "max-cid": 403,
+        "rows": 1802,
+        "size": 777922,
+        "sha256": "dac6f226b7e05e692cfdba3122abc4f78269b9fb2d5a0f6ecb4526e121e13e0c"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000006/part-00000.parquet",
+        "cid-bucket": 6,
+        "min-cid": 404,
+        "max-cid": 471,
+        "rows": 1682,
+        "size": 722772,
+        "sha256": "78013456ef0a4ac3369880d1f16cc322510262d7df9ee446ffbc8eb0a1980ece"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000007/part-00000.parquet",
+        "cid-bucket": 7,
+        "min-cid": 472,
+        "max-cid": 538,
+        "rows": 1662,
+        "size": 714444,
+        "sha256": "e1f9857ffb6d6d4c0d687a8ecf5e4afcd86de3cbdc61047b3210c2b983ccf579"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000008/part-00000.parquet",
+        "cid-bucket": 8,
+        "min-cid": 539,
+        "max-cid": 619,
+        "rows": 1999,
+        "size": 859688,
+        "sha256": "fb8e077398f1e47cd4fdb7311ea3e1eac6a81e63d0fb4602dea03bd967f550b2"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000009/part-00000.parquet",
+        "cid-bucket": 9,
+        "min-cid": 620,
+        "max-cid": 658,
+        "rows": 906,
+        "size": 392589,
+        "sha256": "6177f6f4e1abb348c77bc04fc3aa3f2bacbb33ac2abd5db7454ef76d676c13c0"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000010/part-00000.parquet",
+        "cid-bucket": 10,
+        "min-cid": 659,
+        "max-cid": 745,
+        "rows": 2147,
+        "size": 923726,
+        "sha256": "ff45bdc9d643ddae80f8f86e696d825a47be5bc9c5fa131174de898d83401a72"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000011/part-00000.parquet",
+        "cid-bucket": 11,
+        "min-cid": 746,
+        "max-cid": 780,
+        "rows": 865,
+        "size": 371300,
+        "sha256": "21e5fc9c10ae37d41042b1c6cf6b33c922bf520e54ab3049e7342862c9cadefe"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000012/part-00000.parquet",
+        "cid-bucket": 12,
+        "min-cid": 781,
+        "max-cid": 899,
+        "rows": 2978,
+        "size": 1278979,
+        "sha256": "dcd7e286d895b8ffa36834d75893a26f1421f6158997b3304283762f5ee7ef3b"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000013/part-00000.parquet",
+        "cid-bucket": 13,
+        "min-cid": 900,
+        "max-cid": 983,
+        "rows": 2053,
+        "size": 884569,
+        "sha256": "73097ef1413ebe751d0cd838e4cebf275542be58352ecd36e81657932abf21d2"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000014/part-00000.parquet",
+        "cid-bucket": 14,
+        "min-cid": 984,
+        "max-cid": 1031,
+        "rows": 1165,
+        "size": 502351,
+        "sha256": "ecba02bfe935017ab02d966b437373962c61c3363b733267bc0a8ee351e3795e"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000015/part-00000.parquet",
+        "cid-bucket": 15,
+        "min-cid": 1032,
+        "max-cid": 1066,
+        "rows": 857,
+        "size": 368851,
+        "sha256": "0f6bd6c527719802955937bd20dd33e6caf105221dfd51f711f6a091b3b47e2b"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000016/part-00000.parquet",
+        "cid-bucket": 16,
+        "min-cid": 1067,
+        "max-cid": 1127,
+        "rows": 1502,
+        "size": 645959,
+        "sha256": "ee8d7795ff87041bed15238747f39a60f5e22ca72ed4db06f3ea06b0348b2f2a"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000017/part-00000.parquet",
+        "cid-bucket": 17,
+        "min-cid": 1128,
+        "max-cid": 1219,
+        "rows": 2311,
+        "size": 991202,
+        "sha256": "f10f036c8dff3a704d31a58e71a06b1dc52098015f980a4865c18f19f3fa213f"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000018/part-00000.parquet",
+        "cid-bucket": 18,
+        "min-cid": 1220,
+        "max-cid": 1279,
+        "rows": 1418,
+        "size": 613343,
+        "sha256": "582d2ec842e4516e87684f80684e2832bd79d0b8cdb49537a3a0c3ad8c6d904f"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000019/part-00000.parquet",
+        "cid-bucket": 19,
+        "min-cid": 1280,
+        "max-cid": 1336,
+        "rows": 1354,
+        "size": 585396,
+        "sha256": "4d5f56de23af3e2f92e775d6e765121afbb7be6fc0018792dbd5d26a3c15610e"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000020/part-00000.parquet",
+        "cid-bucket": 20,
+        "min-cid": 1337,
+        "max-cid": 1407,
+        "rows": 1744,
+        "size": 750871,
+        "sha256": "68c0fd80ce3785e4a9f1e7db2058686fe1622784989d531ef8e20e5b40bb0cd9"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000021/part-00000.parquet",
+        "cid-bucket": 21,
+        "min-cid": 1408,
+        "max-cid": 1472,
+        "rows": 1590,
+        "size": 685382,
+        "sha256": "bef757b13f5d4fb6c625293c349133e5d37002c708ac1625132986d09b013ab2"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000022/part-00000.parquet",
+        "cid-bucket": 22,
+        "min-cid": 1473,
+        "max-cid": 1533,
+        "rows": 1449,
+        "size": 624937,
+        "sha256": "518276e37f9de70d4b83e8bfcb37917f886e7e16907a948b36ec85052334696d"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000023/part-00000.parquet",
+        "cid-bucket": 23,
+        "min-cid": 1534,
+        "max-cid": 1612,
+        "rows": 1920,
+        "size": 827902,
+        "sha256": "247b8dc22e84c6f97717d665271f58eff5c44c62332e729268be9549b62c4c85"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000024/part-00000.parquet",
+        "cid-bucket": 24,
+        "min-cid": 1613,
+        "max-cid": 1677,
+        "rows": 1607,
+        "size": 690880,
+        "sha256": "4c4f28f921e2454eeccbcbde93ba66427ba0ccea3d633809d1e267b594897aee"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000025/part-00000.parquet",
+        "cid-bucket": 25,
+        "min-cid": 1678,
+        "max-cid": 1714,
+        "rows": 873,
+        "size": 378118,
+        "sha256": "9d8fe183e39f59a73be785a4b214a8dc17eee67c872255fbb33c521e4df1d5ed"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000026/part-00000.parquet",
+        "cid-bucket": 26,
+        "min-cid": 1715,
+        "max-cid": 1786,
+        "rows": 1791,
+        "size": 770057,
+        "sha256": "8b43d374320871a447cefaa7c71f7239dbf3338073c3910507b6fe289590781d"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000027/part-00000.parquet",
+        "cid-bucket": 27,
+        "min-cid": 1787,
+        "max-cid": 1829,
+        "rows": 1039,
+        "size": 448636,
+        "sha256": "c0655ddec71561e44e9f399e9d2c5e285f29253d0c1357541b6aea671485fd3d"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000028/part-00000.parquet",
+        "cid-bucket": 28,
+        "min-cid": 1830,
+        "max-cid": 1869,
+        "rows": 958,
+        "size": 413564,
+        "sha256": "96b01fba6737bbbc70230881dc2169ec2fbcc150552f21706b8ea411b6b46da7"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000029/part-00000.parquet",
+        "cid-bucket": 29,
+        "min-cid": 1870,
+        "max-cid": 1918,
+        "rows": 1225,
+        "size": 526923,
+        "sha256": "413403cf676e5e3d17bcd186a00e45583d81a6687012d51fd3290b8cafadc5a8"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000030/part-00000.parquet",
+        "cid-bucket": 30,
+        "min-cid": 1919,
+        "max-cid": 1986,
+        "rows": 1634,
+        "size": 705692,
+        "sha256": "dabf38b43ef286dc54abc5d85bdd61cca4bbb325abd2665c460e6784624a6c92"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000031/part-00000.parquet",
+        "cid-bucket": 31,
+        "min-cid": 1987,
+        "max-cid": 2098,
+        "rows": 2814,
+        "size": 1209445,
+        "sha256": "ece2d877ae5d9c62da45737642853b9b4de3c6b2c52f55e26495ea821821f936"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000032/part-00000.parquet",
+        "cid-bucket": 32,
+        "min-cid": 2099,
+        "max-cid": 2151,
+        "rows": 1287,
+        "size": 555110,
+        "sha256": "fa9dd831c09db0d33dad7fdf33eebb83da38f09973fe7f4bd13442361163f4b2"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000033/part-00000.parquet",
+        "cid-bucket": 33,
+        "min-cid": 2152,
+        "max-cid": 2219,
+        "rows": 1639,
+        "size": 707225,
+        "sha256": "9270261c07b8cb520474725e750ff58eae93cf7cd96a2f61c4e7fe7aae79f6f1"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000034/part-00000.parquet",
+        "cid-bucket": 34,
+        "min-cid": 2220,
+        "max-cid": 2241,
+        "rows": 512,
+        "size": 222463,
+        "sha256": "cf5d4d28735c67fbc3652bbddf1fce3b2004a6a5fe7a5e03af3f65cc4220a28a"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000035/part-00000.parquet",
+        "cid-bucket": 35,
+        "min-cid": 2242,
+        "max-cid": 2290,
+        "rows": 1118,
+        "size": 485945,
+        "sha256": "52ede1c6fe504eb26640d67f61c74976a8f375064af9f3959d861ab1344b3d92"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000036/part-00000.parquet",
+        "cid-bucket": 36,
+        "min-cid": 2291,
+        "max-cid": 2374,
+        "rows": 2045,
+        "size": 881367,
+        "sha256": "7b91dfd845827a525ab6a09c440351f8ef49cad9e9929c55c50dfea7d63c5264"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000037/part-00000.parquet",
+        "cid-bucket": 37,
+        "min-cid": 2375,
+        "max-cid": 2419,
+        "rows": 1101,
+        "size": 474528,
+        "sha256": "97b33ce838bbf652950ce0d557c90955571377701fe725c54bd06b02500da8e1"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000038/part-00000.parquet",
+        "cid-bucket": 38,
+        "min-cid": 2420,
+        "max-cid": 2509,
+        "rows": 2187,
+        "size": 942845,
+        "sha256": "c85d3025c9b58a137ed375fcc167d8cc302369c315f641be49f8b69de9a0aa9e"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000039/part-00000.parquet",
+        "cid-bucket": 39,
+        "min-cid": 2510,
+        "max-cid": 2592,
+        "rows": 2056,
+        "size": 884480,
+        "sha256": "75ee82e18a4de962d71a84bece9741cc25e3b3beb30764257af699b2394eca0e"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000040/part-00000.parquet",
+        "cid-bucket": 40,
+        "min-cid": 2593,
+        "max-cid": 2674,
+        "rows": 2041,
+        "size": 876989,
+        "sha256": "b0f9a05dd55510967f7d6ef1892c2961bfd320dafc4269f0a67a63cd8940a15a"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000041/part-00000.parquet",
+        "cid-bucket": 41,
+        "min-cid": 2675,
+        "max-cid": 2711,
+        "rows": 851,
+        "size": 369547,
+        "sha256": "fe62fa287cc7697ccadfa41968151a7a7eeabeca169dc8fd535219e3394868a9"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000042/part-00000.parquet",
+        "cid-bucket": 42,
+        "min-cid": 2712,
+        "max-cid": 2770,
+        "rows": 1368,
+        "size": 593488,
+        "sha256": "3ea820faf06c83908ebc3b4738b67b4712d21b8619d397b0f422095237ed44bb"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000043/part-00000.parquet",
+        "cid-bucket": 43,
+        "min-cid": 2771,
+        "max-cid": 2815,
+        "rows": 1112,
+        "size": 477651,
+        "sha256": "7d0828a6f1ec0b382e4916a3e874f2097983eb5945ad1f21d248722d4482047c"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000044/part-00000.parquet",
+        "cid-bucket": 44,
+        "min-cid": 2816,
+        "max-cid": 2929,
+        "rows": 2777,
+        "size": 1196653,
+        "sha256": "eb4a0e6ef31f1f5f3fbbcbdda6a9618db9db3413efcf48c1959c4e477000d642"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000045/part-00000.parquet",
+        "cid-bucket": 45,
+        "min-cid": 2930,
+        "max-cid": 3029,
+        "rows": 2535,
+        "size": 1086332,
+        "sha256": "d0b75db39eec9eb790b52be2ce6b3443dba4c5d2eecda0ce35fd305844945b96"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000046/part-00000.parquet",
+        "cid-bucket": 46,
+        "min-cid": 3030,
+        "max-cid": 3143,
+        "rows": 2795,
+        "size": 1203871,
+        "sha256": "203a8765508d12a290ff9491060b6224ba8e197e72d21c88c9448dfa40234c01"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000047/part-00000.parquet",
+        "cid-bucket": 47,
+        "min-cid": 3144,
+        "max-cid": 3268,
+        "rows": 3248,
+        "size": 1388638,
+        "sha256": "366be1c2a7532a616b6b2b079d87a2fd01fc092f42fde53d7b11bc8c014cec86"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000048/part-00000.parquet",
+        "cid-bucket": 48,
+        "min-cid": 3269,
+        "max-cid": 3316,
+        "rows": 1105,
+        "size": 479514,
+        "sha256": "445eab9bb0684c3f884a0321ddadf6c0fc5b9eae5a8c369aa39227eda62e30f0"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000049/part-00000.parquet",
+        "cid-bucket": 49,
+        "min-cid": 3317,
+        "max-cid": 3372,
+        "rows": 1376,
+        "size": 592936,
+        "sha256": "bc7bcd7da07149de4cb2edfecafbbb27f415f9c2997712ec7b88d252bca83808"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000050/part-00000.parquet",
+        "cid-bucket": 50,
+        "min-cid": 3373,
+        "max-cid": 3402,
+        "rows": 684,
+        "size": 297487,
+        "sha256": "93f3c22a94a065fedc7fc7160ddcf41236d2779d508ec99c8f7fa88c43b86ec3"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000051/part-00000.parquet",
+        "cid-bucket": 51,
+        "min-cid": 3403,
+        "max-cid": 3458,
+        "rows": 1302,
+        "size": 564850,
+        "sha256": "971ac9c20ce516c95f4d6faaafd4478d19b69c2e999931851cb20ea880f728b4"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000052/part-00000.parquet",
+        "cid-bucket": 52,
+        "min-cid": 3459,
+        "max-cid": 3538,
+        "rows": 1917,
+        "size": 827907,
+        "sha256": "e037351ad556e93778f845e7ce4b5cc1a5f4ed0cf226126e293b2d7485b42ce6"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000053/part-00000.parquet",
+        "cid-bucket": 53,
+        "min-cid": 3539,
+        "max-cid": 3590,
+        "rows": 1241,
+        "size": 536461,
+        "sha256": "9458778769ceb31fb006c17473d7c006affec18b49b2e39d8caab12f31b08923"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000054/part-00000.parquet",
+        "cid-bucket": 54,
+        "min-cid": 3591,
+        "max-cid": 3648,
+        "rows": 1420,
+        "size": 611640,
+        "sha256": "d063f799a75e98ba97b85473669951d1026c2cfe87cd1ab67e270c4c71d9f975"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000055/part-00000.parquet",
+        "cid-bucket": 55,
+        "min-cid": 3649,
+        "max-cid": 3683,
+        "rows": 860,
+        "size": 370072,
+        "sha256": "02730d035cee64f0cc785f5652091c8723c2efcd3a6cfd1aab1e07670202e2f9"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000056/part-00000.parquet",
+        "cid-bucket": 56,
+        "min-cid": 3684,
+        "max-cid": 3751,
+        "rows": 1637,
+        "size": 706521,
+        "sha256": "b0f412c474d1b4a06efcefeee2fc720d2a2ec7b8e2261cdc385eeadd95cba100"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000057/part-00000.parquet",
+        "cid-bucket": 57,
+        "min-cid": 3752,
+        "max-cid": 3832,
+        "rows": 1973,
+        "size": 849916,
+        "sha256": "11186a0e7287eb18a765f9a4df7a2c86f5b488eb02149cab38c9c3ac794e0f6c"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000058/part-00000.parquet",
+        "cid-bucket": 58,
+        "min-cid": 3833,
+        "max-cid": 3854,
+        "rows": 521,
+        "size": 225794,
+        "sha256": "70ff12f3ec8f41f3cf328b28f39094c09331523782fc3df929fe76c76401b770"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000059/part-00000.parquet",
+        "cid-bucket": 59,
+        "min-cid": 3855,
+        "max-cid": 3900,
+        "rows": 1147,
+        "size": 492759,
+        "sha256": "3f0781684930cb1b8c6313fc05ea648ed4fc4b235f9ea8d3577bd4cfbe38ea88"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000060/part-00000.parquet",
+        "cid-bucket": 60,
+        "min-cid": 3901,
+        "max-cid": 3939,
+        "rows": 896,
+        "size": 388640,
+        "sha256": "27b198c0f921e37c2bef5433e660a569b6c058edb86d7ff26294d72cb3e32d55"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000061/part-00000.parquet",
+        "cid-bucket": 61,
+        "min-cid": 3940,
+        "max-cid": 4007,
+        "rows": 1659,
+        "size": 714690,
+        "sha256": "e169a02a9a6461c412f17451e909e22d2193153b58daf70de7d86247e4ed4244"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000062/part-00000.parquet",
+        "cid-bucket": 62,
+        "min-cid": 4008,
+        "max-cid": 4039,
+        "rows": 780,
+        "size": 336472,
+        "sha256": "46bf4a578d76bcfd0c7c375456894cdf70cbeec4e6ea714af1b1ae39b3668749"
+      },
+      {
+        "path": "ivf_postings/cid_bucket=000063/part-00000.parquet",
+        "cid-bucket": 63,
+        "min-cid": 4040,
+        "max-cid": 4095,
+        "rows": 1367,
+        "size": 588814,
+        "sha256": "58837f32ced86c893c7baf745812cd01f4d824417ca6ff18afab30668262c3d6"
+      }
+    ]
+  }
+}

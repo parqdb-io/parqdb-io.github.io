@@ -14,7 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PARQDB_REVISION: 9d39ef4afb75427a1cd1877565bfcbe2d0cd3cdf
+  PARQDB_REVISION: 3b9d4797dc1dc795fd567e7223ffaf8722fda74b
+  TRANSFORMERS_JS_VERSION: 2.17.2
 
 jobs:
   build:
@@ -37,9 +38,6 @@ jobs:
           path: parqdb
           persist-credentials: false
 
-      - name: Install demo entry point
-        run: cp site/index.html parqdb/browser/demo/index.html
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -55,7 +53,15 @@ jobs:
 
       - name: Install browser dependencies
         working-directory: parqdb/browser
-        run: npm ci
+        run: |
+          npm ci
+          npm install --no-save --package-lock=false "@xenova/transformers@${TRANSFORMERS_JS_VERSION}"
+
+      - name: Install local ONNX Runtime Web assets
+        run: |
+          mkdir -p site/public/ort
+          cp parqdb/browser/node_modules/onnxruntime-web/dist/*.wasm site/public/ort/
+          ln -s ../parqdb/browser/node_modules site/node_modules
 
       - name: Build WebAssembly kernel
         working-directory: parqdb
@@ -66,8 +72,9 @@ jobs:
         run: npm test
 
       - name: Build Pages artifact
-        working-directory: parqdb/browser
-        run: npm run build:pages
+        env:
+          PARQDB_ROOT: ${{ github.workspace }}/parqdb
+        run: node parqdb/browser/node_modules/vite/bin/vite.js build --config site/vite.config.ts
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -75,7 +82,7 @@ jobs:
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: parqdb/browser/pages-dist
+          path: site/dist
 
   deploy:
     name: Deploy GitHub Pages
