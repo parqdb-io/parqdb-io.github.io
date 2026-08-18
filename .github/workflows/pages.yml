@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PARQDB_REVISION: 79b29130daa5bf99bfe4440b27f7b46ecefe15f8
+  PARQDB_REVISION: 180974d601f05923a1aefe05d92ee7221192b362
 
 jobs:
   build:
