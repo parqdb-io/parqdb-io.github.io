@@ -237,10 +237,10 @@
   <body>
     <section class="startup" id="startup" role="status" aria-live="polite" aria-busy="true">
       <div class="startup-panel">
-        <div class="startup-head"><span>PARQDB / LOCAL MODEL BOOT</span><span>FIRST LOAD IS CACHED</span></div>
+        <div class="startup-head"><span>PARQDB / BROWSER MODEL BOOT</span><span>FIRST LOAD IS CACHED</span></div>
         <div class="startup-body">
           <div class="startup-stage" id="startup-stage">LOADING TRANSFORMER</div>
-          <div class="startup-detail" id="startup-detail">Preparing the local MiniLM embedding runtime…</div>
+          <div class="startup-detail" id="startup-detail">Preparing the MiniLM embedding runtime in your browser…</div>
           <div class="startup-track" aria-hidden="true"><i id="startup-bar"></i></div>
           <div class="startup-foot"><span>QUERY TEXT NEVER LEAVES THIS TAB</span><span class="startup-percent" id="startup-percent">0%</span></div>
         </div>
@@ -267,20 +267,20 @@
         <aside class="pane controls">
           <div class="pane-head"><span>01 / query input</span><code>ctrl+enter to run</code></div>
           <form class="form" id="query-form">
-            <div class="field"><label for="query">SEARCH TEXT <span>local MiniLM embedding</span></label><input id="query" value="How do anarchist movements view political authority?" spellcheck="true" /></div>
+            <div class="field"><label for="query">SEARCH TEXT <span>browser MiniLM embedding</span></label><input id="query" value="How do anarchist movements view political authority?" spellcheck="true" /></div>
             <div class="field"><label for="manifest">IMMUTABLE INDEX <span>manifest.json</span></label><input id="manifest" value="https://parqdb-io.github.io/wiki/index/manifest.json" readonly spellcheck="false" /></div>
             <div class="pair">
               <div class="field"><label for="nprobe">NPROBE <span id="nprobe-limit">nlist 4,096</span></label><input id="nprobe" type="number" min="1" value="64" /></div>
               <div class="field"><label for="k">TOP_K <span id="k-limit">max 100</span></label><input id="k" type="number" min="1" value="10" /></div>
             </div>
-            <div class="actions"><button class="run" id="search" type="submit">SEARCH LOCALLY ↵</button><button id="random" type="button">TRY QUERY</button></div>
+            <div class="actions"><button class="run" id="search" type="submit">SEARCH IN BROWSER ↵</button><button id="random" type="button">TRY QUERY</button></div>
             <div class="package-info">
               <div class="kv"><span>encoding</span><b id="encoding">—</b></div>
               <div class="kv"><span>dimension</span><b id="dimension">—</b></div>
               <div class="kv"><span>articles</span><b id="ntotal">—</b></div>
               <div class="kv"><span>embedding</span><b>MINILM / ONNX</b></div>
               <div class="kv"><span>transport</span><b>HTTP RANGE</b></div>
-              <div class="kv"><span>compute</span><b>LOCAL WASM</b></div>
+              <div class="kv"><span>compute</span><b>BROWSER WASM</b></div>
             </div>
             <p class="status" id="status">Ready. No index loaded.</p>
           </form>
@@ -404,7 +404,7 @@
       }
 
       async function embed(text) {
-        setPhase('embedding', 'active', embedderPromise ? 'encoding query locally' : 'loading 23 MiB quantized MiniLM')
+        setPhase('embedding', 'active', embedderPromise ? 'encoding query in browser' : 'loading 23 MiB quantized MiniLM')
         embedderPromise ??= pipeline('feature-extraction', 'all-MiniLM-L6-v2', { quantized: true, progress_callback: onModelProgress })
         const extractor = await embedderPromise
         modelMetadataPromise ??= tracedFetch(new URL('./wiki/model.json', location.href)).then(response => {
@@ -423,7 +423,7 @@
           finishStartup()
         }
         const vector = await extractVector(extractor, text)
-        if (vector.length !== 384 || vector.some(value => !Number.isFinite(value))) throw new Error('local embedding model returned an invalid vector')
+        if (vector.length !== 384 || vector.some(value => !Number.isFinite(value))) throw new Error('browser embedding model returned an invalid vector')
         setPhase('embedding', 'done', '384d · parity verified · L2 normalized')
         return vector
       }
@@ -549,9 +549,9 @@
           const fileProgress = event.loaded / event.total
           const percent = file.endsWith('.onnx') ? 8 + fileProgress * 84 : 3 + fileProgress * 5
           const label = file.split('/').at(-1) || 'model data'
-          updateStartup(percent, 'DOWNLOADING LOCAL TRANSFORMER', `${label} · ${formatBytes(event.loaded)} / ${formatBytes(event.total)}`)
+          updateStartup(percent, 'DOWNLOADING EMBEDDING MODEL', `${label} · ${formatBytes(event.loaded)} / ${formatBytes(event.total)}`)
         } else if (event.status === 'ready') {
-          updateStartup(94, 'INITIALIZING ONNX / WASM', 'Model files loaded. Initializing the local inference graph…')
+          updateStartup(94, 'INITIALIZING ONNX / WASM', 'Model files loaded. Initializing the browser inference runtime…')
         } else if (event.status === 'initiate' && startupProgress < 3) {
           updateStartup(3, 'LOCATING MODEL FILES', file || 'MiniLM model manifest')
         }
@@ -566,7 +566,7 @@
       }
       function finishStartup() {
         if (startupComplete) return
-        updateStartup(100, 'LOCAL EMBEDDING READY', 'MiniLM parity verified. Executing the first query…')
+        updateStartup(100, 'EMBEDDING MODEL READY', 'MiniLM parity verified. Executing the first query…')
         startupComplete = true
         byId('startup').setAttribute('aria-busy', 'false')
         setTimeout(() => { byId('startup').hidden = true }, 320)
