@@ -269,7 +269,7 @@
           <div class="pane-head"><span>01 / query input</span><code>ctrl+enter to run</code></div>
           <form class="form" id="query-form">
             <div class="field"><label for="query">SEARCH TEXT <span>browser MiniLM embedding</span></label><input id="query" value="How do anarchist movements view political authority?" spellcheck="true" /></div>
-            <div class="field"><label for="manifest">IMMUTABLE INDEX <span>manifest.json</span></label><input id="manifest" value="https://parqdb-io.github.io/wiki/index/manifest.json" readonly spellcheck="false" /></div>
+            <div class="field"><label for="manifest">IMMUTABLE INDEX <span>manifest.json</span></label><input id="manifest" value="https://data.parqdb.io/wiki-100k/v1/index/manifest.json" readonly spellcheck="false" /></div>
             <div class="pair">
               <div class="field"><label for="nprobe">NPROBE <span id="nprobe-limit">nlist 4,096</span></label><input id="nprobe" type="number" min="1" value="64" /></div>
               <div class="field"><label for="k">TOP_K <span id="k-limit">max 100</span></label><input id="k" type="number" min="1" value="10" /></div>
@@ -326,6 +326,8 @@
       import { HttpRangeBuffer } from '@parqdb/http'
 
       const nativeFetch = globalThis.fetch.bind(globalThis)
+      const dataRoot = new URL('https://data.parqdb.io/wiki-100k/v1/')
+      const dataPath = dataRoot.pathname.replace(/\/$/, '')
       const byId = id => document.getElementById(id)
       const manifestInput = byId('manifest')
       const searchButton = byId('search')
@@ -358,7 +360,7 @@
 
       env.allowRemoteModels = false
       env.allowLocalModels = true
-      env.localModelPath = new URL('./wiki/models/', location.href).href
+      env.localModelPath = new URL('models/', dataRoot).href
       env.backends.onnx.wasm.wasmPaths = new URL('./ort/', location.href).href
       globalThis.fetch = tracedFetch
 
@@ -409,7 +411,7 @@
         setPhase('embedding', 'active', embedderPromise ? 'encoding query in browser' : 'loading 23 MiB quantized MiniLM')
         embedderPromise ??= pipeline('feature-extraction', 'all-MiniLM-L6-v2', { quantized: true, progress_callback: onModelProgress })
         const extractor = await embedderPromise
-        modelMetadataPromise ??= tracedFetch(new URL('./wiki/model.json', location.href)).then(response => {
+        modelMetadataPromise ??= tracedFetch(new URL('model.json', dataRoot)).then(response => {
           if (!response.ok) throw new Error(`model manifest request failed with HTTP ${response.status}`)
           return response.json()
         })
@@ -437,7 +439,7 @@
 
       async function openSource() {
         sourcePromise ??= (async () => {
-          const url = new URL('./wiki/source-manifest.json', location.href)
+          const url = new URL('source-manifest.json', dataRoot)
           const response = await tracedFetch(url)
           if (!response.ok) throw new Error(`source manifest request failed with HTTP ${response.status}`)
           const manifest = await response.json()
@@ -582,11 +584,14 @@
         byId('startup').setAttribute('aria-busy', 'false')
       }
       function defaultPhaseText(name) { return ({ embedding: 'text → 384d in ONNX/WASM', manifest: 'manifest.json', routing: 'global LVQ8 centroid top-nprobe', ranges: 'footer → selected row groups', wasm: 'LVQ8 distance + bounded top-k', source: 'doc_id → Wikipedia rows' })[name] }
-      function compactPath(path) { return path.replace('/wiki/', 'wiki/').replace('/assets/', 'assets/') }
+      function compactPath(path) {
+        if (path.startsWith(`${dataPath}/`)) return `wiki/${path.slice(dataPath.length + 1)}`
+        return path.replace('/assets/', 'assets/')
+      }
       function requestScope(path) {
-        if (path.includes('/wiki/index/')) return 'INDEX'
-        if (path.endsWith('/wiki/documents.parquet') || path.endsWith('/wiki/source-manifest.json')) return 'SOURCE'
-        if (path.includes('/wiki/models/') || path.endsWith('/wiki/model.json')) return 'MODEL'
+        if (path.startsWith(`${dataPath}/index/`)) return 'INDEX'
+        if (path === `${dataPath}/documents.parquet` || path === `${dataPath}/source-manifest.json`) return 'SOURCE'
+        if (path.startsWith(`${dataPath}/models/`) || path === `${dataPath}/model.json`) return 'MODEL'
         return 'RUNTIME'
       }
       function requestRow(request) {
