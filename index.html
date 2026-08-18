@@ -358,9 +358,10 @@
       let startupProgress = 0
       let startupComplete = false
 
-      env.allowRemoteModels = false
-      env.allowLocalModels = true
-      env.localModelPath = new URL('models/', dataRoot).href
+      env.allowRemoteModels = true
+      env.allowLocalModels = false
+      env.remoteHost = new URL('models/', dataRoot).href
+      env.remotePathTemplate = '{model}/'
       env.backends.onnx.wasm.wasmPaths = new URL('./ort/', location.href).href
       globalThis.fetch = tracedFetch
 
