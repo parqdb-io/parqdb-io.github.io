@@ -121,22 +121,40 @@
       .hero-search input:focus { border-color: var(--green); box-shadow: inset 4px 0 var(--green), 0 0 24px rgba(123,255,158,.06); }
       .hero-search button { min-height: 54px; }
       .hero-search .run { position: relative; overflow: visible; }
-      .search-burst { position: absolute; inset: 50%; z-index: 3; pointer-events: none; }
+      .search-burst { position: fixed; z-index: 70; width: 0; height: 0; pointer-events: none; }
+      .search-burst::before, .search-burst::after {
+        content: "";
+        position: absolute;
+        inset: -8px;
+        border: 2px solid var(--green);
+        border-radius: 50%;
+        box-shadow: 0 0 22px rgba(123,255,158,.55);
+        animation: search-shockwave 720ms cubic-bezier(.1,.7,.2,1) forwards;
+      }
+      .search-burst::after { animation-delay: 90ms; border-color: var(--cyan); }
       .search-burst i {
         position: absolute;
-        left: -2px;
-        top: -2px;
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        background: var(--green);
-        box-shadow: 0 0 8px var(--green);
-        animation: search-burst 620ms cubic-bezier(.15,.75,.25,1) forwards;
+        left: -3px;
+        top: -3px;
+        width: 6px;
+        height: 6px;
+        background: var(--particle-color, var(--green));
+        box-shadow: 0 0 12px var(--particle-color, var(--green));
+        animation: search-burst 850ms cubic-bezier(.12,.72,.2,1) forwards;
       }
       @keyframes search-burst {
-        0% { opacity: 1; transform: rotate(var(--angle)) translateY(0) scale(1); }
-        70% { opacity: .95; }
-        100% { opacity: 0; transform: rotate(var(--angle)) translateY(var(--distance)) scale(.25); }
+        0% { opacity: 0; transform: rotate(var(--angle)) translateY(0) scale(1.5); }
+        8% { opacity: 1; }
+        72% { opacity: 1; }
+        100% { opacity: 0; transform: rotate(var(--angle)) translateY(var(--distance)) scale(.15); }
+      }
+      @keyframes search-shockwave { to { opacity: 0; transform: scale(10); } }
+      .run.search-launch { animation: search-launch 560ms steps(2,end); }
+      .run.search-launch:disabled { opacity: 1; }
+      @keyframes search-launch {
+        0%, 100% { filter: none; }
+        20% { filter: brightness(2.2); box-shadow: 0 0 0 4px rgba(123,255,158,.3), 0 0 42px rgba(123,255,158,.75); }
+        55% { filter: brightness(1.35); box-shadow: 0 0 24px rgba(105,215,255,.45); }
       }
       @media (prefers-reduced-motion: reduce) {
         .search-burst { display: none; }
@@ -489,7 +507,6 @@
       let transferred = 0
       let startupProgress = 0
       let startupComplete = false
-      let startupBurstPending = true
 
       class TracedRangeCache extends HttpRangeCache {
         read(url, objectSize, start, end, load) {
@@ -724,10 +741,6 @@
 
       async function run() {
         if (searchButton.disabled) return
-        if (startupBurstPending) {
-          startupBurstPending = false
-          triggerSearchBurst()
-        }
         setQueryControlsDisabled(true)
         hideResultJump()
         updateQueryProgress(3, 'EMBED · QUERY TEXT', 'active')
@@ -803,18 +816,25 @@
 
       function triggerSearchBurst() {
         if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-        const button = byId('search')
+        const button = this instanceof HTMLElement && this.matches('.run') ? this : byId('search')
+        const bounds = button.getBoundingClientRect()
         const burst = document.createElement('span')
         burst.className = 'search-burst'
-        for (let index = 0; index < 18; index += 1) {
+        burst.style.left = `${bounds.left + bounds.width / 2}px`
+        burst.style.top = `${bounds.top + bounds.height / 2}px`
+        for (let index = 0; index < 32; index += 1) {
           const particle = document.createElement('i')
-          particle.style.setProperty('--angle', `${index * 20 + (Math.random() * 8 - 4)}deg`)
-          particle.style.setProperty('--distance', `${30 + Math.random() * 32}px`)
-          particle.style.animationDelay = `${Math.random() * 80}ms`
+          particle.style.setProperty('--angle', `${index * 11.25 + (Math.random() * 8 - 4)}deg`)
+          particle.style.setProperty('--distance', `${70 + Math.random() * 90}px`)
+          particle.style.setProperty('--particle-color', index % 4 === 0 ? 'var(--cyan)' : 'var(--green)')
+          particle.style.animationDelay = `${Math.random() * 100}ms`
           burst.append(particle)
         }
-        button.append(burst)
-        setTimeout(() => burst.remove(), 850)
+        document.body.append(burst)
+        button.classList.remove('search-launch')
+        void button.offsetWidth
+        button.classList.add('search-launch')
+        setTimeout(() => { burst.remove(); button.classList.remove('search-launch') }, 1100)
       }
 
       function setQueryControlsDisabled(disabled) {
@@ -862,6 +882,7 @@
         startupComplete = true
         byId('startup').setAttribute('aria-busy', 'false')
         setTimeout(() => { byId('startup').hidden = true }, 320)
+        setTimeout(() => triggerSearchBurst(), 390)
       }
       function failStartup(error) {
         if (startupComplete) return
