@@ -308,7 +308,7 @@
             <div class="plan-row" id="phase-source" data-step="05" data-state="idle"><span class="phase-name">LOOKUP</span><span class="phase-detail">doc_id → Wikipedia rows</span><span class="phase-status"></span></div>
           </div>
           <div class="activity">
-            <div class="pane-head"><span>03 / HTTP trace</span><code><span id="cache-trace">0 MEM HITS</span> · NETWORK REQUESTS BELOW</code></div>
+            <div class="pane-head"><span>03 / HTTP trace</span><code><span id="cache-trace">0 MEM HITS</span> · ORDERED CACHE + NETWORK EVENTS</code></div>
             <div class="request-log" id="request-log"><div class="request-empty">$ waiting for range requests<span class="cursor">_</span></div></div>
           </div>
         </section>
@@ -372,13 +372,32 @@
       let openedIndex
       let openedUrl = ''
       let sourcePromise
-      const rangeCache = new HttpRangeCache()
       let requests = []
       let requestTotal = 0
       let rangeTotal = 0
       let transferred = 0
       let startupProgress = 0
       let startupComplete = false
+
+      class TracedRangeCache extends HttpRangeCache {
+        read(url, objectSize, start, end, load) {
+          const hitsBefore = this.stats().hits
+          const started = performance.now()
+          const result = super.read(url, objectSize, start, end, load)
+          if (this.stats().hits === hitsBefore) return result
+          return result.then(bytes => {
+            const trace = {
+              method: 'HIT', scope: requestScope(url.pathname), path: compactPath(url.pathname),
+              range: `${start}-${end - 1}`, elapsed: performance.now() - started, status: 'MEM',
+            }
+            requests.push(trace)
+            appendRequest(trace)
+            return bytes
+          })
+        }
+      }
+
+      const rangeCache = new TracedRangeCache()
 
       env.allowRemoteModels = true
       env.allowLocalModels = false
@@ -654,9 +673,6 @@
         const hits = Math.max(0, rangeCache.stats().hits - start)
         byId('cache-hit-count').textContent = hits.toLocaleString()
         byId('cache-trace').textContent = `${hits.toLocaleString()} MEM ${hits === 1 ? 'HIT' : 'HITS'}`
-        if (requests.length === 0 && hits > 0) {
-          byId('request-log').innerHTML = `<div class="request-empty">$ cache satisfied ${hits.toLocaleString()} logical ${hits === 1 ? 'range' : 'ranges'} · fetch() not called_</div>`
-        }
         return hits
       }
       function renderRequests() {
