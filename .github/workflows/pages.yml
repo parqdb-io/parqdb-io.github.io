@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PARQDB_REVISION: 1afc66ef25bd7750d38f4d9fc8fca6157c0f00c8
+  PARQDB_REVISION: 19a3cb1fcbeeacee20d45dc1dace5cc710b47057
   TRANSFORMERS_JS_VERSION: 2.17.2
 
 jobs:

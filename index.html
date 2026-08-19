@@ -225,6 +225,7 @@
         .request-row { grid-template-columns: 44px minmax(0,1fr) 55px; padding: 7px 10px; }
         .request-row .range { grid-column: 2 / 4; font-size: 8px; }
         .request-row .time { grid-column: 3; grid-row: 1; }
+        .result-head { height: auto; min-height: 42px; align-items: flex-start; flex-direction: column; gap: 5px; padding: 10px; }
         .result-card { grid-template-columns: 28px minmax(0,1fr); gap: 8px; padding: 13px 10px; }
         .result-meta { grid-column: 2; text-align: left; }
         .footer { align-items: flex-start; flex-direction: column; gap: 4px; padding: 12px 10px calc(12px + env(safe-area-inset-bottom)); }
@@ -256,7 +257,7 @@
     <main>
       <section class="boot">
         <div class="prompt">100,000 Wikipedia articles online</div>
-        <h1>SEARCH WIKIPEDIA. YOUR BROWSER IS THE QUERY ENGINE.</h1>
+        <h1>SEARCH WIKIPEDIA. THE QUERY ENGINE RUNS IN YOUR BROWSER.</h1>
         <p class="boot-copy">Type a question to search 100,000 Wikipedia articles. ParqDB builds an IVF-LVQ8 index over their MiniLM embeddings and publishes it to object storage as immutable Parquet files. Your browser embeds the query, reads only the required byte ranges, and ranks results in WASM. <b>No query server sees your data.</b></p>
         <div class="routes" aria-label="Architecture comparison">
           <div class="route legacy"><span class="route-name">LEGACY</span><span class="route-path">browser ──<del>QUERY──&gt; vector DB</del> ──READ──&gt; object storage</span><span class="route-state">VECTOR DB ×</span></div>
@@ -274,7 +275,7 @@
               <div class="field"><label for="nprobe">NPROBE <span id="nprobe-limit">nlist 4,096</span></label><input id="nprobe" type="number" min="1" value="64" /></div>
               <div class="field"><label for="k">TOP_K <span id="k-limit">max 100</span></label><input id="k" type="number" min="1" value="10" /></div>
             </div>
-            <div class="actions"><button class="run" id="search" type="submit">SEARCH ↵</button><button id="random" type="button">RANDOM QUERY</button></div>
+            <div class="actions"><button class="run" id="search" type="submit" disabled>SEARCH ↵</button><button id="random" type="button" disabled>RANDOM QUERY</button></div>
             <div class="package-info">
               <div class="kv"><span>encoding</span><b id="encoding">—</b></div>
               <div class="kv"><span>dimension</span><b id="dimension">—</b></div>
@@ -322,7 +323,7 @@
       import { env, pipeline } from '@xenova/transformers'
       import { parquetMetadataAsync, parquetReadObjects } from 'hyparquet'
       import { compressors } from 'hyparquet-compressors'
-      import { ParqDB } from '@parqdb/index'
+      import { HttpRangeCache, ParqDB } from '@parqdb/index'
       import { HttpRangeBuffer } from '@parqdb/http'
 
       const nativeFetch = globalThis.fetch.bind(globalThis)
@@ -343,6 +344,24 @@
         'women who made foundational discoveries in physics',
         'ancient cities destroyed by volcanic eruptions',
         'how neural networks learn representations from data',
+        'why the Roman Empire split into eastern and western halves',
+        'how black holes form from massive stars',
+        'artists who pioneered cubism in the early twentieth century',
+        'causes and consequences of the French Revolution',
+        'organisms that survive around deep-sea hydrothermal vents',
+        'the development of public-key cryptography',
+        'civilizations in the Americas before European contact',
+        'novels about dystopian surveillance societies',
+        'languages that descended from Latin',
+        'how vaccines train the immune system',
+        'expeditions that first reached the South Pole',
+        'the origins of hip-hop in 1970s New York City',
+        'Gothic cathedrals built with flying buttresses',
+        'mathematicians who shaped modern computer science',
+        'inventions that transformed printing and literacy',
+        'how plate tectonics creates volcanic island chains',
+        'philosophers associated with existentialism',
+        'early programmable electronic computers',
       ]
       let wasm
       let embedderPromise
@@ -351,6 +370,7 @@
       let openedIndex
       let openedUrl = ''
       let sourcePromise
+      const rangeCache = new HttpRangeCache(32 * 1024 * 1024)
       let requests = []
       let requestTotal = 0
       let rangeTotal = 0
@@ -408,8 +428,7 @@
         }
       }
 
-      async function embed(text) {
-        setPhase('embedding', 'active', embedderPromise ? 'encoding query in browser' : 'loading 23 MiB quantized MiniLM')
+      async function loadEmbedder() {
         embedderPromise ??= pipeline('feature-extraction', 'all-MiniLM-L6-v2', { quantized: true, progress_callback: onModelProgress })
         const extractor = await embedderPromise
         modelMetadataPromise ??= tracedFetch(new URL('model.json', dataRoot)).then(response => {
@@ -427,6 +446,12 @@
           parityVerified = true
           finishStartup()
         }
+        return extractor
+      }
+
+      async function embed(text) {
+        setPhase('embedding', 'active', embedderPromise ? 'encoding query in browser' : 'loading 23 MiB quantized MiniLM')
+        const extractor = await loadEmbedder()
         const vector = await extractVector(extractor, text)
         if (vector.length !== 384 || vector.some(value => !Number.isFinite(value))) throw new Error('browser embedding model returned an invalid vector')
         setPhase('embedding', 'done', '384d · parity verified · L2 normalized')
@@ -446,7 +471,7 @@
           const manifest = await response.json()
           if (manifest['format-version'] !== 1 || manifest.key?.name !== 'doc_id') throw new Error('invalid source manifest')
           const objectUrl = new URL(manifest.object.path, url)
-          const file = new HttpRangeBuffer(objectUrl, manifest.object.size, { fetch: tracedFetch })
+          const file = new HttpRangeBuffer(objectUrl, manifest.object.size, { fetch: tracedFetch, rangeCache })
           const metadata = await parquetMetadataAsync(file)
           if (Number(metadata.num_rows) !== manifest.rows) throw new Error('source row count does not match manifest')
           return { manifest, file, metadata }
@@ -487,6 +512,22 @@
         return rows
       }
 
+      async function boot() {
+        searchButton.disabled = true
+        byId('random').disabled = true
+        try {
+          await loadEmbedder()
+          status.className = 'status'
+          status.textContent = 'Transformer ready · enter a question and press SEARCH'
+          searchButton.disabled = false
+          byId('random').disabled = false
+        } catch (error) {
+          failStartup(error)
+          status.className = 'status error'
+          status.textContent = error instanceof Error ? error.message : String(error)
+        }
+      }
+
       async function run() {
         if (searchButton.disabled) return
         searchButton.disabled = true
@@ -510,7 +551,7 @@
           const manifestUrl = new URL(manifestInput.value, location.href)
           if (openedIndex === undefined || openedUrl !== manifestUrl.href) {
             wasm ??= await tracedFetch(new URL('./parqdb_browser_kernels.wasm', location.href)).then(response => response.arrayBuffer())
-            openedIndex = await ParqDB.open(manifestUrl, { wasm, fetch: tracedFetch })
+            openedIndex = await ParqDB.open(manifestUrl, { wasm, fetch: tracedFetch, rangeCache })
             openedUrl = manifestUrl.href
           } else {
             setPhase('manifest', 'done', 'index metadata cache hit')
@@ -524,12 +565,14 @@
           const searchStarted = performance.now()
           const hits = await openedIndex.search(vector, { nprobe, k, trace: onTrace })
           const searchMs = performance.now() - searchStarted
+          const sourceStarted = performance.now()
           const rows = await lookupDocuments(hits)
+          const sourceMs = performance.now() - sourceStarted
           const totalMs = performance.now() - totalStarted
           renderFacts(openedIndex.manifest)
           renderRows(rows)
           byId('query-time').textContent = `${totalMs.toFixed(1)} ms`
-          byId('latency').textContent = `${embeddingMs.toFixed(1)} ms EMBED / ${searchMs.toFixed(1)} ms SEARCH / ${totalMs.toFixed(1)} ms TOTAL`
+          byId('latency').textContent = `${embeddingMs.toFixed(1)} ms EMBED / ${searchMs.toFixed(1)} ms INDEX SEARCH / ${sourceMs.toFixed(1)} ms SOURCE LOOKUP / ${totalMs.toFixed(1)} ms TOTAL`
           byId('trace-state').textContent = 'COMPLETE'
           const caps = []
           if (nprobe !== requestedNprobe) caps.push(`nprobe ${requestedNprobe}→${nprobe}`)
@@ -572,7 +615,7 @@
       }
       function finishStartup() {
         if (startupComplete) return
-        updateStartup(100, 'TRANSFORMER READY', 'MiniLM parity verified. Executing the first query…')
+        updateStartup(100, 'TRANSFORMER READY', 'MiniLM parity verified. Enter a question and press SEARCH.')
         startupComplete = true
         byId('startup').setAttribute('aria-busy', 'false')
         setTimeout(() => { byId('startup').hidden = true }, 320)
@@ -621,7 +664,7 @@
       function formatBytes(bytes) { if (bytes < 1024) return `${bytes} B`; if (bytes < 1048576) return `${(bytes/1024).toFixed(1)} KiB`; return `${(bytes/1048576).toFixed(1)} MiB` }
       function escape(value) { return value.replace(/[&<>"']/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[character]) }
 
-      run()
+      boot()
     </script>
   </body>
 </html>
