@@ -132,6 +132,7 @@
         font-size: 12px;
       }
       input:focus { border-color: var(--green); box-shadow: inset 3px 0 var(--green); }
+      input.query-flash { animation: query-flash .32s steps(2,end); }
       .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
       .actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 4px; }
       button { min-height: 42px; border: 1px solid #384138; border-radius: 0; background: #101510; cursor: pointer; font-size: 11px; }
@@ -206,6 +207,7 @@
 
       @keyframes pulse { 50% { opacity: .25; } }
       @keyframes enter { from { opacity: 0; transform: translateX(-5px); } }
+      @keyframes query-flash { 50% { border-color: var(--green); box-shadow: inset 3px 0 var(--green), 0 0 12px rgba(126,255,153,.2); color: var(--green); } }
       @media (max-width: 900px) {
         main { border: 0; }
         .workspace { grid-template-columns: 1fr; }
@@ -240,7 +242,7 @@
   <body>
     <section class="startup" id="startup" role="status" aria-live="polite" aria-busy="true">
       <div class="startup-panel">
-        <div class="startup-head"><span>PARQDB / TRANSFORMER BOOT</span><span>FIRST LOAD IS CACHED</span></div>
+        <div class="startup-head"><span>PARQDB / BROWSER QUERY BOOT</span><span>FIRST LOAD IS CACHED</span></div>
         <div class="startup-body">
           <div class="startup-stage" id="startup-stage">LOADING TRANSFORMER</div>
           <div class="startup-detail" id="startup-detail">Preparing the MiniLM embedding runtime in your browser…</div>
@@ -413,8 +415,11 @@
       byId('random').addEventListener('click', () => {
         const current = byId('query').value
         const choices = sampleQueries.filter(query => query !== current)
-        byId('query').value = choices[Math.floor(Math.random() * choices.length)]
-        byId('query').focus()
+        const queryInput = byId('query')
+        queryInput.value = choices[Math.floor(Math.random() * choices.length)]
+        queryInput.classList.remove('query-flash')
+        void queryInput.offsetWidth
+        queryInput.classList.add('query-flash')
       })
 
       async function tracedFetch(input, init) {
@@ -440,12 +445,15 @@
       function onTrace(event) {
         if (event.phase === 'routing') {
           setPhase('routing', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.selectedCids} CIDs selected globally` : 'loading LVQ8 leaf centroids')
+          if (!startupComplete) updateStartup(event.status === 'start' ? 76 : 82, event.status === 'start' ? 'ROUTING IVF CENTROIDS' : 'IVF ROUTE READY', event.status === 'complete' ? `${event.selectedCids} nearest CIDs selected in browser WASM.` : 'Reading and ranking the published LVQ8 leaf centroids…')
           if (event.selectedCids !== undefined) byId('cid-count').textContent = event.selectedCids.toLocaleString()
         } else if (event.phase === 'planning') {
           setPhase('ranges', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.files} files / ${event.candidateRows} rows` : `${event.files} candidate files`)
+          if (!startupComplete) updateStartup(event.status === 'start' ? 84 : 91, event.status === 'start' ? 'READING PARQUET RANGES' : 'CANDIDATES MATERIALIZED', event.status === 'complete' ? `${event.candidateRows.toLocaleString()} candidate vectors read from ${event.files} Parquet objects.` : `${event.files} candidate Parquet objects · reading footer metadata…`)
           if (event.candidateRows !== undefined) byId('candidate-count').textContent = event.candidateRows.toLocaleString()
         } else {
           setPhase('wasm', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.candidateRows} LVQ8 vectors ranked` : 'executing WASM distance kernel')
+          if (!startupComplete) updateStartup(event.status === 'start' ? 92 : 95, event.status === 'start' ? 'RANKING IN WASM' : 'VECTOR SEARCH COMPLETE', event.status === 'complete' ? `${event.candidateRows.toLocaleString()} LVQ8 vectors ranked locally.` : 'Executing bounded top-k in this tab…')
         }
       }
 
@@ -457,7 +465,7 @@
           return response.json()
         })
         if (!parityVerified) {
-          updateStartup(96, 'VERIFYING EMBEDDING PARITY', 'Checking the browser vector against the offline index builder…')
+          updateStartup(68, 'VERIFYING EMBEDDING PARITY', 'Checking the browser vector against the offline index builder…')
           const metadata = await modelMetadataPromise
           const observed = await extractVector(extractor, metadata['parity-probe'].text)
           const expected = metadata['parity-probe'].vector
@@ -465,7 +473,7 @@
           const error = observed.reduce((maximum, value, index) => Math.max(maximum, Math.abs(value - expected[index])), 0)
           if (error > metadata['parity-probe']['max-absolute-error']) throw new Error(`browser/offline embedding mismatch (${error})`)
           parityVerified = true
-          finishStartup()
+          updateStartup(70, 'TRANSFORMER READY', 'MiniLM parity verified. Preparing the first browser query…')
         }
         return extractor
       }
@@ -502,6 +510,7 @@
 
       async function lookupDocuments(hits) {
         setPhase('source', 'active', 'planning integer doc_id row groups')
+        if (!startupComplete) updateStartup(96, 'LOOKING UP ARTICLES', 'Reading matching Wikipedia rows by integer doc_id…')
         const source = await openSource()
         const ids = new Set(hits.map(hit => Number(hit.doc_id)))
         const groups = [...new Set([...ids].map(id => Math.floor(id / source.manifest['row-group-rows'])))].sort((a, b) => a - b)
@@ -530,6 +539,7 @@
           return { ...document, doc_id: id, _distance: hit._distance }
         })
         setPhase('source', 'done', `${rows.length} rows · ${groups.length} row groups · concurrency 6`)
+        if (!startupComplete) updateStartup(99, 'RESULTS MATERIALIZED', `${rows.length} matching Wikipedia articles decoded in this tab.`)
         return rows
       }
 
@@ -540,9 +550,8 @@
           await loadEmbedder()
           status.className = 'status'
           status.textContent = 'Transformer ready · starting the first query…'
-          searchButton.disabled = false
-          byId('random').disabled = false
-          await run()
+          const ready = await run(true)
+          if (ready) byId('random').disabled = false
         } catch (error) {
           failStartup(error)
           status.className = 'status error'
@@ -550,8 +559,8 @@
         }
       }
 
-      async function run() {
-        if (searchButton.disabled) return
+      async function run(isStartup = false) {
+        if (searchButton.disabled && !isStartup) return false
         searchButton.disabled = true
         byId('trace-state').textContent = 'EXECUTING'
         status.className = 'status'
@@ -571,6 +580,7 @@
           const totalStarted = performance.now()
           const embeddingStarted = performance.now()
           const vector = await embed(text)
+          if (!startupComplete) updateStartup(72, 'OPENING PUBLISHED INDEX', 'Loading manifest.json and the browser WASM kernel…')
           const embeddingMs = performance.now() - embeddingStarted
           const manifestUrl = new URL(manifestInput.value, location.href)
           if (openedIndex === undefined || openedUrl !== manifestUrl.href) {
@@ -605,12 +615,15 @@
           if (k !== requestedK) caps.push(`top-k ${requestedK}→${k}`)
           const cacheHits = renderCacheHits(cacheHitsBefore)
           status.textContent = `${rows.length} articles · ${rangeTotal} range requests · ${cacheHits} memory range hits · ${formatBytes(transferred)} transferred${caps.length ? ` · capped ${caps.join(' / ')}` : ''}`
+          if (isStartup) finishStartup()
+          return true
         } catch (error) {
           failStartup(error)
           status.className = 'status error'
           status.textContent = error instanceof Error ? error.message : String(error)
           byId('trace-state').textContent = 'FAULT'
           byId('output').innerHTML = '<div class="empty">$ query failed — inspect SYS output</div>'
+          return false
         } finally {
           renderCacheHits(cacheHitsBefore)
           byId('request-log').scrollTop = 0
@@ -624,11 +637,11 @@
         const file = String(event.file ?? '')
         if (event.status === 'progress' && Number.isFinite(event.loaded) && Number.isFinite(event.total) && event.total > 0) {
           const fileProgress = event.loaded / event.total
-          const percent = file.endsWith('.onnx') ? 8 + fileProgress * 84 : 3 + fileProgress * 5
+          const percent = file.endsWith('.onnx') ? 6 + fileProgress * 60 : 2 + fileProgress * 4
           const label = file.split('/').at(-1) || 'model data'
           updateStartup(percent, 'DOWNLOADING TRANSFORMER', `${label} · ${formatBytes(event.loaded)} / ${formatBytes(event.total)}`)
         } else if (event.status === 'ready') {
-          updateStartup(94, 'INITIALIZING ONNX / WASM', 'Model files loaded. Initializing the browser inference runtime…')
+          updateStartup(67, 'INITIALIZING ONNX / WASM', 'Model files loaded. Initializing the browser inference runtime…')
         } else if (event.status === 'initiate' && startupProgress < 3) {
           updateStartup(3, 'LOCATING MODEL FILES', file || 'MiniLM model manifest')
         }
@@ -643,7 +656,7 @@
       }
       function finishStartup() {
         if (startupComplete) return
-        updateStartup(100, 'TRANSFORMER READY', 'MiniLM parity verified. Starting the first query…')
+        updateStartup(100, 'BROWSER QUERY READY', 'The index is open and the first results are materialized.')
         startupComplete = true
         byId('startup').setAttribute('aria-busy', 'false')
         setTimeout(() => { byId('startup').hidden = true }, 320)
@@ -652,7 +665,7 @@
         if (startupComplete) return
         const message = error instanceof Error ? error.message : String(error)
         byId('startup').classList.add('error')
-        updateStartup(100, 'MODEL BOOT FAILED', message)
+        updateStartup(100, 'BROWSER QUERY BOOT FAILED', message)
         byId('startup').setAttribute('aria-busy', 'false')
       }
       function defaultPhaseText(name) { return ({ embedding: 'text → 384d in ONNX/WASM', manifest: 'manifest.json', routing: 'global LVQ8 centroid top-nprobe', ranges: 'footer → selected row groups', wasm: 'LVQ8 distance + bounded top-k', source: 'doc_id → Wikipedia rows' })[name] }
