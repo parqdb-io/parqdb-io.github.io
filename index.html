@@ -520,9 +520,10 @@
         try {
           await loadEmbedder()
           status.className = 'status'
-          status.textContent = 'Transformer ready · enter a question and press SEARCH'
+          status.textContent = 'Transformer ready · starting the first query…'
           searchButton.disabled = false
           byId('random').disabled = false
+          await run()
         } catch (error) {
           failStartup(error)
           status.className = 'status error'
@@ -619,7 +620,7 @@
       }
       function finishStartup() {
         if (startupComplete) return
-        updateStartup(100, 'TRANSFORMER READY', 'MiniLM parity verified. Enter a question and press SEARCH.')
+        updateStartup(100, 'TRANSFORMER READY', 'MiniLM parity verified. Starting the first query…')
         startupComplete = true
         byId('startup').setAttribute('aria-busy', 'false')
         setTimeout(() => { byId('startup').hidden = true }, 320)
