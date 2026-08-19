@@ -654,6 +654,9 @@
         const hits = Math.max(0, rangeCache.stats().hits - start)
         byId('cache-hit-count').textContent = hits.toLocaleString()
         byId('cache-trace').textContent = `${hits.toLocaleString()} MEM ${hits === 1 ? 'HIT' : 'HITS'}`
+        if (requests.length === 0 && hits > 0) {
+          byId('request-log').innerHTML = `<div class="request-empty">$ cache satisfied ${hits.toLocaleString()} logical ${hits === 1 ? 'range' : 'ranges'} · fetch() not called_</div>`
+        }
         return hits
       }
       function renderRequests() {
