@@ -120,6 +120,27 @@
       .hero-search input { min-height: 54px; padding: 12px 15px; border-color: #3b453b; font-size: 16px; box-shadow: inset 3px 0 #222a22; }
       .hero-search input:focus { border-color: var(--green); box-shadow: inset 4px 0 var(--green), 0 0 24px rgba(123,255,158,.06); }
       .hero-search button { min-height: 54px; }
+      .hero-search .run { position: relative; overflow: visible; }
+      .search-burst { position: absolute; inset: 50%; z-index: 3; pointer-events: none; }
+      .search-burst i {
+        position: absolute;
+        left: -2px;
+        top: -2px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 8px var(--green);
+        animation: search-burst 620ms cubic-bezier(.15,.75,.25,1) forwards;
+      }
+      @keyframes search-burst {
+        0% { opacity: 1; transform: rotate(var(--angle)) translateY(0) scale(1); }
+        70% { opacity: .95; }
+        100% { opacity: 0; transform: rotate(var(--angle)) translateY(var(--distance)) scale(.25); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .search-burst { display: none; }
+      }
 
       .routes { margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; }
       .route { min-height: 38px; display: grid; grid-template-columns: 86px 1fr auto; gap: 18px; align-items: center; padding: 8px 10px; font-size: 11px; }
@@ -468,6 +489,7 @@
       let transferred = 0
       let startupProgress = 0
       let startupComplete = false
+      let startupBurstPending = true
 
       class TracedRangeCache extends HttpRangeCache {
         read(url, objectSize, start, end, load) {
@@ -701,6 +723,10 @@
 
       async function run() {
         if (searchButton.disabled) return
+        if (startupBurstPending) {
+          startupBurstPending = false
+          triggerSearchBurst()
+        }
         setQueryControlsDisabled(true)
         hideResultJump()
         updateQueryProgress(3, 'EMBED · QUERY TEXT', 'active')
@@ -772,6 +798,22 @@
           byId('request-log').scrollTop = 0
           setQueryControlsDisabled(false)
         }
+      }
+
+      function triggerSearchBurst() {
+        if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+        const button = byId('search')
+        const burst = document.createElement('span')
+        burst.className = 'search-burst'
+        for (let index = 0; index < 18; index += 1) {
+          const particle = document.createElement('i')
+          particle.style.setProperty('--angle', `${index * 20 + (Math.random() * 8 - 4)}deg`)
+          particle.style.setProperty('--distance', `${30 + Math.random() * 32}px`)
+          particle.style.animationDelay = `${Math.random() * 80}ms`
+          burst.append(particle)
+        }
+        button.append(burst)
+        setTimeout(() => burst.remove(), 850)
       }
 
       function setQueryControlsDisabled(disabled) {
