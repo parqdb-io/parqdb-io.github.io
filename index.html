@@ -370,9 +370,7 @@
       let openedIndex
       let openedUrl = ''
       let sourcePromise
-      // Keep cold demo queries on exact Parquet ranges. The browser client cache
-      // remains disabled here until it can retain ranges without aligned over-read.
-      const rangeCache = new HttpRangeCache(0)
+      const rangeCache = new HttpRangeCache()
       let requests = []
       let requestTotal = 0
       let rangeTotal = 0
