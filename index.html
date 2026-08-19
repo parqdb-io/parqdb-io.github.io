@@ -91,14 +91,19 @@
       .pulse { width: 7px; height: 7px; background: var(--green); box-shadow: 0 0 12px rgba(123,255,158,.65); animation: pulse 1.4s steps(2,end) infinite; }
 
       main { width: min(1440px, 100%); margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
-      .boot { padding: 34px 28px 30px; border-bottom: 1px solid var(--line); }
+      .boot { padding: 42px 28px 30px; border-bottom: 1px solid var(--line); text-align: center; }
       .prompt { color: var(--green); font-size: 11px; }
       .prompt::before { content: "> "; color: #dfffe5; }
-      h1 { margin: 14px 0 10px; font-size: clamp(24px, 3.3vw, 46px); line-height: 1; letter-spacing: -.055em; font-weight: 650; }
-      .boot-copy { max-width: 820px; margin: 0; color: #919a91; font-size: 12px; line-height: 1.65; }
+      h1 { margin: 0; font-size: clamp(44px, 7vw, 86px); line-height: .92; letter-spacing: -.075em; font-weight: 680; }
+      .boot-tagline { margin: 12px 0 0; color: var(--green); font-size: 11px; letter-spacing: .08em; }
+      .boot-copy { max-width: 820px; margin: 0 auto; color: #919a91; font-size: 12px; line-height: 1.65; }
       .boot-copy b { color: var(--ink); font-weight: 500; }
+      .hero-search { display: grid; grid-template-columns: minmax(0,1fr) 132px auto; gap: 8px; width: min(1060px, 100%); margin: 24px auto 8px; }
+      .hero-search input { min-height: 54px; padding: 12px 15px; border-color: #3b453b; font-size: 16px; box-shadow: inset 3px 0 #222a22; }
+      .hero-search input:focus { border-color: var(--green); box-shadow: inset 4px 0 var(--green), 0 0 24px rgba(123,255,158,.06); }
+      .hero-search button { min-height: 54px; }
 
-      .routes { margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .routes { margin-top: 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; }
       .route { min-height: 38px; display: grid; grid-template-columns: 86px 1fr auto; gap: 18px; align-items: center; padding: 8px 10px; font-size: 11px; }
       .route + .route { border-top: 1px solid var(--line); }
       .route-name { color: var(--muted); }
@@ -152,6 +157,15 @@
       .status.error { border-color: var(--red); color: #e88787; }
 
       .profiler { background: #080a08; }
+      .query-progress { display: grid; grid-template-columns: 150px minmax(120px,1fr) 42px; align-items: center; gap: 10px; width: min(1060px, 100%); min-height: 30px; margin: 0 auto 16px; padding: 0 14px; border: 1px solid var(--line); background: #090b09; color: #596259; font-size: 8px; letter-spacing: .08em; }
+      .query-progress-track { height: 2px; overflow: hidden; background: #1b211b; }
+      .query-progress-track i { display: block; width: 0; height: 100%; background: var(--cyan); transition: width .18s steps(4,end); }
+      .query-progress b { justify-self: end; color: #657065; font-weight: 500; }
+      .query-progress[data-state="active"] span, .query-progress[data-state="active"] b { color: var(--cyan); }
+      .query-progress[data-state="done"] span, .query-progress[data-state="done"] b { color: var(--green); }
+      .query-progress[data-state="done"] .query-progress-track i { background: var(--green); }
+      .query-progress[data-state="error"] span, .query-progress[data-state="error"] b { color: var(--red); }
+      .query-progress[data-state="error"] .query-progress-track i { background: var(--red); }
       .metrics { display: grid; grid-template-columns: repeat(6, 1fr); border-bottom: 1px solid var(--line); }
       .metric { min-width: 0; padding: 13px 12px; }
       .metric + .metric { border-left: 1px solid var(--line); }
@@ -218,7 +232,11 @@
         .topbar { grid-template-columns: 1fr auto; }
         .topbar-center { display: none; }
         .boot { padding: 24px 14px 20px; }
-        h1 { font-size: 27px; }
+        h1 { font-size: 46px; }
+        .boot-tagline { font-size: 9px; }
+        .hero-search { grid-template-columns: 1fr 1fr; margin-top: 18px; }
+        .hero-search input { grid-column: 1 / -1; }
+        .query-progress { grid-template-columns: 105px minmax(70px,1fr) 32px; gap: 7px; padding: 0 8px; }
         .routes { margin-top: 20px; }
         .route { grid-template-columns: 58px minmax(0,1fr); gap: 8px; padding: 9px 6px; }
         .route-state { grid-column: 2; justify-self: start; }
@@ -242,7 +260,7 @@
   <body>
     <section class="startup" id="startup" role="status" aria-live="polite" aria-busy="true">
       <div class="startup-panel">
-        <div class="startup-head"><span>PARQDB / BROWSER QUERY BOOT</span><span>FIRST LOAD IS CACHED</span></div>
+        <div class="startup-head"><span>PARQDB / TRANSFORMER BOOT</span><span>FIRST LOAD IS CACHED</span></div>
         <div class="startup-body">
           <div class="startup-stage" id="startup-stage">LOADING TRANSFORMER</div>
           <div class="startup-detail" id="startup-detail">Preparing the MiniLM embedding runtime in your browser…</div>
@@ -259,8 +277,14 @@
 
     <main>
       <section class="boot">
-        <div class="prompt">100,000 Wikipedia articles online</div>
-        <h1>SEARCH WIKIPEDIA. THE QUERY ENGINE RUNS IN YOUR BROWSER.</h1>
+        <h1>WIKI SEARCH</h1>
+        <p class="boot-tagline">THE QUERY ENGINE RUNS IN YOUR BROWSER.</p>
+        <form class="hero-search" id="query-form">
+          <input id="query" value="How do anarchist movements view political authority?" aria-label="Search Wikipedia articles" spellcheck="true" />
+          <button class="run" id="search" type="submit" disabled>SEARCH ↵</button>
+          <button id="random" type="button" disabled>RANDOM QUERY</button>
+        </form>
+        <div class="query-progress" id="query-progress" data-state="idle"><span id="query-progress-stage">QUERY IDLE</span><div class="query-progress-track" aria-hidden="true"><i id="query-progress-bar"></i></div><b id="query-progress-percent">0%</b></div>
         <p class="boot-copy">Type a question to search 100,000 Wikipedia articles. ParqDB builds an IVF-LVQ8 index over their MiniLM embeddings and publishes it to object storage as immutable Parquet files. Your browser embeds the query, reads only the required byte ranges, and ranks results in WASM. <b>No query server sees your data.</b></p>
         <div class="routes" aria-label="Architecture comparison">
           <div class="route legacy"><span class="route-name">LEGACY</span><span class="route-path">browser ──<del>QUERY──&gt; vector DB</del> ──READ──&gt; object storage</span><span class="route-state">VECTOR DB ×</span></div>
@@ -270,15 +294,13 @@
 
       <section class="workspace" id="console">
         <aside class="pane controls">
-          <div class="pane-head"><span>01 / query input</span><code>ctrl+enter to run</code></div>
-          <form class="form" id="query-form">
-            <div class="field"><label for="query">SEARCH TEXT <span>browser MiniLM embedding</span></label><input id="query" value="How do anarchist movements view political authority?" spellcheck="true" /></div>
-            <div class="field"><label for="manifest">IMMUTABLE INDEX <span>manifest.json</span></label><input id="manifest" value="https://data.parqdb.io/wiki-100k/v1/index/manifest.json" readonly spellcheck="false" /></div>
+          <div class="pane-head"><span>01 / index controls</span><code>advanced</code></div>
+          <div class="form">
+            <div class="field"><label for="manifest">IMMUTABLE INDEX <span>manifest.json</span></label><input id="manifest" value="https://data.parqdb.io/wiki-100k/v2/index/manifest.json" readonly spellcheck="false" /></div>
             <div class="pair">
-              <div class="field"><label for="nprobe">NPROBE <span id="nprobe-limit">nlist 4,096</span></label><input id="nprobe" type="number" min="1" value="64" /></div>
+              <div class="field"><label for="nprobe">NPROBE <span id="nprobe-limit">nlist 2,048</span></label><input id="nprobe" type="number" min="1" value="32" /></div>
               <div class="field"><label for="k">TOP_K <span id="k-limit">max 100</span></label><input id="k" type="number" min="1" value="10" /></div>
             </div>
-            <div class="actions"><button class="run" id="search" type="submit" disabled>SEARCH ↵</button><button id="random" type="button" disabled>RANDOM QUERY</button></div>
             <div class="package-info">
               <div class="kv"><span>encoding</span><b id="encoding">—</b></div>
               <div class="kv"><span>dimension</span><b id="dimension">—</b></div>
@@ -288,7 +310,7 @@
               <div class="kv"><span>compute</span><b>BROWSER WASM</b></div>
             </div>
             <p class="status" id="status">Ready. No index loaded.</p>
-          </form>
+          </div>
         </aside>
 
         <section class="pane profiler">
@@ -335,6 +357,7 @@
       const dataPath = dataRoot.pathname.replace(/\/$/, '')
       const byId = id => document.getElementById(id)
       const manifestInput = byId('manifest')
+      const indexPath = new URL('.', manifestInput.value).pathname.replace(/\/$/, '')
       const searchButton = byId('search')
       const status = byId('status')
       const phases = {
@@ -445,15 +468,15 @@
       function onTrace(event) {
         if (event.phase === 'routing') {
           setPhase('routing', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.selectedCids} CIDs selected globally` : 'loading LVQ8 leaf centroids')
-          if (!startupComplete) updateStartup(event.status === 'start' ? 76 : 82, event.status === 'start' ? 'ROUTING IVF CENTROIDS' : 'IVF ROUTE READY', event.status === 'complete' ? `${event.selectedCids} nearest CIDs selected in browser WASM.` : 'Reading and ranking the published LVQ8 leaf centroids…')
+          updateQueryProgress(event.status === 'start' ? 24 : 40, event.status === 'start' ? 'ROUTE · CENTROIDS' : 'ROUTE · CIDS READY')
           if (event.selectedCids !== undefined) byId('cid-count').textContent = event.selectedCids.toLocaleString()
         } else if (event.phase === 'planning') {
           setPhase('ranges', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.files} files / ${event.candidateRows} rows` : `${event.files} candidate files`)
-          if (!startupComplete) updateStartup(event.status === 'start' ? 84 : 91, event.status === 'start' ? 'READING PARQUET RANGES' : 'CANDIDATES MATERIALIZED', event.status === 'complete' ? `${event.candidateRows.toLocaleString()} candidate vectors read from ${event.files} Parquet objects.` : `${event.files} candidate Parquet objects · reading footer metadata…`)
+          updateQueryProgress(event.status === 'start' ? 48 : 74, event.status === 'start' ? 'READ · PARQUET RANGES' : 'READ · CANDIDATES READY')
           if (event.candidateRows !== undefined) byId('candidate-count').textContent = event.candidateRows.toLocaleString()
         } else {
           setPhase('wasm', event.status === 'start' ? 'active' : 'done', event.status === 'complete' ? `${event.candidateRows} LVQ8 vectors ranked` : 'executing WASM distance kernel')
-          if (!startupComplete) updateStartup(event.status === 'start' ? 92 : 95, event.status === 'start' ? 'RANKING IN WASM' : 'VECTOR SEARCH COMPLETE', event.status === 'complete' ? `${event.candidateRows.toLocaleString()} LVQ8 vectors ranked locally.` : 'Executing bounded top-k in this tab…')
+          updateQueryProgress(event.status === 'start' ? 80 : 88, event.status === 'start' ? 'RANK · WASM TOP-K' : 'RANK · COMPLETE')
         }
       }
 
@@ -465,7 +488,7 @@
           return response.json()
         })
         if (!parityVerified) {
-          updateStartup(68, 'VERIFYING EMBEDDING PARITY', 'Checking the browser vector against the offline index builder…')
+          updateStartup(96, 'VERIFYING EMBEDDING PARITY', 'Checking the browser vector against the offline index builder…')
           const metadata = await modelMetadataPromise
           const observed = await extractVector(extractor, metadata['parity-probe'].text)
           const expected = metadata['parity-probe'].vector
@@ -473,7 +496,7 @@
           const error = observed.reduce((maximum, value, index) => Math.max(maximum, Math.abs(value - expected[index])), 0)
           if (error > metadata['parity-probe']['max-absolute-error']) throw new Error(`browser/offline embedding mismatch (${error})`)
           parityVerified = true
-          updateStartup(70, 'TRANSFORMER READY', 'MiniLM parity verified. Preparing the first browser query…')
+          finishStartup()
         }
         return extractor
       }
@@ -510,7 +533,7 @@
 
       async function lookupDocuments(hits) {
         setPhase('source', 'active', 'planning integer doc_id row groups')
-        if (!startupComplete) updateStartup(96, 'LOOKING UP ARTICLES', 'Reading matching Wikipedia rows by integer doc_id…')
+        updateQueryProgress(92, 'LOOKUP · SOURCE ROWS')
         const source = await openSource()
         const ids = new Set(hits.map(hit => Number(hit.doc_id)))
         const groups = [...new Set([...ids].map(id => Math.floor(id / source.manifest['row-group-rows'])))].sort((a, b) => a - b)
@@ -539,7 +562,7 @@
           return { ...document, doc_id: id, _distance: hit._distance }
         })
         setPhase('source', 'done', `${rows.length} rows · ${groups.length} row groups · concurrency 6`)
-        if (!startupComplete) updateStartup(99, 'RESULTS MATERIALIZED', `${rows.length} matching Wikipedia articles decoded in this tab.`)
+        updateQueryProgress(98, 'LOOKUP · RESULTS READY')
         return rows
       }
 
@@ -550,8 +573,9 @@
           await loadEmbedder()
           status.className = 'status'
           status.textContent = 'Transformer ready · starting the first query…'
-          const ready = await run(true)
-          if (ready) byId('random').disabled = false
+          searchButton.disabled = false
+          byId('random').disabled = false
+          await run()
         } catch (error) {
           failStartup(error)
           status.className = 'status error'
@@ -559,9 +583,11 @@
         }
       }
 
-      async function run(isStartup = false) {
-        if (searchButton.disabled && !isStartup) return false
+      async function run() {
+        if (searchButton.disabled) return
         searchButton.disabled = true
+        byId('random').disabled = true
+        updateQueryProgress(3, 'EMBED · QUERY TEXT', 'active')
         byId('trace-state').textContent = 'EXECUTING'
         status.className = 'status'
         status.textContent = 'Embedding your text in this tab…'
@@ -580,7 +606,7 @@
           const totalStarted = performance.now()
           const embeddingStarted = performance.now()
           const vector = await embed(text)
-          if (!startupComplete) updateStartup(72, 'OPENING PUBLISHED INDEX', 'Loading manifest.json and the browser WASM kernel…')
+          updateQueryProgress(16, 'OPEN · PUBLISHED INDEX')
           const embeddingMs = performance.now() - embeddingStarted
           const manifestUrl = new URL(manifestInput.value, location.href)
           if (openedIndex === undefined || openedUrl !== manifestUrl.href) {
@@ -615,33 +641,39 @@
           if (k !== requestedK) caps.push(`top-k ${requestedK}→${k}`)
           const cacheHits = renderCacheHits(cacheHitsBefore)
           status.textContent = `${rows.length} articles · ${rangeTotal} range requests · ${cacheHits} memory range hits · ${formatBytes(transferred)} transferred${caps.length ? ` · capped ${caps.join(' / ')}` : ''}`
-          if (isStartup) finishStartup()
-          return true
+          updateQueryProgress(100, 'QUERY COMPLETE', 'done')
         } catch (error) {
           failStartup(error)
           status.className = 'status error'
           status.textContent = error instanceof Error ? error.message : String(error)
           byId('trace-state').textContent = 'FAULT'
           byId('output').innerHTML = '<div class="empty">$ query failed — inspect SYS output</div>'
-          return false
+          updateQueryProgress(100, 'QUERY FAILED', 'error')
         } finally {
           renderCacheHits(cacheHitsBefore)
           byId('request-log').scrollTop = 0
           searchButton.disabled = false
+          byId('random').disabled = false
         }
       }
 
       function setPhase(name, state, detail) { phases[name].dataset.state = state; phases[name].querySelector('.phase-detail').textContent = detail }
+      function updateQueryProgress(percent, stage, state = 'active') {
+        byId('query-progress').dataset.state = state
+        byId('query-progress-stage').textContent = stage
+        byId('query-progress-bar').style.width = `${Math.min(100, Math.max(0, percent))}%`
+        byId('query-progress-percent').textContent = `${Math.round(percent)}%`
+      }
       function onModelProgress(event) {
         if (startupComplete) return
         const file = String(event.file ?? '')
         if (event.status === 'progress' && Number.isFinite(event.loaded) && Number.isFinite(event.total) && event.total > 0) {
           const fileProgress = event.loaded / event.total
-          const percent = file.endsWith('.onnx') ? 6 + fileProgress * 60 : 2 + fileProgress * 4
+          const percent = file.endsWith('.onnx') ? 8 + fileProgress * 84 : 3 + fileProgress * 5
           const label = file.split('/').at(-1) || 'model data'
           updateStartup(percent, 'DOWNLOADING TRANSFORMER', `${label} · ${formatBytes(event.loaded)} / ${formatBytes(event.total)}`)
         } else if (event.status === 'ready') {
-          updateStartup(67, 'INITIALIZING ONNX / WASM', 'Model files loaded. Initializing the browser inference runtime…')
+          updateStartup(94, 'INITIALIZING ONNX / WASM', 'Model files loaded. Initializing the browser inference runtime…')
         } else if (event.status === 'initiate' && startupProgress < 3) {
           updateStartup(3, 'LOCATING MODEL FILES', file || 'MiniLM model manifest')
         }
@@ -656,7 +688,7 @@
       }
       function finishStartup() {
         if (startupComplete) return
-        updateStartup(100, 'BROWSER QUERY READY', 'The index is open and the first results are materialized.')
+        updateStartup(100, 'TRANSFORMER READY', 'MiniLM parity verified. Starting the first query…')
         startupComplete = true
         byId('startup').setAttribute('aria-busy', 'false')
         setTimeout(() => { byId('startup').hidden = true }, 320)
@@ -665,16 +697,17 @@
         if (startupComplete) return
         const message = error instanceof Error ? error.message : String(error)
         byId('startup').classList.add('error')
-        updateStartup(100, 'BROWSER QUERY BOOT FAILED', message)
+        updateStartup(100, 'MODEL BOOT FAILED', message)
         byId('startup').setAttribute('aria-busy', 'false')
       }
       function defaultPhaseText(name) { return ({ embedding: 'text → 384d in ONNX/WASM', manifest: 'manifest.json', routing: 'global LVQ8 centroid top-nprobe', ranges: 'footer → selected row groups', wasm: 'LVQ8 distance + bounded top-k', source: 'doc_id → Wikipedia rows' })[name] }
       function compactPath(path) {
+        if (path.startsWith(`${indexPath}/`)) return `wiki/index/${path.slice(indexPath.length + 1)}`
         if (path.startsWith(`${dataPath}/`)) return `wiki/${path.slice(dataPath.length + 1)}`
         return path.replace('/assets/', 'assets/')
       }
       function requestScope(path) {
-        if (path.startsWith(`${dataPath}/index/`)) return 'INDEX'
+        if (path.startsWith(`${indexPath}/`)) return 'INDEX'
         if (path === `${dataPath}/documents.parquet` || path === `${dataPath}/source-manifest.json`) return 'SOURCE'
         if (path.startsWith(`${dataPath}/models/`) || path === `${dataPath}/model.json`) return 'MODEL'
         return 'RUNTIME'
