@@ -355,6 +355,8 @@
       const nativeFetch = globalThis.fetch.bind(globalThis)
       const dataRoot = new URL('https://data.parqdb.io/wiki-100k/v1/')
       const dataPath = dataRoot.pathname.replace(/\/$/, '')
+      const indexReadConcurrency = 16
+      const sourceReadConcurrency = 10
       const byId = id => document.getElementById(id)
       const manifestInput = byId('manifest')
       const indexPath = new URL('.', manifestInput.value).pathname.replace(/\/$/, '')
@@ -541,8 +543,8 @@
         let row = 0
         for (const group of source.metadata.row_groups) { starts.push(row); row += Number(group.num_rows) }
         const documents = new Map()
-        for (let offset = 0; offset < groups.length; offset += 6) {
-          const batches = await Promise.all(groups.slice(offset, offset + 6).map(async group => {
+        for (let offset = 0; offset < groups.length; offset += sourceReadConcurrency) {
+          const batches = await Promise.all(groups.slice(offset, offset + sourceReadConcurrency).map(async group => {
             if (group < 0 || group >= starts.length) throw new Error('doc_id is outside source row groups')
             return parquetReadObjects({
               file: source.file, metadata: source.metadata, compressors,
@@ -561,7 +563,7 @@
           if (!document) throw new Error(`source row missing for doc_id ${id}`)
           return { ...document, doc_id: id, _distance: hit._distance }
         })
-        setPhase('source', 'done', `${rows.length} rows · ${groups.length} row groups · concurrency 6`)
+        setPhase('source', 'done', `${rows.length} rows · ${groups.length} row groups · concurrency ${sourceReadConcurrency}`)
         updateQueryProgress(98, 'LOOKUP · RESULTS READY')
         return rows
       }
@@ -624,7 +626,7 @@
           byId('k').value = String(k)
           const searchStarted = performance.now()
           status.textContent = 'Searching the published index…'
-          const hits = await openedIndex.search(vector, { nprobe, k, trace: onTrace })
+          const hits = await openedIndex.search(vector, { nprobe, k, maxConcurrentReads: indexReadConcurrency, trace: onTrace })
           const searchMs = performance.now() - searchStarted
           const sourceStarted = performance.now()
           status.textContent = 'Looking up matching Wikipedia rows…'
