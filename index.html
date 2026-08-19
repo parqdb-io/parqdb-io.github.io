@@ -151,7 +151,7 @@
       .status.error { border-color: var(--red); color: #e88787; }
 
       .profiler { background: #080a08; }
-      .metrics { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--line); }
+      .metrics { display: grid; grid-template-columns: repeat(6, 1fr); border-bottom: 1px solid var(--line); }
       .metric { min-width: 0; padding: 13px 12px; }
       .metric + .metric { border-left: 1px solid var(--line); }
       .metric span { display: block; overflow: hidden; color: #596259; font-size: 8px; letter-spacing: .12em; text-transform: uppercase; text-overflow: ellipsis; }
@@ -210,7 +210,7 @@
         main { border: 0; }
         .workspace { grid-template-columns: 1fr; }
         .controls { border-right: 0; border-bottom: 1px solid var(--line); }
-        .metrics { grid-template-columns: repeat(5, minmax(100px,1fr)); overflow-x: auto; }
+        .metrics { grid-template-columns: repeat(6, minmax(100px,1fr)); overflow-x: auto; }
       }
       @media (max-width: 620px) {
         .topbar { grid-template-columns: 1fr auto; }
@@ -293,6 +293,7 @@
           <div class="pane-head"><span>02 / query profiler</span><code id="trace-state">AWAITING EXECUTION</code></div>
           <div class="metrics">
             <div class="metric"><span>requests</span><b id="request-count">0</b></div>
+            <div class="metric"><span>memory range hits</span><b id="cache-hit-count">0</b></div>
             <div class="metric"><span>transferred</span><b id="byte-total">0 B</b></div>
             <div class="metric"><span>selected cids</span><b id="cid-count">—</b></div>
             <div class="metric"><span>candidates</span><b id="candidate-count">—</b></div>
@@ -307,7 +308,7 @@
             <div class="plan-row" id="phase-source" data-step="05" data-state="idle"><span class="phase-name">LOOKUP</span><span class="phase-detail">doc_id → Wikipedia rows</span><span class="phase-status"></span></div>
           </div>
           <div class="activity">
-            <div class="pane-head"><span>03 / HTTP trace</span><code>METHOD · OBJECT · BYTE RANGE · RTT</code></div>
+            <div class="pane-head"><span>03 / HTTP trace</span><code><span id="cache-trace">0 MEM HITS</span> · NETWORK REQUESTS BELOW</code></div>
             <div class="request-log" id="request-log"><div class="request-empty">$ waiting for range requests<span class="cursor">_</span></div></div>
           </div>
         </section>
@@ -540,7 +541,9 @@
         byId('query-time').textContent = '—'
         byId('cid-count').textContent = '—'
         byId('candidate-count').textContent = '—'
+        const cacheHitsBefore = rangeCache.stats().hits
         requests = []; requestTotal = 0; rangeTotal = 0; transferred = 0
+        renderCacheHits(cacheHitsBefore)
         renderRequests()
         Object.keys(phases).forEach(name => setPhase(name, 'idle', defaultPhaseText(name)))
         try {
@@ -581,7 +584,8 @@
           const caps = []
           if (nprobe !== requestedNprobe) caps.push(`nprobe ${requestedNprobe}→${nprobe}`)
           if (k !== requestedK) caps.push(`top-k ${requestedK}→${k}`)
-          status.textContent = `${rows.length} articles · ${rangeTotal} range requests · ${formatBytes(transferred)} transferred${caps.length ? ` · capped ${caps.join(' / ')}` : ''}`
+          const cacheHits = renderCacheHits(cacheHitsBefore)
+          status.textContent = `${rows.length} articles · ${rangeTotal} range requests · ${cacheHits} memory range hits · ${formatBytes(transferred)} transferred${caps.length ? ` · capped ${caps.join(' / ')}` : ''}`
         } catch (error) {
           failStartup(error)
           status.className = 'status error'
@@ -589,6 +593,7 @@
           byId('trace-state').textContent = 'FAULT'
           byId('output').innerHTML = '<div class="empty">$ query failed — inspect SYS output</div>'
         } finally {
+          renderCacheHits(cacheHitsBefore)
           byId('request-log').scrollTop = 0
           searchButton.disabled = false
         }
@@ -644,6 +649,12 @@
       }
       function requestRow(request) {
         return `<div class="request-row"><b>${request.method}</b><span class="path"><i>${request.scope}</i>${request.status} ${escape(request.path)}</span><span class="range">${escape(request.range)}</span><span class="time">${request.elapsed.toFixed(1)}ms</span></div>`
+      }
+      function renderCacheHits(start) {
+        const hits = Math.max(0, rangeCache.stats().hits - start)
+        byId('cache-hit-count').textContent = hits.toLocaleString()
+        byId('cache-trace').textContent = `${hits.toLocaleString()} MEM ${hits === 1 ? 'HIT' : 'HITS'}`
+        return hits
       }
       function renderRequests() {
         const log = byId('request-log')
