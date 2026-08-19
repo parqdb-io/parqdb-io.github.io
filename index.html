@@ -370,7 +370,9 @@
       let openedIndex
       let openedUrl = ''
       let sourcePromise
-      const rangeCache = new HttpRangeCache(32 * 1024 * 1024)
+      // Keep cold demo queries on exact Parquet ranges. The browser client cache
+      // remains disabled here until it can retain ranges without aligned over-read.
+      const rangeCache = new HttpRangeCache(0)
       let requests = []
       let requestTotal = 0
       let rangeTotal = 0
@@ -563,9 +565,11 @@
           byId('nprobe').value = String(nprobe)
           byId('k').value = String(k)
           const searchStarted = performance.now()
+          status.textContent = 'Searching the published index…'
           const hits = await openedIndex.search(vector, { nprobe, k, trace: onTrace })
           const searchMs = performance.now() - searchStarted
           const sourceStarted = performance.now()
+          status.textContent = 'Looking up matching Wikipedia rows…'
           const rows = await lookupDocuments(hits)
           const sourceMs = performance.now() - sourceStarted
           const totalMs = performance.now() - totalStarted
