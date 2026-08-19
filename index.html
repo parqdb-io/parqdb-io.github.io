@@ -523,6 +523,7 @@
       })
       byId('query-form').addEventListener('submit', event => { event.preventDefault(); run() })
       byId('query-controls-form').addEventListener('submit', event => { event.preventDefault(); run() })
+      for (const button of searchButtons) button.addEventListener('click', triggerSearchBurst)
       document.addEventListener('keydown', event => {
         if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { event.preventDefault(); run() }
       })
