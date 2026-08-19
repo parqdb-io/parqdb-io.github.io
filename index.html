@@ -395,7 +395,7 @@
         const current = byId('query').value
         const choices = sampleQueries.filter(query => query !== current)
         byId('query').value = choices[Math.floor(Math.random() * choices.length)]
-        run()
+        byId('query').focus()
       })
 
       async function tracedFetch(input, init) {
