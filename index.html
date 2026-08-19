@@ -88,6 +88,24 @@
       .topbar-right > span { display: flex; align-items: center; gap: 8px; }
       .repo-link { color: #b8c1b8; }
       .repo-link:hover, .repo-link:focus-visible { color: var(--green); }
+      .topbar .repo-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 10px;
+        border: 1px solid var(--green);
+        color: #061007;
+        background: var(--green);
+        box-shadow: 3px 3px 0 #244c2c;
+        font-weight: 700;
+        letter-spacing: .04em;
+      }
+      .topbar .repo-link:hover, .topbar .repo-link:focus-visible {
+        color: #061007;
+        background: #d7ffe1;
+        transform: translate(-1px, -1px);
+        box-shadow: 4px 4px 0 #244c2c;
+      }
       .pulse { width: 7px; height: 7px; background: var(--green); box-shadow: 0 0 12px rgba(123,255,158,.65); animation: pulse 1.4s steps(2,end) infinite; }
 
       main { width: min(1440px, 100%); margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
@@ -231,6 +249,7 @@
       @media (max-width: 620px) {
         .topbar { grid-template-columns: 1fr auto; }
         .topbar-center { display: none; }
+        .topbar-right > span { display: none; }
         .boot { padding: 24px 14px 20px; }
         h1 { font-size: 46px; }
         .boot-tagline { font-size: 9px; }
@@ -272,7 +291,7 @@
     <header class="topbar">
       <strong>PARQDB://CONSOLE</strong>
       <span class="topbar-center">PARQUET_INDEX / HTTP_RANGE / WASM</span>
-      <span class="topbar-right"><span><i class="pulse"></i> CLIENT ONLINE</span><a class="repo-link" href="https://github.com/parqdb-io/parqdb" target="_blank" rel="noreferrer">GITHUB ↗</a></span>
+      <span class="topbar-right"><span><i class="pulse"></i> CLIENT ONLINE</span><a class="repo-link" href="https://github.com/parqdb-io/parqdb" target="_blank" rel="noreferrer" aria-label="View ParqDB on GitHub">VIEW ON GITHUB ↗</a></span>
     </header>
 
     <main>
