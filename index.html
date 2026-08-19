@@ -127,19 +127,18 @@
         position: absolute;
         inset: -8px;
         border: 2px solid var(--green);
-        border-radius: 50%;
-        box-shadow: 0 0 22px rgba(123,255,158,.55);
+        box-shadow: 0 0 16px rgba(123,255,158,.38);
         animation: search-shockwave 720ms cubic-bezier(.1,.7,.2,1) forwards;
       }
-      .search-burst::after { animation-delay: 90ms; border-color: var(--cyan); }
+      .search-burst::after { animation-delay: 90ms; opacity: .55; }
       .search-burst i {
         position: absolute;
         left: -3px;
         top: -3px;
         width: 6px;
         height: 6px;
-        background: var(--particle-color, var(--green));
-        box-shadow: 0 0 12px var(--particle-color, var(--green));
+        background: var(--green);
+        box-shadow: 0 0 8px rgba(123,255,158,.8);
         animation: search-burst 850ms cubic-bezier(.12,.72,.2,1) forwards;
       }
       @keyframes search-burst {
@@ -152,9 +151,9 @@
       .run.search-launch { animation: search-launch 560ms steps(2,end); }
       .run.search-launch:disabled { opacity: 1; }
       @keyframes search-launch {
-        0%, 100% { filter: none; }
-        20% { filter: brightness(2.2); box-shadow: 0 0 0 4px rgba(123,255,158,.3), 0 0 42px rgba(123,255,158,.75); }
-        55% { filter: brightness(1.35); box-shadow: 0 0 24px rgba(105,215,255,.45); }
+        0%, 100% { background: var(--green); color: #071008; box-shadow: none; }
+        20% { background: #071008; color: var(--green); box-shadow: 5px 5px 0 #315d3b, -3px -3px 0 rgba(123,255,158,.25); }
+        55% { background: #142419; color: var(--green); box-shadow: 3px 3px 0 #244c2c; }
       }
       @media (prefers-reduced-motion: reduce) {
         .search-burst { display: none; }
@@ -826,7 +825,6 @@
           const particle = document.createElement('i')
           particle.style.setProperty('--angle', `${index * 11.25 + (Math.random() * 8 - 4)}deg`)
           particle.style.setProperty('--distance', `${70 + Math.random() * 90}px`)
-          particle.style.setProperty('--particle-color', index % 4 === 0 ? 'var(--cyan)' : 'var(--green)')
           particle.style.animationDelay = `${Math.random() * 100}ms`
           burst.append(particle)
         }
