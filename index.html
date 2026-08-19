@@ -184,6 +184,24 @@
       .query-progress[data-state="done"] .query-progress-track i { background: var(--green); }
       .query-progress[data-state="error"] span, .query-progress[data-state="error"] b { color: var(--red); }
       .query-progress[data-state="error"] .query-progress-track i { background: var(--red); }
+      .result-jump {
+        width: min(1060px, 100%);
+        min-height: 42px;
+        display: grid;
+        grid-template-columns: auto minmax(0,1fr) auto;
+        align-items: center;
+        gap: 14px;
+        margin: -8px auto 16px;
+        padding: 8px 12px;
+        border-color: #31563a;
+        background: rgba(123,255,158,.045);
+        text-align: left;
+      }
+      .result-jump[hidden] { display: none; }
+      .result-jump-meta { color: var(--green); font-size: 9px; letter-spacing: .08em; white-space: nowrap; }
+      .result-jump-title { min-width: 0; overflow: hidden; color: #c8d2c8; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+      .result-jump-action { color: var(--green); font-size: 9px; white-space: nowrap; }
+      .result-jump:hover .result-jump-title, .result-jump:focus-visible .result-jump-title { color: #effff3; }
       .metrics { display: grid; grid-template-columns: repeat(6, 1fr); border-bottom: 1px solid var(--line); }
       .metric { min-width: 0; padding: 13px 12px; }
       .metric + .metric { border-left: 1px solid var(--line); }
@@ -256,6 +274,10 @@
         .hero-search { grid-template-columns: 1fr 1fr; margin-top: 18px; }
         .hero-search input { grid-column: 1 / -1; }
         .query-progress { grid-template-columns: 105px minmax(70px,1fr) 32px; gap: 7px; padding: 0 8px; }
+        .result-jump { grid-template-columns: 1fr auto; gap: 5px 10px; }
+        .result-jump-meta { grid-column: 1; }
+        .result-jump-title { grid-column: 1 / -1; grid-row: 2; }
+        .result-jump-action { grid-column: 2; grid-row: 1; }
         .routes { margin-top: 20px; }
         .route { grid-template-columns: 58px minmax(0,1fr); gap: 8px; padding: 9px 6px; }
         .route-state { grid-column: 2; justify-self: start; }
@@ -304,6 +326,7 @@
           <button id="random" type="button" disabled>RANDOM QUERY</button>
         </form>
         <div class="query-progress" id="query-progress" data-state="idle"><span id="query-progress-stage">QUERY IDLE</span><div class="query-progress-track" aria-hidden="true"><i id="query-progress-bar"></i></div><b id="query-progress-percent">0%</b></div>
+        <button class="result-jump" id="result-jump" type="button" hidden><span class="result-jump-meta" id="result-jump-meta"></span><span class="result-jump-title" id="result-jump-title"></span><span class="result-jump-action">VIEW RESULTS ↓</span></button>
         <p class="boot-copy">Type a question to search 100,000 Wikipedia articles. ParqDB builds an IVF-LVQ8 index over their MiniLM embeddings and publishes it to object storage as immutable Parquet files. Your browser embeds the query, reads only the required byte ranges, and ranks results in WASM. <b>No query server sees your data.</b></p>
         <div class="routes" aria-label="Architecture comparison">
           <div class="route legacy"><span class="route-name">LEGACY</span><span class="route-path">browser ──<del>QUERY──&gt; vector DB</del> ──READ──&gt; object storage</span><span class="route-state">VECTOR DB ×</span></div>
@@ -313,9 +336,11 @@
 
       <section class="workspace" id="console">
         <aside class="pane controls">
-          <div class="pane-head"><span>01 / index controls</span><code>advanced</code></div>
-          <div class="form">
-            <div class="field"><label for="manifest">IMMUTABLE INDEX <span>manifest.json</span></label><input id="manifest" value="https://data.parqdb.io/wiki-100k/v2/index/manifest.json" readonly spellcheck="false" /></div>
+          <div class="pane-head"><span>01 / query</span><code>advanced</code></div>
+          <form class="form" id="query-controls-form">
+            <div class="field"><label for="query-secondary">QUERY TEXT <span>shared with search above</span></label><input id="query-secondary" value="How do anarchist movements view political authority?" aria-label="Search Wikipedia articles from query controls" spellcheck="true" /></div>
+            <div class="actions field"><button class="run" id="search-secondary" type="submit" disabled>SEARCH ↵</button><button id="random-secondary" type="button" disabled>RANDOM QUERY</button></div>
+            <div class="field"><label for="manifest">INDEX MANIFEST <span>immutable Parquet</span></label><input id="manifest" value="https://data.parqdb.io/wiki-100k/v2/index/manifest.json" readonly spellcheck="false" /></div>
             <div class="pair">
               <div class="field"><label for="nprobe">NPROBE <span id="nprobe-limit">nlist 2,048</span></label><input id="nprobe" type="number" min="1" value="32" /></div>
               <div class="field"><label for="k">TOP_K <span id="k-limit">max 100</span></label><input id="k" type="number" min="1" value="10" /></div>
@@ -329,7 +354,7 @@
               <div class="kv"><span>compute</span><b>BROWSER WASM</b></div>
             </div>
             <p class="status" id="status">Ready. No index loaded.</p>
-          </div>
+          </form>
         </aside>
 
         <section class="pane profiler">
@@ -357,7 +382,7 @@
         </section>
       </section>
 
-      <section class="results">
+      <section class="results" id="results">
         <div class="result-head"><span>04 / WIKIPEDIA RESULTS · RANGE-LOOKED-UP BY DOC_ID</span><span class="latency" id="latency"></span></div>
         <div class="table-wrap" id="output"><div class="empty">$ no rows materialized</div></div>
       </section>
@@ -380,6 +405,9 @@
       const manifestInput = byId('manifest')
       const indexPath = new URL('.', manifestInput.value).pathname.replace(/\/$/, '')
       const searchButton = byId('search')
+      const queryInputs = [byId('query'), byId('query-secondary')]
+      const searchButtons = [searchButton, byId('search-secondary')]
+      const randomButtons = [byId('random'), byId('random-secondary')]
       const status = byId('status')
       const phases = {
         embedding: byId('phase-embedding'), manifest: byId('phase-manifest'),
@@ -452,19 +480,26 @@
       env.backends.onnx.wasm.wasmPaths = new URL('./ort/', location.href).href
       globalThis.fetch = tracedFetch
 
+      for (const input of queryInputs) input.addEventListener('input', () => {
+        for (const peer of queryInputs) if (peer !== input) peer.value = input.value
+      })
       byId('query-form').addEventListener('submit', event => { event.preventDefault(); run() })
+      byId('query-controls-form').addEventListener('submit', event => { event.preventDefault(); run() })
       document.addEventListener('keydown', event => {
         if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { event.preventDefault(); run() }
       })
-      byId('random').addEventListener('click', () => {
+      for (const button of randomButtons) button.addEventListener('click', () => {
         const current = byId('query').value
         const choices = sampleQueries.filter(query => query !== current)
-        const queryInput = byId('query')
-        queryInput.value = choices[Math.floor(Math.random() * choices.length)]
-        queryInput.classList.remove('query-flash')
-        void queryInput.offsetWidth
-        queryInput.classList.add('query-flash')
+        const next = choices[Math.floor(Math.random() * choices.length)]
+        for (const queryInput of queryInputs) {
+          queryInput.value = next
+          queryInput.classList.remove('query-flash')
+          void queryInput.offsetWidth
+          queryInput.classList.add('query-flash')
+        }
       })
+      byId('result-jump').addEventListener('click', () => byId('results').scrollIntoView({ behavior: 'smooth', block: 'start' }))
 
       async function tracedFetch(input, init) {
         const request = new Request(input, init)
@@ -588,14 +623,12 @@
       }
 
       async function boot() {
-        searchButton.disabled = true
-        byId('random').disabled = true
+        setQueryControlsDisabled(true)
         try {
           await loadEmbedder()
           status.className = 'status'
           status.textContent = 'Transformer ready · starting the first query…'
-          searchButton.disabled = false
-          byId('random').disabled = false
+          setQueryControlsDisabled(false)
           await run()
         } catch (error) {
           failStartup(error)
@@ -606,8 +639,8 @@
 
       async function run() {
         if (searchButton.disabled) return
-        searchButton.disabled = true
-        byId('random').disabled = true
+        setQueryControlsDisabled(true)
+        hideResultJump()
         updateQueryProgress(3, 'EMBED · QUERY TEXT', 'active')
         byId('trace-state').textContent = 'EXECUTING'
         status.className = 'status'
@@ -654,6 +687,7 @@
           const totalMs = performance.now() - totalStarted
           renderFacts(openedIndex.manifest)
           renderRows(rows)
+          showResultJump(rows, totalMs)
           byId('query-time').textContent = `${totalMs.toFixed(1)} ms`
           byId('latency').textContent = `${embeddingMs.toFixed(1)} ms EMBED / ${searchMs.toFixed(1)} ms INDEX SEARCH / ${sourceMs.toFixed(1)} ms SOURCE LOOKUP / ${totalMs.toFixed(1)} ms TOTAL`
           byId('trace-state').textContent = 'COMPLETE'
@@ -669,15 +703,25 @@
           status.textContent = error instanceof Error ? error.message : String(error)
           byId('trace-state').textContent = 'FAULT'
           byId('output').innerHTML = '<div class="empty">$ query failed — inspect SYS output</div>'
+          hideResultJump()
           updateQueryProgress(100, 'QUERY FAILED', 'error')
         } finally {
           renderCacheHits(cacheHitsBefore)
           byId('request-log').scrollTop = 0
-          searchButton.disabled = false
-          byId('random').disabled = false
+          setQueryControlsDisabled(false)
         }
       }
 
+      function setQueryControlsDisabled(disabled) {
+        for (const button of [...searchButtons, ...randomButtons]) button.disabled = disabled
+      }
+      function hideResultJump() { byId('result-jump').hidden = true }
+      function showResultJump(rows, totalMs) {
+        if (!rows.length) return hideResultJump()
+        byId('result-jump-meta').textContent = `${rows.length} RESULTS · ${totalMs.toFixed(0)} MS`
+        byId('result-jump-title').textContent = `TOP HIT · ${rows[0].title}`
+        byId('result-jump').hidden = false
+      }
       function setPhase(name, state, detail) { phases[name].dataset.state = state; phases[name].querySelector('.phase-detail').textContent = detail }
       function updateQueryProgress(percent, stage, state = 'active') {
         byId('query-progress').dataset.state = state
