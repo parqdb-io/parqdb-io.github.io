@@ -245,6 +245,8 @@
       .request-row .path i { margin-right: 6px; color: var(--amber); font-style: normal; }
       .request-row .range { color: var(--cyan); }
       .request-row .time { justify-self: end; color: var(--amber); }
+      .request-row.fail { background: rgba(255,107,107,.045); }
+      .request-row.fail b, .request-row.fail .path, .request-row.fail .path i, .request-row.fail .range, .request-row.fail .time { color: var(--red); }
       .request-empty { height: 250px; display: grid; place-items: center; color: #444c44; font-size: 10px; }
 
       .results { border-top: 1px solid var(--line); background: var(--panel); }
@@ -414,6 +416,7 @@
       const dataPath = dataRoot.pathname.replace(/\/$/, '')
       const indexReadConcurrency = 16
       const sourceReadConcurrency = 10
+      const fetchAttemptLimit = 3
       const byId = id => document.getElementById(id)
       const manifestInput = byId('manifest')
       const indexPath = new URL('.', manifestInput.value).pathname.replace(/\/$/, '')
@@ -519,19 +522,65 @@
         const url = new URL(request.url)
         const range = request.headers.get('range')
         const method = range ? 'RANGE' : 'GET'
-        const started = performance.now()
+        const scope = requestScope(url.pathname)
+        const path = compactPath(url.pathname)
+        const rangeLabel = range?.replace('bytes=', '') ?? 'complete'
         if (url.pathname.endsWith('/index/manifest.json')) setPhase('manifest', 'active', 'GET index/manifest.json')
-        const response = await nativeFetch(request)
-        const elapsed = performance.now() - started
-        const bytes = Number(response.headers.get('content-length') ?? 0)
-        transferred += Number.isFinite(bytes) ? bytes : 0
-        requestTotal += 1
-        if (range) rangeTotal += 1
-        const trace = { method, scope: requestScope(url.pathname), path: compactPath(url.pathname), range: range?.replace('bytes=', '') ?? 'complete', elapsed, status: response.status }
+        for (let attempt = 1; attempt <= fetchAttemptLimit; attempt += 1) {
+          const started = performance.now()
+          requestTotal += 1
+          if (range) rangeTotal += 1
+          try {
+            const response = await nativeFetch(request.clone())
+            const elapsed = performance.now() - started
+            const bytes = Number(response.headers.get('content-length') ?? 0)
+            transferred += Number.isFinite(bytes) ? bytes : 0
+            if (isRetryableStatus(response.status)) {
+              const error = `HTTP ${response.status} · attempt ${attempt}/${fetchAttemptLimit}`
+              recordRequest({ method: 'FAIL', scope, path, range: rangeLabel, elapsed, status: response.status, error })
+              if (attempt === fetchAttemptLimit) throw fetchFailure(scope, method, url, range, attempt, error)
+              try { await response.body?.cancel() } catch {}
+              await retryPause(attempt, response.headers.get('retry-after'))
+              continue
+            }
+            recordRequest({ method, scope, path, range: rangeLabel, elapsed, status: response.status })
+            if (url.pathname.endsWith('/index/manifest.json')) setPhase('manifest', 'done', `${response.status} · ${bytes.toLocaleString()} B`)
+            return response
+          } catch (cause) {
+            if (cause?.parqdbFetchFailure) throw cause
+            const elapsed = performance.now() - started
+            const reason = cause instanceof Error ? `${cause.name}: ${cause.message}` : String(cause)
+            const context = `${reason} · attempt ${attempt}/${fetchAttemptLimit} · browser ${navigator.onLine ? 'online' : 'offline'}`
+            recordRequest({ method: 'FAIL', scope, path, range: rangeLabel, elapsed, status: 'NETWORK', error: context })
+            if (attempt === fetchAttemptLimit || request.signal.aborted) {
+              const failure = fetchFailure(scope, method, url, range, attempt, context)
+              console.error('ParqDB request failed', { scope, method, url: url.href, range, attempt, cause })
+              throw failure
+            }
+            await retryPause(attempt)
+          }
+        }
+        throw new Error('unreachable fetch retry state')
+      }
+
+      function recordRequest(trace) {
         requests.push(trace)
         appendRequest(trace)
-        if (url.pathname.endsWith('/index/manifest.json')) setPhase('manifest', 'done', `${response.status} · ${bytes.toLocaleString()} B`)
-        return response
+      }
+
+      function isRetryableStatus(status) { return status === 408 || status === 429 || status >= 500 }
+
+      function fetchFailure(scope, method, url, range, attempts, reason) {
+        const target = `${scope} ${method} ${url.href}${range ? ` · ${range}` : ''}`
+        const error = new Error(`${target} failed after ${attempts} ${attempts === 1 ? 'attempt' : 'attempts'}: ${reason}`)
+        error.parqdbFetchFailure = true
+        return error
+      }
+
+      async function retryPause(attempt, retryAfter) {
+        const seconds = retryAfter === null ? NaN : Number(retryAfter)
+        const delay = Number.isFinite(seconds) ? Math.min(2_000, Math.max(0, seconds * 1_000)) : 160 * (2 ** (attempt - 1))
+        await new Promise(resolve => setTimeout(resolve, delay))
       }
 
       function onTrace(event) {
@@ -791,7 +840,9 @@
         return 'RUNTIME'
       }
       function requestRow(request) {
-        return `<div class="request-row"><b>${request.method}</b><span class="path"><i>${request.scope}</i>${request.status} ${escape(request.path)}</span><span class="range">${escape(request.range)}</span><span class="time">${request.elapsed.toFixed(1)}ms</span></div>`
+        const failed = request.method === 'FAIL'
+        const title = request.error ? ` title="${escape(String(request.error))}"` : ''
+        return `<div class="request-row${failed ? ' fail' : ''}"${title}><b>${request.method}</b><span class="path"><i>${request.scope}</i>${request.status} ${escape(request.path)}</span><span class="range">${escape(request.range)}</span><span class="time">${request.elapsed.toFixed(1)}ms</span></div>`
       }
       function renderCacheHits(start) {
         const hits = Math.max(0, rangeCache.stats().hits - start)
