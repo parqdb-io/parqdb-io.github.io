@@ -56,7 +56,7 @@ parqdb config init
 parqdb serve
 ```
 
-See the [server guide](../guides/server) for source authorization, storage,
+See the [server guide](/docs/0.2/guides/server) for source authorization, storage,
 runtime settings, and the ASGI embedding API.
 
 ```python
@@ -273,4 +273,4 @@ session = parqdb.connect("./parqdb-data", config=config)
 ```
 
 Runtime resource configuration is resolved when the embedded session is
-created. See [configuration](./configuration) for the complete set of keys.
+created. See [configuration](/docs/0.2/reference/configuration) for the complete set of keys.

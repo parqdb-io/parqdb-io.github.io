@@ -46,7 +46,7 @@ metadata.
 
 Run `parqdb config init` to write the default `parqdb.toml`, then use
 `parqdb serve`. The server guide documents the [configuration file and source
-policy](../guides/server). The default source allowlist is empty. File paths
+policy](/docs/0.2/guides/server). The default source allowlist is empty. File paths
 are resolved by the server and must remain below an allowed file root.
 Object-store URIs must match the configured scheme, authority, and path-segment
 boundary. Registration requests cannot override the server's storage

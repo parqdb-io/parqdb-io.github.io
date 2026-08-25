@@ -35,7 +35,7 @@ test("documentation navigation and search load", async ({ page }, testInfo) => {
   const version = page.getByLabel("Documentation version");
   await expect(version).toHaveValue("/docs/getting-started");
   await version.selectOption({ label: "0.2" });
-  await expect(page).toHaveURL(/\/docs\/0\.2\/getting-started$/);
+  await expect(page).toHaveURL(/\/docs\/0\.2\/getting-started\/?$/);
   await expect(page.getByText("You are viewing the ParqDB 0.2 documentation snapshot.")).toBeVisible();
   if (testInfo.project.name === "mobile") {
     await page.locator('button[aria-controls="starlight__sidebar"]').click();
@@ -61,7 +61,7 @@ test("key pages have no automated accessibility violations", async ({ page }) =>
 
 test("all internal pages and links resolve", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop", "One crawl is sufficient");
-  const pending = ["/"];
+  const pending = ["/", "/docs/0.2"];
   const visited = new Set();
 
   while (pending.length > 0) {
@@ -78,10 +78,11 @@ test("all internal pages and links resolve", async ({ page }, testInfo) => {
     for (const href of links) {
       const url = new URL(href);
       if (url.origin !== "http://127.0.0.1:4321") continue;
-      const next = `${url.pathname}${url.search}`;
+      const pathname = url.pathname === "/" ? "/" : url.pathname.replace(/\/$/, "");
+      const next = `${pathname}${url.search}`;
       if (!visited.has(next) && !pending.includes(next)) pending.push(next);
     }
   }
 
-  expect(visited.size).toBeGreaterThanOrEqual(14);
+  expect(visited.size).toBe(31);
 });

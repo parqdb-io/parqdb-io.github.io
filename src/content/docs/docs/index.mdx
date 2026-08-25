@@ -6,11 +6,11 @@ hero:
   tagline: Build and query open vector indexes without moving your data into a proprietary format.
   actions:
     - text: Get started
-      link: docs/getting-started
+      link: /docs/getting-started
       icon: right-arrow
       variant: primary
     - text: Python API
-      link: docs/reference/python
+      link: /docs/reference/python
       icon: document
       variant: secondary
 ---
@@ -23,17 +23,17 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
   <Card title="Run embedded" icon="seti:python">
     Install ParqDB, register an existing Parquet table, and build an IVF index inside your Python process.
 
-    [Start the embedded guide →](docs/getting-started)
+    [Start the embedded guide →](/docs/getting-started)
   </Card>
   <Card title="Publish for the browser" icon="globe">
     Publish an immutable IVF-LVQ index to object storage and query it with HTTP Range and WebAssembly.
 
-    [Open the publication guide →](docs/guides/browser)
+    [Open the publication guide →](/docs/guides/browser)
   </Card>
   <Card title="Understand the system" icon="puzzle">
     Learn how ParqDB separates source tables, open indexes, catalog publication, storage, and execution.
 
-    [Read the core concepts →](docs/concepts)
+    [Read the core concepts →](/docs/concepts)
   </Card>
   <Card title="Inspect the format" icon="open-book">
     Use the runtime-independent metadata and Parquet schemas to build interoperable tools and engines.
@@ -51,7 +51,19 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 | Embedded DataFusion | Iceberg | Query exact snapshots through the native provider | Experimental |
 | Client/server | Authorized Parquet sources | Build and query through the HTTP API | Experimental |
 
-The embedded DataFusion runtime is the first supported product surface. Review [current limitations](docs/reference/limitations) before planning a production deployment.
+The embedded DataFusion runtime is the first supported product surface. Review [current limitations](/docs/reference/limitations) before planning a production deployment.
+
+## Choose a deployment shape
+
+| If you need | Start here | What runs the query |
+| --- | --- | --- |
+| A local Python application or notebook | [Embedded ParqDB](/docs/guides/embedded) | DataFusion in your Python process |
+| A public, serverless search experience | [Publish for the browser](/docs/guides/browser) | WebAssembly in each visitor's browser |
+| A shared API for trusted clients | [Run a server](/docs/guides/server) | The ParqDB process behind HTTP |
+
+All three paths use the same immutable Parquet index format. The browser path
+has a deliberately smaller feature surface; the [limitations page](/docs/reference/limitations)
+defines the current boundary.
 
 ## Install
 
@@ -67,4 +79,18 @@ session.register_parquet("documents", parqdb.datasets.uri("documents"))
 documents = session.table("documents")
 ```
 
-Continue with [Getting started](docs/getting-started) to build and query your first index.
+Continue with [Getting started](/docs/getting-started) to build and query your first index.
+
+## Before production
+
+1. Confirm the source schema and stable key fields in [Getting started](/docs/getting-started#use-your-own-parquet-table).
+2. [Tune the IVF index](/docs/guides/index-tuning) against representative queries and measure recall, latency, and I/O together.
+3. Set explicit [resource and cache limits](/docs/reference/configuration).
+4. Review [current limitations](/docs/reference/limitations) and the [troubleshooting guide](/docs/reference/troubleshooting).
+
+## Developer resources
+
+- [Python API](/docs/reference/python) and [CLI reference](/docs/reference/cli)
+- [Architecture](/docs/project/architecture) and [versions and compatibility](/docs/project/versioning)
+- [Open index specification](https://github.com/parqdb-io/parqdb/tree/main/spec) and [RFCs](https://github.com/parqdb-io/parqdb/tree/main/docs/rfcs)
+- [Reproducible benchmarks](https://github.com/parqdb-io/parqdb/tree/main/benchmarks), [contributing guide](https://github.com/parqdb-io/parqdb/blob/main/CONTRIBUTING.md), and [issue tracker](https://github.com/parqdb-io/parqdb/issues)

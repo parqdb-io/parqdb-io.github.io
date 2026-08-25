@@ -22,7 +22,7 @@ parqdb serve
 parqdb serve --config ./parqdb-server.toml
 ```
 
-The server reads `./parqdb-server.toml` when it exists. See [Run a server](../guides/server) for authorization and deployment guidance.
+The server reads `./parqdb-server.toml` when it exists. See [Run a server](/docs/0.2/guides/server) for authorization and deployment guidance.
 
 ## `parqdb config init`
 
@@ -86,4 +86,4 @@ Use `--index-manifest PATH` to reuse an index that has already been built.
 | `--cors-origin` | Origin used for CORS verification |
 | `--no-verify-http` | Skip public HTTP Range and CORS verification |
 
-The command never overwrites an existing destination prefix. See [Publish for the browser](../guides/browser) for the full workflow.
+The command never overwrites an existing destination prefix. See [Publish for the browser](/docs/0.2/guides/browser) for the full workflow.

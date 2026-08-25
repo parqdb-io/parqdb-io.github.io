@@ -24,6 +24,25 @@ function resolve(requestPath) {
 }
 
 createServer((request, response) => {
+  const requestUrl = new URL(request.url ?? "/", "http://127.0.0.1:4321");
+  const decoded = decodeURIComponent(requestUrl.pathname);
+  const relative = normalize(decoded).replace(/^(\.\.(\/|\\|$))+/, "").replace(/^\//, "");
+  const directory = join(root, relative);
+  if (
+    requestUrl.pathname !== "/" &&
+    !requestUrl.pathname.endsWith("/") &&
+    existsSync(directory) &&
+    statSync(directory).isDirectory() &&
+    existsSync(join(directory, "index.html"))
+  ) {
+    response.writeHead(301, {
+      Location: `${requestUrl.pathname}/${requestUrl.search}`,
+      "Cache-Control": "no-store",
+    });
+    response.end();
+    return;
+  }
+
   const file = resolve(request.url ?? "/");
   const notFound = file.endsWith("404.html") && !request.url?.startsWith("/404");
   response.writeHead(notFound ? 404 : 200, {

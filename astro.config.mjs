@@ -63,6 +63,7 @@ export default defineConfig({
           label: "Guides",
           items: [
             { label: "Embedded ParqDB", slug: "docs/guides/embedded" },
+            { label: "Tune an IVF index", slug: "docs/guides/index-tuning" },
             { label: "Publish for the browser", slug: "docs/guides/browser" },
             { label: "Run a server", slug: "docs/guides/server" },
           ],
@@ -81,6 +82,7 @@ export default defineConfig({
           label: "Project",
           items: [
             { label: "Architecture", slug: "docs/project/architecture" },
+            { label: "Versions and compatibility", slug: "docs/project/versioning" },
             { label: "Roadmap", slug: "docs/project/roadmap" },
             {
               label: "Open index specification ↗",

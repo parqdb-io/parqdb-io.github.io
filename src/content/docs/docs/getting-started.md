@@ -121,9 +121,9 @@ requirements.
 
 ## Next Steps
 
-- Follow the [embedded runtime guide](./guides/embedded) for persistence, query
+- Follow the [embedded runtime guide](/docs/guides/embedded) for persistence, query
   composition, build controls, refresh, caching, and maintenance.
-- Read [core concepts](./concepts) for catalog and snapshot semantics.
-- Review [configuration](./reference/configuration) before using S3, HDFS, or Iceberg.
-- Check [current limitations](./reference/limitations) before planning a production
+- Read [core concepts](/docs/concepts) for catalog and snapshot semantics.
+- Review [configuration](/docs/reference/configuration) before using S3, HDFS, or Iceberg.
+- Check [current limitations](/docs/reference/limitations) before planning a production
   deployment.

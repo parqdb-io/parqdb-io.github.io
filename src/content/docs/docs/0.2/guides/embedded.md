@@ -20,7 +20,7 @@ applications that already expose Parquet data to an embedded query engine.
 python -m pip install parqdb
 ```
 
-See [getting started](../getting-started) for the supported Python and
+See [getting started](/docs/0.2/getting-started) for the supported Python and
 platform matrix and a complete first query.
 
 ## Open a Session
@@ -48,7 +48,7 @@ session = parqdb.connect(
 )
 ```
 
-See [configuration](../reference/configuration) for S3-compatible storage and HDFS
+See [configuration](/docs/0.2/reference/configuration) for S3-compatible storage and HDFS
 settings.
 
 ## Register a Source
@@ -179,7 +179,7 @@ documents.drop_index("documents_embedding")
 ```
 
 Retention and orphan cleanup behavior is summarized in
-[current limitations](../reference/limitations).
+[current limitations](/docs/0.2/reference/limitations).
 
 ## Diagnose a Query
 
@@ -189,5 +189,5 @@ print(session.analyze(query))
 ```
 
 `analyze` reports candidate counts, distance and Top-K time, bytes scanned, and
-other physical metrics. See [troubleshooting](../reference/troubleshooting) for common
+other physical metrics. See [troubleshooting](/docs/0.2/reference/troubleshooting) for common
 schema, catalog, storage, and performance failures.
