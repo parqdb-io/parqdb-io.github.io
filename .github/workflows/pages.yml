@@ -36,8 +36,8 @@ jobs:
 
       - name: Build website
         env:
-          SITE_URL: ${{ vars.PARQDB_CUSTOM_DOMAIN == 'true' && 'https://parqdb.io' || steps.pages.outputs.origin }}
-          BASE_PATH: ${{ vars.PARQDB_CUSTOM_DOMAIN == 'true' && '/' || steps.pages.outputs.base_path }}
+          SITE_URL: https://parqdb.io
+          BASE_PATH: /
         run: npm run build
 
       - name: Upload Pages artifact

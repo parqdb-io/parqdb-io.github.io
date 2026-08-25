@@ -29,4 +29,6 @@ Documentation lives in `src/content/docs/`. The marketing homepage lives in `src
 
 ## Deployment
 
-The Pages workflow publishes every push to `main`. Until `parqdb.io` is attached, it builds with the `/parqdb-website` preview base path. Set the repository variable `PARQDB_CUSTOM_DOMAIN=true` when the custom domain is ready; the workflow will then build for the root path.
+The Pages workflow publishes every push to `main` at the root of
+`https://parqdb.io`. The repository is also the canonical GitHub organization
+site at `https://parqdb-io.github.io`.

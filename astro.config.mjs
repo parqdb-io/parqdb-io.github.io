@@ -32,7 +32,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: "https://github.com/parqdb-io/parqdb-website/edit/main/",
+        baseUrl: "https://github.com/parqdb-io/parqdb-io.github.io/edit/main/",
       },
       head: [
         {
