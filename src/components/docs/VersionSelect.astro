@@ -1,0 +1,65 @@
+---
+import {
+  currentDocsVersion,
+  docsPathForVersion,
+  docsVersions,
+} from "../../lib/docsVersions";
+
+const currentVersion = currentDocsVersion(Astro.url.pathname);
+---
+
+<div class="docs-version">
+  <label for="docs-version-select">Documentation version</label>
+  <select id="docs-version-select" data-docs-version-select>
+    {
+      docsVersions.map((version) => (
+        <option
+          value={docsPathForVersion(Astro.url.pathname, version.id)}
+          selected={version.id === currentVersion}
+        >
+          {version.label}
+        </option>
+      ))
+    }
+  </select>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLSelectElement>("[data-docs-version-select]").forEach((select) => {
+    select.addEventListener("change", () => window.location.assign(select.value));
+  });
+</script>
+
+<style>
+  .docs-version {
+    margin: 0 0.5rem 1.25rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  select {
+    width: 100%;
+    min-height: 2.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    padding: 0.45rem 2.25rem 0.45rem 0.7rem;
+    color: var(--sl-color-white);
+    background: var(--sl-color-black);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  select:hover,
+  select:focus-visible {
+    border-color: var(--sl-color-accent-high);
+  }
+</style>

@@ -27,6 +27,14 @@ This repository is the canonical source for ParqDB's public documentation. Produ
 
 Documentation lives in `src/content/docs/`. The marketing homepage lives in `src/pages/index.astro`.
 
+## Documentation versions
+
+`/docs` is the permanent URL for documentation built from the current main
+branch and appears as `latest` in the version selector. Frozen minor-version
+snapshots live below `/docs/<minor>`, starting with `/docs/0.2` for the
+`v0.2.0rc3` release line. Historical snapshots are excluded from site search
+so results always prefer the current API.
+
 ## Deployment
 
 The Pages workflow publishes every push to `main` at the root of

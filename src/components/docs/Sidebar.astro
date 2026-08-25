@@ -1,0 +1,46 @@
+---
+import MobileMenuFooter from "@astrojs/starlight/components/MobileMenuFooter.astro";
+import SidebarPersister from "@astrojs/starlight/components/SidebarPersister.astro";
+import SidebarSublist from "@astrojs/starlight/components/SidebarSublist.astro";
+import VersionSelect from "./VersionSelect.astro";
+import {
+  currentDocsVersion,
+  normalizePath,
+  versionedDocsHref,
+} from "../../lib/docsVersions";
+
+type SidebarEntry = {
+  type: "link" | "group";
+  href?: string;
+  isCurrent?: boolean;
+  entries?: SidebarEntry[];
+  [key: string]: unknown;
+};
+
+const version = currentDocsVersion(Astro.url.pathname);
+const currentPath = normalizePath(Astro.url.pathname);
+
+function applyVersion(entry: SidebarEntry): SidebarEntry {
+  if (entry.type === "group") {
+    return { ...entry, entries: entry.entries?.map(applyVersion) };
+  }
+
+  const href = versionedDocsHref(entry.href ?? "", version);
+  return {
+    ...entry,
+    href,
+    isCurrent: normalizePath(href) === currentPath,
+  };
+}
+
+const sidebar = (Astro.locals.starlightRoute.sidebar as unknown as SidebarEntry[]).map(applyVersion);
+---
+
+<VersionSelect />
+<SidebarPersister>
+  <SidebarSublist sublist={sidebar as never} />
+</SidebarPersister>
+
+<div class="md:sl-hidden">
+  <MobileMenuFooter />
+</div>

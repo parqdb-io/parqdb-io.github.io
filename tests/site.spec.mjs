@@ -32,7 +32,18 @@ test("documentation navigation and search load", async ({ page }, testInfo) => {
   if (testInfo.project.name === "mobile") {
     await page.locator('button[aria-controls="starlight__sidebar"]').click();
   }
-  await expect(page.getByRole("link", { name: "Python API" }).first()).toBeVisible();
+  const version = page.getByLabel("Documentation version");
+  await expect(version).toHaveValue("/docs/getting-started");
+  await version.selectOption({ label: "0.2" });
+  await expect(page).toHaveURL(/\/docs\/0\.2\/getting-started$/);
+  await expect(page.getByText("You are viewing the ParqDB 0.2 documentation snapshot.")).toBeVisible();
+  if (testInfo.project.name === "mobile") {
+    await page.locator('button[aria-controls="starlight__sidebar"]').click();
+  }
+  await expect(page.getByRole("link", { name: "Python API" }).first()).toHaveAttribute(
+    "href",
+    "/docs/0.2/reference/python",
+  );
 
   await page.screenshot({
     path: testInfo.outputPath("docs-getting-started.png"),

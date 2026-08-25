@@ -1,0 +1,8 @@
+---
+import DefaultEditLink from "@astrojs/starlight/components/EditLink.astro";
+import { currentDocsVersion } from "../../lib/docsVersions";
+
+const isLatest = currentDocsVersion(Astro.url.pathname) === "latest";
+---
+
+{isLatest && <DefaultEditLink />}

@@ -1,0 +1,73 @@
+---
+pagefind: false
+banner:
+  content: 'You are viewing the ParqDB 0.2 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
+title: ParqDB documentation
+description: Build and query open Parquet vector indexes with embedded DataFusion or WebAssembly.
+template: splash
+hero:
+  tagline: Build and query open vector indexes without moving your data into a proprietary format.
+  actions:
+    - text: Get started
+      link: 0.2/getting-started
+      icon: right-arrow
+      variant: primary
+    - text: Python API
+      link: 0.2/reference/python
+      icon: document
+      variant: secondary
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Choose a path
+
+<CardGrid>
+  <Card title="Run embedded" icon="seti:python">
+    Install ParqDB, register an existing Parquet table, and build an IVF index inside your Python process.
+
+    [Start the embedded guide →](0.2/getting-started)
+  </Card>
+  <Card title="Publish for the browser" icon="globe">
+    Publish an immutable IVF-LVQ index to object storage and query it with HTTP Range and WebAssembly.
+
+    [Open the publication guide →](0.2/guides/browser)
+  </Card>
+  <Card title="Understand the system" icon="puzzle">
+    Learn how ParqDB separates source tables, open indexes, catalog publication, storage, and execution.
+
+    [Read the core concepts →](0.2/concepts)
+  </Card>
+  <Card title="Inspect the format" icon="open-book">
+    Use the runtime-independent metadata and Parquet schemas to build interoperable tools and engines.
+
+    [View the specification ↗](https://github.com/parqdb-io/parqdb/tree/v0.2.0rc3/spec)
+  </Card>
+</CardGrid>
+
+## What ParqDB supports today
+
+| Runtime | Storage | Capability | Status |
+| --- | --- | --- | --- |
+| Embedded DataFusion | Parquet | Build and query IVF, IVF-LVQ4, and IVF-LVQ8 | Supported |
+| Browser/WASM | Public HTTPS object storage | Query immutable IVF-LVQ indexes over HTTP Range | Experimental |
+| Embedded DataFusion | Iceberg | Query exact snapshots through the native provider | Experimental |
+| Client/server | Authorized Parquet sources | Build and query through the HTTP API | Experimental |
+
+The embedded DataFusion runtime is the first supported product surface. Review [current limitations](0.2/reference/limitations) before planning a production deployment.
+
+## Install
+
+```bash
+python -m pip install parqdb
+```
+
+```python
+import parqdb
+
+session = parqdb.connect("./parqdb-data")
+session.register_parquet("documents", parqdb.datasets.uri("documents"))
+documents = session.table("documents")
+```
+
+Continue with [Getting started](0.2/getting-started) to build and query your first index.

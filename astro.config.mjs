@@ -23,6 +23,9 @@ export default defineConfig({
       customCss: ["./src/styles/starlight.css"],
       components: {
         Head: "./src/components/docs/Head.astro",
+        Sidebar: "./src/components/docs/Sidebar.astro",
+        EditLink: "./src/components/docs/EditLink.astro",
+        Pagination: "./src/components/docs/Pagination.astro",
       },
       social: [
         {
