@@ -1,0 +1,28 @@
+---
+import logo from "../assets/logo-dark.svg";
+
+interface Props {
+  href?: string;
+}
+
+const { href = "/" } = Astro.props;
+---
+
+<a class="brand" href={href} aria-label="ParqDB home">
+  <img src={logo.src} width="150" height="56" alt="ParqDB" />
+</a>
+
+<style>
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    width: 132px;
+    height: 44px;
+  }
+
+  img {
+    display: block;
+    width: 132px;
+    height: auto;
+  }
+</style>

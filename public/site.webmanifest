@@ -1,0 +1,9 @@
+{
+  "name": "ParqDB",
+  "short_name": "ParqDB",
+  "description": "Billion-scale vector search, built on Parquet.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07152f",
+  "theme_color": "#07152f"
+}

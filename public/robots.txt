@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://parqdb.io/sitemap-index.xml
