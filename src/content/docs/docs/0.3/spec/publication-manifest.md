@@ -1,6 +1,8 @@
 ---
 title: Immutable Publication Manifest
 description: Normative manifest for immutable IVF-LVQ publications queried without a catalog or object listing.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ## Overview

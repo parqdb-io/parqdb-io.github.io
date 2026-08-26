@@ -1,6 +1,8 @@
 ---
 title: IVF Index Schema
 description: Normative IVF centroid, hierarchy, postings, and quantization schemas.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ## 1. Scope

@@ -1,6 +1,8 @@
 ---
 title: Getting started
 description: Install ParqDB, build an IVF index, and run a filtered vector query.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 This guide installs ParqDB, builds an IVF index over a Parquet source, and
@@ -116,14 +118,14 @@ session.register_parquet(
 Every vector value must be a non-null, fixed-dimension Parquet list whose
 elements are non-null, finite `float32` or `float64` values. Each key field must
 identify source rows using an exact supported scalar type. See the
-[IVF index schema](/docs/spec/ivf/index-schema) for the normative source
+[IVF index schema](/docs/0.3/spec/ivf/index-schema) for the normative source
 requirements.
 
 ## Next Steps
 
-- Follow the [embedded runtime guide](/docs/guides/embedded) for persistence, query
+- Follow the [embedded runtime guide](/docs/0.3/guides/embedded) for persistence, query
   composition, build controls, refresh, caching, and maintenance.
-- Read [core concepts](/docs/concepts) for catalog and snapshot semantics.
-- Review [configuration](/docs/reference/configuration) before using S3 or HDFS.
-- Check [current limitations](/docs/reference/limitations) before planning a production
+- Read [core concepts](/docs/0.3/concepts) for catalog and snapshot semantics.
+- Review [configuration](/docs/0.3/reference/configuration) before using S3 or HDFS.
+- Check [current limitations](/docs/0.3/reference/limitations) before planning a production
   deployment.

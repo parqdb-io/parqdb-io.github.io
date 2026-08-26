@@ -1,6 +1,8 @@
 ---
 title: Parquet Relation Profile
 description: Normative Parquet type mapping, postings layout, discovery, and consistency profile.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ## Overview

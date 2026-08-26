@@ -1,6 +1,8 @@
 ---
 title: Core concepts
 description: Understand source tables, open vector indexes, catalogs, snapshots, and query execution.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ParqDB keeps vector indexes as table data and executes search inside a SQL
@@ -28,7 +30,7 @@ family stores:
 
 Logical indexes over the same source state, vector field, metric, and cluster
 count may share one immutable centroid artifact while keeping independent
-postings. The [open index specification](/docs/spec) defines the metadata and table
+postings. The [open index specification](/docs/0.3/spec) defines the metadata and table
 schemas independently of the Python runtime.
 
 ## Catalog and Snapshots

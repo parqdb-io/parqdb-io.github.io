@@ -1,6 +1,8 @@
 ---
 title: Iceberg Relation Profile
 description: Normative Iceberg relation reference, identity, snapshot, and consistency profile.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ## Overview

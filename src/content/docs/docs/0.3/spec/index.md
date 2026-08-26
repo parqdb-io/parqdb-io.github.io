@@ -1,6 +1,8 @@
 ---
 title: Open index specification
 description: Portable metadata, table schemas, storage profiles, and query semantics shared across ParqDB engines.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ParqDB is a library for building and querying vector indexes over existing data
@@ -137,20 +139,20 @@ implementation-specific.
 
 Core:
 
-- [`metadata.md`](/docs/spec/metadata): index metadata format and snapshots.
-- [`catalog.md`](/docs/spec/catalog): catalog state and atomic metadata commits.
-- [`publication-manifest.md`](/docs/spec/publication-manifest): immutable HTTP-queryable IVF-LVQ
+- [`metadata.md`](/docs/0.3/spec/metadata): index metadata format and snapshots.
+- [`catalog.md`](/docs/0.3/spec/catalog): catalog state and atomic metadata commits.
+- [`publication-manifest.md`](/docs/0.3/spec/publication-manifest): immutable HTTP-queryable IVF-LVQ
   snapshots.
 
 Provider profiles:
 
-- [`storage/parquet.md`](/docs/spec/storage/parquet)
-- [`storage/iceberg.md`](/docs/spec/storage/iceberg)
+- [`storage/parquet.md`](/docs/0.3/spec/storage/parquet)
+- [`storage/iceberg.md`](/docs/0.3/spec/storage/iceberg)
 
 IVF:
 
-- [`ivf/index-schema.md`](/docs/spec/ivf/index-schema)
-- [`ivf/query.md`](/docs/spec/ivf/query)
+- [`ivf/index-schema.md`](/docs/0.3/spec/ivf/index-schema)
+- [`ivf/query.md`](/docs/0.3/spec/ivf/query)
 
 Non-normative test vectors:
 

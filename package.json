@@ -8,6 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "sync:spec": "node scripts/sync-spec.mjs",
+    "snapshot:docs": "node scripts/snapshot-docs.mjs",
     "test": "npm run build && playwright test"
   },
   "dependencies": {

@@ -1,6 +1,8 @@
 ---
 title: Versions and compatibility
 description: Understand documentation snapshots, package releases, catalog metadata, and index format versions.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ParqDB is pre-release software. The project versions its Python package, public
@@ -9,7 +11,7 @@ independently because they change on different schedules.
 
 ## Documentation versions
 
-- [`/docs`](/docs) follows the current development and release line.
+- [`/docs`](/docs/0.3) follows the current development and release line.
 - [`/docs/0.3`](/docs/0.3) is the preserved 0.3 documentation snapshot.
 - [`/docs/0.2`](/docs/0.2) is the preserved 0.2 documentation snapshot.
 
@@ -40,7 +42,7 @@ each format at its boundary and reject an unsupported version instead of
 guessing.
 
 The normative contracts live in the
-[open index specification](/docs/spec).
+[open index specification](/docs/0.3/spec).
 RFCs explain proposed designs but are not compatibility promises until their
 behavior is implemented, tested, and documented.
 

@@ -87,8 +87,8 @@ export default defineConfig({
             { label: "Publication manifest", slug: "docs/spec/publication-manifest" },
             { label: "IVF index schema", slug: "docs/spec/ivf/index-schema" },
             { label: "IVF query semantics", slug: "docs/spec/ivf/query" },
-            { label: "Parquet profile", slug: "docs/spec/storage/parquet" },
-            { label: "Iceberg profile", slug: "docs/spec/storage/iceberg" },
+            { label: "Parquet provider", slug: "docs/spec/storage/parquet" },
+            { label: "Iceberg table provider", slug: "docs/spec/storage/iceberg" },
           ],
         },
         {

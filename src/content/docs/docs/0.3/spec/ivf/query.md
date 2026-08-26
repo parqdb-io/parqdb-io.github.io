@@ -1,6 +1,8 @@
 ---
 title: IVF Query Spec
 description: Normative IVF routing, distance, source resolution, and result semantics.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ## 1. Inputs

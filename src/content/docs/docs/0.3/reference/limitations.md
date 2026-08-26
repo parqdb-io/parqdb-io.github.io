@@ -1,6 +1,8 @@
 ---
 title: Current limitations
 description: Review supported platforms, query behavior, storage constraints, and runtime limitations.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 This page defines the implemented boundary. The specification and RFCs may

@@ -60,6 +60,14 @@ test("specification navigation preserves the selected version", async ({ page },
     await page.locator('button[aria-controls="starlight__sidebar"]').click();
   }
   const version = page.getByLabel("Documentation version");
+  await version.selectOption({ label: "0.3" });
+  await expect(page).toHaveURL(/\/docs\/0\.3\/spec\/publication-manifest\/?$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Immutable Publication Manifest" }),
+  ).toBeVisible();
+  if (testInfo.project.name === "mobile") {
+    await page.locator('button[aria-controls="starlight__sidebar"]').click();
+  }
   await version.selectOption({ label: "0.2" });
   await expect(page).toHaveURL(/\/docs\/0\.2\/spec\/publication-manifest\/?$/);
   await expect(
@@ -107,5 +115,5 @@ test("all internal pages and links resolve", async ({ page }, testInfo) => {
     }
   }
 
-  expect(visited.size).toBe(47);
+  expect(visited.size).toBe(70);
 });

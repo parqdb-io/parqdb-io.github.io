@@ -1,6 +1,8 @@
 ---
 title: Architecture
 description: Explore ParqDB's API, transport, execution, catalog, storage, cache, and publication boundaries.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ParqDB separates the public API, transport boundary, execution service,

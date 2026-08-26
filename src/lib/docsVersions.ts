@@ -1,15 +1,17 @@
 export const docsVersions = [
   { id: "latest", label: "latest" },
+  { id: "0.3", label: "0.3" },
   { id: "0.2", label: "0.2" },
 ] as const;
 
 export type DocsVersion = (typeof docsVersions)[number]["id"];
 
 const docsRoot = "/docs";
-const versionPattern = /^\/docs\/(0\.2)(?=\/|$)/;
+const versionPattern = /^\/docs\/(0\.3|0\.2)(?=\/|$)/;
 
 export function currentDocsVersion(pathname: string): DocsVersion {
-  return versionPattern.test(normalizePath(pathname)) ? "0.2" : "latest";
+  const match = normalizePath(pathname).match(versionPattern);
+  return match ? (match[1] as DocsVersion) : "latest";
 }
 
 export function docsPathForVersion(pathname: string, version: DocsVersion): string {

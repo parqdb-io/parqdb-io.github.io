@@ -1,6 +1,8 @@
 ---
 title: ParqDB Catalog Spec
 description: Normative naming, discovery, registration, and atomic publication semantics for an index catalog.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ## Overview
@@ -57,7 +59,7 @@ substitute an older location.
 A successful `register` or `commit` must reference metadata that satisfies:
 
 - the metadata format and snapshot invariants in
-  [`metadata.md`](/docs/spec/metadata);
+  [`metadata.md`](/docs/0.3/spec/metadata);
 - warehouse-relative location syntax and family-defined index-table roles; and
 - for `commit`, unchanged `index-uuid` and logical identity fields.
 

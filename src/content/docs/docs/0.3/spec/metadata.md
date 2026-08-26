@@ -1,6 +1,8 @@
 ---
 title: ParqDB Index Metadata Spec
 description: Normative format for immutable ParqDB index metadata and snapshots.
+banner:
+  content: 'You are viewing the ParqDB 0.3 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 ---
 
 ## Overview
