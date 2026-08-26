@@ -14,6 +14,12 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
   await expect(page.getByText("63.05 ms")).toBeVisible();
   await expect(page.getByText("Object storage becomes the query endpoint.")).toBeVisible();
 
+  const browserArchitecture = page.getByRole("tab", { name: /Browser/ });
+  await browserArchitecture.click();
+  await expect(browserArchitecture).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByText("PARQDB WASM")).toBeVisible();
+  await page.getByRole("tab", { name: /Embedded/ }).click();
+
   const bodyWidth = await page.locator("body").evaluate((element) => element.scrollWidth);
   const viewportWidth = page.viewportSize()?.width ?? bodyWidth;
   expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
