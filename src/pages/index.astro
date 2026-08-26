@@ -344,8 +344,8 @@ hits = session.<span class="fn">collect</span>(
   .principles .section-heading { color: var(--ink); }
   .principles .section-copy { color: #3f4947; }
   .principle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 68px; }
-  .principle-grid article { position: relative; min-height: 400px; padding: 38px 30px 31px; border: 1px solid var(--ink); background: var(--paper-muted); box-shadow: 7px 7px 0 var(--ink); transition: transform 140ms ease, box-shadow 140ms ease; }
-  .principle-grid article:hover { transform: translate(-3px, -3px); box-shadow: 10px 10px 0 var(--blue); }
+  .principle-grid article { position: relative; min-height: 400px; padding: 38px 30px 31px; border: 1px solid var(--ink); background: var(--paper-muted); transition: transform 140ms ease, border-color 140ms ease, background 140ms ease; }
+  .principle-grid article:hover { border-color: #0b72d9; background: var(--paper); transform: translateY(-3px); }
   .feature-index { position: absolute; top: 15px; right: 17px; color: #56615e; font-family: monospace; font-size: 9px; }
   .feature-icon { position: relative; width: 54px; height: 54px; margin-bottom: 42px; }
   .feature-icon.layers span { position: absolute; left: 4px; width: 43px; height: 17px; border: 2px solid #0b72d9; transform: skewY(-13deg); background: rgba(53,167,255,.12); }
