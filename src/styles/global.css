@@ -12,10 +12,8 @@
   --text-2: #b9c4bf;
   --text-3: #7f8d89;
   --line: #333c43;
-  --blue: #35a7ff;
   --cyan: #52e5ff;
-  --violet: #9b83ff;
-  --navy: #719dff;
+  --cyan-shadow: #23606b;
   --green: #b6f34a;
   --orange: #ff9858;
   --max: 1180px;
@@ -48,8 +46,8 @@ button, input, textarea { font: inherit; }
 .button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 9px; padding: 0 19px; border: 1px solid var(--text-1); border-radius: 2px; font-size: 13px; font-weight: 760; letter-spacing: .015em; text-decoration: none; transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease; }
 .button:hover { transform: translate(-2px, -2px); }
 .button:active { transform: translate(2px, 2px); box-shadow: none; }
-.button-primary { color: var(--ink); border-color: var(--ink); background: var(--green); box-shadow: 5px 5px 0 var(--blue); }
-.button-primary:hover { background: #c8ff68; box-shadow: 7px 7px 0 var(--blue); }
+.button-primary { color: var(--ink); border-color: var(--ink); background: var(--green); box-shadow: 5px 5px 0 var(--cyan-shadow); }
+.button-primary:hover { background: #c8ff68; box-shadow: 7px 7px 0 var(--cyan-shadow); }
 .button-secondary { color: var(--text-1); border-color: #59636b; background: var(--panel-solid); box-shadow: 5px 5px 0 #27313a; }
 .button-secondary:hover { border-color: var(--text-1); background: #1c252f; box-shadow: 7px 7px 0 #27313a; }
 code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }

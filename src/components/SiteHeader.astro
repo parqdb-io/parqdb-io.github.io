@@ -144,7 +144,7 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     background: var(--green);
     padding: 10px 15px;
     border-radius: 1px;
-    box-shadow: 3px 3px 0 var(--blue);
+    box-shadow: 3px 3px 0 var(--cyan-shadow);
     text-decoration: none;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     font-size: 11px;
@@ -157,7 +157,7 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
 
   .nav-cta b { font-size: 15px; line-height: 0; }
 
-  .nav-cta:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--blue); }
+  .nav-cta:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--cyan-shadow); }
 
   .data-bus {
     position: absolute;
@@ -172,7 +172,7 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
   }
 
   .data-bus span { background: #263138; }
-  .data-bus span:nth-child(2), .data-bus span:nth-child(5) { background: var(--blue); }
+  .data-bus span:nth-child(2), .data-bus span:nth-child(5) { background: var(--cyan); }
   .data-bus span:nth-child(4) { background: var(--green); }
 
   @keyframes navBlink { 0%, 68% { opacity: 1; } 69%, 100% { opacity: .25; } }
