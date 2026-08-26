@@ -79,16 +79,24 @@ export default defineConfig({
           ],
         },
         {
+          label: "Specification",
+          items: [
+            { label: "Overview", slug: "docs/spec" },
+            { label: "Index metadata", slug: "docs/spec/metadata" },
+            { label: "Catalog", slug: "docs/spec/catalog" },
+            { label: "Publication manifest", slug: "docs/spec/publication-manifest" },
+            { label: "IVF index schema", slug: "docs/spec/ivf/index-schema" },
+            { label: "IVF query semantics", slug: "docs/spec/ivf/query" },
+            { label: "Parquet profile", slug: "docs/spec/storage/parquet" },
+            { label: "Iceberg profile", slug: "docs/spec/storage/iceberg" },
+          ],
+        },
+        {
           label: "Project",
           items: [
             { label: "Architecture", slug: "docs/project/architecture" },
             { label: "Versions and compatibility", slug: "docs/project/versioning" },
             { label: "Roadmap", slug: "docs/project/roadmap" },
-            {
-              label: "Open index specification ↗",
-              link: "https://github.com/parqdb-io/parqdb/tree/main/spec",
-              attrs: { target: "_blank", rel: "noreferrer" },
-            },
             {
               label: "RFCs ↗",
               link: "https://github.com/parqdb-io/parqdb/tree/main/docs/rfcs",

@@ -116,7 +116,7 @@ session.register_parquet(
 Every vector value must be a non-null, fixed-dimension Parquet list whose
 elements are non-null, finite `float32` or `float64` values. Each key field must
 identify source rows using an exact supported scalar type. See the
-[IVF index schema](https://github.com/parqdb-io/parqdb/blob/main/spec/ivf/index-schema.md) for the normative source
+[IVF index schema](/docs/spec/ivf/index-schema) for the normative source
 requirements.
 
 ## Next Steps

@@ -29,7 +29,7 @@ family stores:
 
 Logical indexes over the same source state, vector field, metric, and cluster
 count may share one immutable centroid artifact while keeping independent
-postings. The [open index specification](https://github.com/parqdb-io/parqdb/tree/main/spec) defines the metadata and table
+postings. The [open index specification](/docs/spec) defines the metadata and table
 schemas independently of the Python runtime.
 
 ## Catalog and Snapshots

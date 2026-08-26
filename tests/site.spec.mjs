@@ -51,8 +51,31 @@ test("documentation navigation and search load", async ({ page }, testInfo) => {
   });
 });
 
+test("specification navigation preserves the selected version", async ({ page }, testInfo) => {
+  await page.goto("/docs/spec/publication-manifest");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Immutable Publication Manifest" }),
+  ).toBeVisible();
+  if (testInfo.project.name === "mobile") {
+    await page.locator('button[aria-controls="starlight__sidebar"]').click();
+  }
+  const version = page.getByLabel("Documentation version");
+  await version.selectOption({ label: "0.2" });
+  await expect(page).toHaveURL(/\/docs\/0\.2\/spec\/publication-manifest\/?$/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Static HTTP Index Package" }),
+  ).toBeVisible();
+});
+
 test("key pages have no automated accessibility violations", async ({ page }) => {
-  for (const path of ["/", "/docs", "/docs/getting-started", "/docs/guides/server"]) {
+  for (const path of [
+    "/",
+    "/docs",
+    "/docs/getting-started",
+    "/docs/guides/server",
+    "/docs/spec",
+    "/docs/spec/ivf/index-schema",
+  ]) {
     await page.goto(path);
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations, `${path}: ${JSON.stringify(results.violations, null, 2)}`).toEqual([]);
@@ -84,5 +107,5 @@ test("all internal pages and links resolve", async ({ page }, testInfo) => {
     }
   }
 
-  expect(visited.size).toBe(31);
+  expect(visited.size).toBe(47);
 });

@@ -39,7 +39,7 @@ each format at its boundary and reject an unsupported version instead of
 guessing.
 
 The normative contracts live in the
-[open index specification](https://github.com/parqdb-io/parqdb/tree/main/spec).
+[open index specification](/docs/spec).
 RFCs explain proposed designs but are not compatibility promises until their
 behavior is implemented, tested, and documented.
 
