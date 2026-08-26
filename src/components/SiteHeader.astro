@@ -39,8 +39,8 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     position: sticky;
     top: 0;
     z-index: 20;
-    border-bottom: 1px solid #3d484f;
-    background: rgba(9, 12, 16, 0.94);
+    border-bottom: 1px solid var(--ink);
+    background: rgba(238, 233, 220, 0.96);
     backdrop-filter: blur(12px);
   }
 
@@ -51,7 +51,7 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     display: grid;
     grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr);
     align-items: center;
-    border-inline: 1px solid #2c353b;
+    border-inline: 1px solid var(--line);
   }
 
   .nav-brand {
@@ -60,21 +60,21 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     align-items: center;
     gap: 17px;
     padding: 0 18px;
-    border-right: 1px solid #2c353b;
+    border-right: 1px solid var(--line);
   }
 
   .nav-brand > span {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    color: #71817b;
+    color: var(--text-3);
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     font-size: 8px;
     letter-spacing: .1em;
     white-space: nowrap;
   }
 
-  .nav-brand > span b { width: 6px; height: 6px; background: var(--green); animation: navBlink 2.2s steps(2, end) infinite; }
+  .nav-brand > span b { width: 6px; height: 6px; background: var(--accent); animation: navBlink 2.2s steps(2, end) infinite; }
 
   nav {
     align-self: stretch;
@@ -103,16 +103,15 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     gap: 7px;
     min-width: 112px;
     padding: 0 18px;
-    border-right: 1px solid #2c353b;
+    border-right: 1px solid var(--line);
   }
 
-  nav a:first-child { border-left: 1px solid #2c353b; }
-  nav a b { color: #53625d; font-size: 8px; }
-  nav a:hover { color: var(--ink); background: var(--cyan); }
-  nav a:hover b { color: #20515d; }
+  nav a:first-child { border-left: 1px solid var(--line); }
+  nav a b { color: var(--text-3); font-size: 8px; }
+  nav a:hover { color: var(--paper); background: var(--ink); }
+  nav a:hover b { color: var(--paper-muted); }
 
-  nav a:hover,
-  .github-link:hover { color: var(--green); }
+  .github-link:hover { color: var(--accent); }
 
   .nav-actions {
     align-self: stretch;
@@ -128,7 +127,7 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     align-items: center;
     gap: 8px;
     padding: 0 17px;
-    border-left: 1px solid #2c353b;
+    border-left: 1px solid var(--line);
   }
 
   .github-link svg { width: 18px; height: 18px; }
@@ -139,12 +138,11 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     align-items: center;
     gap: 22px;
     margin: 0 14px;
-    color: var(--ink);
+    color: var(--paper);
     border: 1px solid var(--ink);
-    background: var(--green);
+    background: var(--ink);
     padding: 10px 15px;
     border-radius: 1px;
-    box-shadow: 3px 3px 0 var(--cyan-shadow);
     text-decoration: none;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     font-size: 11px;
@@ -152,12 +150,12 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     font-weight: 760;
     letter-spacing: .04em;
     text-transform: uppercase;
-    transition: transform 120ms ease, box-shadow 120ms ease;
+    transition: color 120ms ease, background 120ms ease;
   }
 
   .nav-cta b { font-size: 15px; line-height: 0; }
 
-  .nav-cta:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--cyan-shadow); }
+  .nav-cta:hover { color: var(--paper); background: var(--accent); }
 
   .data-bus {
     position: absolute;
@@ -171,9 +169,9 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     pointer-events: none;
   }
 
-  .data-bus span { background: #263138; }
+  .data-bus span { background: #777d79; }
   .data-bus span:nth-child(2), .data-bus span:nth-child(5) { background: var(--cyan); }
-  .data-bus span:nth-child(4) { background: var(--green); }
+  .data-bus span:nth-child(4) { background: var(--accent); }
 
   @keyframes navBlink { 0%, 68% { opacity: 1; } 69%, 100% { opacity: .25; } }
 

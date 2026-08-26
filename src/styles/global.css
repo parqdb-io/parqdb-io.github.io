@@ -1,21 +1,20 @@
 :root {
-  color-scheme: dark;
-  --bg: #090c10;
-  --bg-2: #10151b;
-  --panel: #121820;
-  --panel-solid: #141b24;
-  --paper: #eef2ed;
-  --paper-muted: #dbe2dc;
-  --ink: #0a0e12;
-  --white: #f6f8f4;
-  --text-1: #edf2ee;
-  --text-2: #b9c4bf;
-  --text-3: #7f8d89;
-  --line: #333c43;
-  --cyan: #52e5ff;
-  --cyan-shadow: #23606b;
-  --green: #b6f34a;
-  --orange: #ff9858;
+  color-scheme: light;
+  --bg: #eee9dc;
+  --bg-2: #e5dfd0;
+  --panel: #f7f3e9;
+  --panel-solid: #f7f3e9;
+  --paper: #f7f3e9;
+  --paper-muted: #e8e1d2;
+  --ink: #1e2a2d;
+  --white: #1e2a2d;
+  --text-1: #263336;
+  --text-2: #5d6767;
+  --text-3: #4f5b59;
+  --line: #a8aaa3;
+  --cyan: #365e68;
+  --accent: #9a4638;
+  --orange: #b9763b;
   --max: 1180px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
@@ -27,29 +26,24 @@ body {
   margin: 0;
   min-width: 320px;
   color: var(--text-1);
-  background:
-    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-    var(--bg);
-  background-size: 100% 4px;
+  background: var(--bg);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 button, input, textarea { font: inherit; }
-::selection { color: var(--ink); background: var(--green); }
-.skip-link { position: absolute; top: -100px; left: 16px; z-index: 100; padding: 10px 14px; color: var(--ink); background: var(--green); border: 1px solid var(--ink); }
+::selection { color: var(--ink); background: var(--accent); }
+.skip-link { position: absolute; top: -100px; left: 16px; z-index: 100; padding: 10px 14px; color: var(--ink); background: var(--accent); border: 1px solid var(--ink); }
 .skip-link:focus { top: 12px; }
 .shell { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
-.eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--green); font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 11px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
-.eyebrow::before { content: ""; width: 8px; height: 8px; background: currentColor; box-shadow: 3px 3px 0 rgba(182,243,74,.2); }
+.eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--accent); font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 11px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+.eyebrow::before { content: ""; width: 7px; height: 7px; background: currentColor; }
 .section-heading { max-width: 760px; margin: 18px 0 0; color: var(--white); font-size: clamp(38px, 5vw, 66px); line-height: .98; letter-spacing: -.052em; }
 .section-copy { max-width: 640px; margin: 22px 0 0; color: var(--text-2); font-size: 18px; line-height: 1.65; }
-.button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 9px; padding: 0 19px; border: 1px solid var(--text-1); border-radius: 2px; font-size: 13px; font-weight: 760; letter-spacing: .015em; text-decoration: none; transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease; }
-.button:hover { transform: translate(-2px, -2px); }
-.button:active { transform: translate(2px, 2px); box-shadow: none; }
-.button-primary { color: var(--ink); border-color: var(--ink); background: var(--green); box-shadow: 5px 5px 0 var(--cyan-shadow); }
-.button-primary:hover { background: #c8ff68; box-shadow: 7px 7px 0 var(--cyan-shadow); }
-.button-secondary { color: var(--text-1); border-color: #59636b; background: var(--panel-solid); box-shadow: 5px 5px 0 #27313a; }
-.button-secondary:hover { border-color: var(--text-1); background: #1c252f; box-shadow: 7px 7px 0 #27313a; }
+.button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 9px; padding: 0 19px; border: 1px solid var(--ink); border-radius: 0; font-size: 13px; font-weight: 760; letter-spacing: .015em; text-decoration: none; transition: color 120ms ease, background 120ms ease; }
+.button-primary { color: var(--paper); background: var(--ink); }
+.button-primary:hover { color: var(--paper); background: var(--accent); }
+.button-secondary { color: var(--ink); background: transparent; }
+.button-secondary:hover { color: var(--paper); background: var(--ink); }
 code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
 
 @media (max-width: 760px) {
