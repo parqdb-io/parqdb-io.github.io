@@ -3,7 +3,7 @@ pagefind: false
 banner:
   content: 'You are viewing the ParqDB 0.2 documentation snapshot. <a href="/docs">Read the latest documentation →</a>'
 title: Run a server
-description: Start the experimental ParqDB HTTP server and connect through Arrow IPC.
+description: Start and verify the experimental ParqDB HTTP server, then build and query an index through Arrow IPC.
 ---
 
 :::caution[Experimental]
@@ -76,18 +76,156 @@ To use a different location, pass it explicitly:
 parqdb serve --config /etc/parqdb/parqdb.toml
 ```
 
-## Connect
+## Verify the Service
+
+Keep the server running and use a second terminal. First verify that the HTTP
+process is reachable:
+
+```bash
+curl --fail --silent http://127.0.0.1:8000/health
+```
+
+The response must be:
+
+```json
+{"status":"ok"}
+```
+
+The health endpoint does not execute a query. Run a constant SQL query to also
+verify the Python client, HTTP transport, server runtime, and Arrow IPC result
+stream:
+
+```bash
+python - <<'PY'
+import parqdb
+
+with parqdb.connect("http://127.0.0.1:8000") as session:
+    result = session.sql("SELECT 1 AS ready")
+    assert result.to_pylist() == [{"ready": 1}]
+    print(result.to_pylist())
+PY
+```
+
+Expected output:
+
+```text
+[{'ready': 1}]
+```
+
+Install the same ParqDB pre-release in the client and server environments.
+Cross-version client/server compatibility is not yet a stable guarantee.
+
+## Build and Query an Index
 
 The client uses the normal session facade. Registered paths are resolved on the
-server and are never uploaded from the client:
+server and are never uploaded from the client. The following example assumes
+the server can read the configured `/srv/lakehouse/documents/*.parquet` source.
+Replace the field names, query dimension, and index settings for your table:
+
+```python
+from datetime import timedelta
+
+import parqdb
+
+with parqdb.connect("http://127.0.0.1:8000") as session:
+    session.register_parquet(
+        "documents",
+        "/srv/lakehouse/documents/*.parquet",
+    )
+    documents = session.table("documents")
+    print(documents.schema)
+
+    documents.create_index(
+        "documents_embedding",
+        column="embedding",
+        key=["document_id"],
+        config=parqdb.IVF(
+            nlist=4096,
+            encoding="lvq8",
+            metric="cosine",
+        ),
+    )
+    documents.wait_for_index(
+        "documents_embedding",
+        timeout=timedelta(hours=1),
+    )
+
+    status = documents.index_status("documents_embedding")
+    assert status.state == "ready"
+    print("index:", status.state, status.current_snapshot_id)
+
+    query_vector = [0.2, 0.0]  # Replace with one model-compatible vector.
+    query = (
+        documents.search(
+            query_vector,
+            column="embedding",
+            index="documents_embedding",
+        )
+        .nprobes(64)
+        .limit(10)
+        .select(["document_id", "title"])
+    )
+    hits = session.collect(query)
+    print(hits.to_pylist())
+```
+
+`nlist` must not exceed the source row count. Use the
+[IVF tuning guide](/docs/0.2/guides/index-tuning) rather than copying `4096` as a
+universal default.
+
+The result contains the selected source fields followed by `_distance`, with
+smaller values ranked first. `create_index` submits a server-side build;
+`wait_for_index` polls until the immutable snapshot is ready or the timeout is
+reached. Reconnecting does not require registration again because the table and
+published index are stored in the server catalog.
+
+To query an index that is already present after a reconnect:
 
 ```python
 import parqdb
 
-session = parqdb.connect("http://127.0.0.1:8000")
-session.register_parquet("documents", "/srv/lakehouse/documents/*.parquet")
-documents = session.table("documents")
+query_vector = [0.2, 0.0]  # Same dimension and embedding model as the source.
+with parqdb.connect("http://127.0.0.1:8000") as session:
+    documents = session.table("documents")
+    print(documents.list_indexes())
+    hits = session.collect(
+        documents.search(query_vector, index="documents_embedding")
+        .nprobes(64)
+        .limit(10)
+        .select(["document_id", "title"])
+    )
+    print(hits.to_pylist())
 ```
+
+## Inspect and Diagnose
+
+Verify that the index appears in the catalog, then inspect the plan and actual
+operator metrics:
+
+```python
+import parqdb
+
+with parqdb.connect("http://127.0.0.1:8000") as session:
+    documents = session.table("documents")
+    query = (
+        documents.search([0.2, 0.0], index="documents_embedding")
+        .nprobes(64)
+        .limit(10)
+    )
+    print(session.list_tables())
+    print(documents.list_indexes())
+    print(session.explain(query))
+    print(session.analyze(query))
+```
+
+The machine-readable HTTP contract is available at
+`http://127.0.0.1:8000/openapi.json`.
+
+If `/health` fails, check the listen address, port, and server process. If SQL
+fails, inspect the server log because that path exercises query execution and
+Arrow IPC. A rejected registration usually means the path is not visible to
+the server or is outside `allowed_source_prefixes`. For an asynchronous build
+failure, inspect `documents.index_status(name).error` before resubmitting.
 
 ## Embed the ASGI Application
 

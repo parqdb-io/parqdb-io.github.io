@@ -52,7 +52,7 @@ test("documentation navigation and search load", async ({ page }, testInfo) => {
 });
 
 test("key pages have no automated accessibility violations", async ({ page }) => {
-  for (const path of ["/", "/docs", "/docs/getting-started"]) {
+  for (const path of ["/", "/docs", "/docs/getting-started", "/docs/guides/server"]) {
     await page.goto(path);
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations, `${path}: ${JSON.stringify(results.violations, null, 2)}`).toEqual([]);
