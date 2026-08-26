@@ -14,16 +14,34 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
   await expect(page.getByText("63.05 ms")).toBeVisible();
   await expect(page.getByText("Object storage becomes the query endpoint.")).toBeVisible();
 
-  const sharedObjectStore = page.locator(".object-store");
+  await expect(page.getByText("ONE PARQUET INDEX.")).toBeVisible();
+  await expect(page.getByText("QUERY IT ANYWHERE.")).toBeVisible();
+
+  const sharedObjectStore = page.locator(".ascii-storage");
   await expect(sharedObjectStore).toHaveCount(1);
   await expect(sharedObjectStore).toBeVisible();
   await expect(page.getByLabel("Parquet files with pruned row groups")).toBeVisible();
+
+  const expectAlignedAscii = async (locator, skipLines = 0) => {
+    const widths = await locator.evaluate(
+      (element, skip) => element.textContent.split("\n").slice(skip).map((line) => [...line].length),
+      skipLines,
+    );
+    expect(new Set(widths).size).toBe(1);
+  };
+  await expectAlignedAscii(sharedObjectStore);
+  await expectAlignedAscii(page.locator('[data-architecture-panel="embedded"] .ascii-runtime'));
+
+  const serverArchitecture = page.getByRole("tab", { name: /Client \/ Server/ });
+  await serverArchitecture.click();
+  await expectAlignedAscii(page.locator('[data-architecture-panel="server"] .ascii-runtime'), 1);
 
   const browserArchitecture = page.getByRole("tab", { name: /Browser/ });
   await browserArchitecture.click();
   await expect(browserArchitecture).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("[data-architecture-stage]")).toHaveAttribute("data-mode", "browser");
   await expect(page.getByText("PARQDB WASM")).toBeVisible();
+  await expectAlignedAscii(page.locator('[data-architecture-panel="browser"] .ascii-runtime'));
   await expect(sharedObjectStore).toBeVisible();
   await page.getByRole("tab", { name: /Embedded/ }).click();
 
