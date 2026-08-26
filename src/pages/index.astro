@@ -52,38 +52,54 @@ const description =
           <span>ONE INDEX / THREE RUNTIMES</span>
           <span class="live"><b></b> OPEN</span>
         </div>
-        <pre class="ascii-system ascii-desktop" aria-hidden="true"><span class="ascii-green">┌─ PARQUET INDEX / OBJECT STORAGE ─────────────────────────────┐</span><span class="ascii-shadow">░</span>
-│ FILE  part-00042.parquet                                     │<span class="ascii-shadow">░</span>
-│ └─ ROW GROUP 17                                              │<span class="ascii-shadow">░</span>
-│    ├─ COLUMN cid      [STATS]                                │<span class="ascii-shadow">░</span>
-│    └─ COLUMN vector   <span class="ascii-blue">[PAGE 0] [PAGE 1] [PAGE 2]</span>             │<span class="ascii-shadow">░</span>
-<span class="ascii-green">└──────────────────────────────────────────────────────────────┘</span><span class="ascii-shadow">░
- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
-         │                     │                     │
-        READ                 RANGE               HTTP RANGE
-         ▼                     ▼                     ▼
-<span class="ascii-blue">┌─ EMBEDDED ───────┐</span><span class="ascii-shadow">░</span>  <span class="ascii-green">┌─ CLIENT / SERVER ┐</span><span class="ascii-shadow">░</span>  <span class="ascii-blue">┌─ BROWSER ────────┐</span><span class="ascii-shadow">░</span>
-│ APP + PARQDB     │<span class="ascii-shadow">░</span>  │ APP -&gt; SERVER    │<span class="ascii-shadow">░</span>  │ TAB + WASM       │<span class="ascii-shadow">░</span>
-│ <span class="ascii-green">PAGE CACHE</span>       │<span class="ascii-shadow">░</span>  │ PARQDB + <span class="ascii-green">CACHE</span>   │<span class="ascii-shadow">░</span>  │ <span class="ascii-green">PAGE CACHE</span>       │<span class="ascii-shadow">░</span>
-<span class="ascii-blue">└──────────────────┘</span><span class="ascii-shadow">░</span>  <span class="ascii-green">└──────────────────┘</span><span class="ascii-shadow">░</span>  <span class="ascii-blue">└──────────────────┘</span><span class="ascii-shadow">░
- ░░░░░░░░░░░░░░░░░░░░  ░░░░░░░░░░░░░░░░░░░░  ░░░░░░░░░░░░░░░░░░░░</span></pre>
-        <pre class="ascii-system ascii-mobile" aria-hidden="true"><span class="ascii-green">┌─ PARQUET INDEX / OBJECT STORE ───────┐</span><span class="ascii-shadow">░</span>
-│ FILE part-00042.parquet              │<span class="ascii-shadow">░</span>
-│ └─ ROW GROUP 17                      │<span class="ascii-shadow">░</span>
-│    └─ COLUMN vector                  │<span class="ascii-shadow">░</span>
-│       <span class="ascii-blue">[PAGE 0] [PAGE 1] [PAGE 2]</span>     │<span class="ascii-shadow">░</span>
-<span class="ascii-green">└──────────────────────────────────────┘</span><span class="ascii-shadow">░
- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
+        <div class="system-map" aria-hidden="true">
+          <div class="system-row system-embedded">
+            <span class="system-mode"><b>01</b> EMBEDDED</span>
+            <div class="system-flow">
+              <div class="system-node system-engine wide-node">
+                <strong>APP</strong>
+                <div class="node-inner"><b>PARQDB</b><em>PAGE CACHE</em></div>
+              </div>
+              <div class="system-link storage-link"><span>READ</span></div>
+              <div class="system-node system-storage">
+                <strong>PARQUET</strong>
+                <div class="storage-levels"><i>FILE</i><i>RG</i><i>COL</i><i>PAGE</i></div>
+              </div>
+            </div>
+          </div>
 
-<span class="ascii-blue">┌─ EMBEDDED ───────────────────────────┐</span><span class="ascii-shadow">░</span>
-│ APP + PARQDB  |  <span class="ascii-green">PAGE CACHE</span>          │<span class="ascii-shadow">░</span>
-<span class="ascii-blue">└──────────────────────────────────────┘</span><span class="ascii-shadow">░</span>
-<span class="ascii-green">┌─ CLIENT / SERVER ────────────────────┐</span><span class="ascii-shadow">░</span>
-│ APP -&gt; SERVER  |  PARQDB + <span class="ascii-green">CACHE</span>     │<span class="ascii-shadow">░</span>
-<span class="ascii-green">└──────────────────────────────────────┘</span><span class="ascii-shadow">░</span>
-<span class="ascii-blue">┌─ BROWSER ────────────────────────────┐</span><span class="ascii-shadow">░</span>
-│ TAB + WASM  |  <span class="ascii-green">PAGE CACHE</span>            │<span class="ascii-shadow">░</span>
-<span class="ascii-blue">└──────────────────────────────────────┘</span><span class="ascii-shadow">░</span></pre>
+          <div class="system-row system-server">
+            <span class="system-mode"><b>02</b> CLIENT / SERVER</span>
+            <div class="system-flow">
+              <div class="system-node system-client"><strong>CLIENT</strong></div>
+              <div class="system-link request-link"><span>REQUEST</span></div>
+              <div class="system-node system-engine">
+                <strong>SERVER</strong>
+                <div class="node-inner"><b>PARQDB</b><em>PAGE CACHE</em></div>
+              </div>
+              <div class="system-link storage-link"><span>RANGE</span></div>
+              <div class="system-node system-storage">
+                <strong>OBJECT STORAGE</strong>
+                <div class="storage-levels"><i>FILE</i><i>RG</i><i>COL</i><i>PAGE</i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="system-row system-browser">
+            <span class="system-mode"><b>03</b> BROWSER</span>
+            <div class="system-flow">
+              <div class="system-node system-engine wide-node">
+                <strong>BROWSER TAB</strong>
+                <div class="node-inner"><b>PARQDB WASM</b><em>PAGE CACHE</em></div>
+              </div>
+              <div class="system-link storage-link"><span>HTTP RANGE</span></div>
+              <div class="system-node system-storage">
+                <strong>OBJECT STORAGE</strong>
+                <div class="storage-levels"><i>FILE</i><i>RG</i><i>COL</i><i>PAGE</i></div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="story-footer">
           <span>FILE → ROW GROUP → COLUMN PAGE</span><span>EMBEDDED · SERVER · BROWSER</span>
         </div>
@@ -313,12 +329,32 @@ hits = session.<span class="fn">collect</span>(
   .query-card-head i:nth-child(2) { background: var(--green); }
   .query-card-head .live { justify-self: end; color: var(--green); }
   .live b { display: inline-block; width: 6px; height: 6px; margin-right: 5px; background: currentColor; }
-  .ascii-system { overflow: hidden; width: 100%; max-width: 100%; margin: 0; padding: 5px 0; color: #9ba9a4; background: transparent; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: clamp(10.5px, .94vw, 13.5px); font-weight: 500; line-height: 1.43; letter-spacing: 0; }
-  .ascii-system strong { color: var(--white); font-weight: 700; }
-  .ascii-blue { color: var(--cyan); }
-  .ascii-green { color: var(--green); }
-  .ascii-shadow { color: #1e617d; }
-  .ascii-mobile { display: none; }
+  .system-map { display: grid; gap: 15px; padding: 5px 0 8px; isolation: isolate; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+  .system-row { min-width: 0; padding-top: 20px; }
+  .system-mode { display: block; margin-bottom: 8px; color: #8a9994; font-size: 9px; font-weight: 700; letter-spacing: .08em; }
+  .system-mode b { margin-right: 8px; color: var(--green); font-size: 8px; }
+  .system-flow { display: grid; grid-template-columns: 110px 42px 138px 58px minmax(145px, 1fr); gap: 6px; align-items: center; min-width: 0; }
+  .system-node { position: relative; z-index: 0; display: flex; min-width: 0; height: 74px; align-items: center; justify-content: center; flex-direction: column; padding: 8px; border: 1px solid #7b8985; color: #d8e1dd; background: #0d1318; text-align: center; }
+  .system-node::after { content: ""; position: absolute; z-index: -1; inset: 0 -6px -6px 0; background-image: radial-gradient(circle, #28657b 1px, transparent 1.2px), radial-gradient(circle, #28657b 1px, transparent 1.2px); background-position: left bottom, right top; background-repeat: repeat-x, repeat-y; background-size: 3px 6px, 6px 3px; }
+  .system-node strong, .system-node small { display: block; overflow: hidden; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; }
+  .system-node strong { font-size: 9px; line-height: 1.2; letter-spacing: .025em; }
+  .system-node small { margin-top: 7px; color: var(--green); font-size: 7px; letter-spacing: .055em; }
+  .node-inner { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; width: min(100%, 220px); margin-top: 8px; border: 1px solid #405159; }
+  .node-inner b, .node-inner em { overflow: hidden; padding: 4px 5px; font-size: 6px; font-style: normal; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+  .node-inner b { color: var(--cyan); }
+  .node-inner em { border-left: 1px solid #405159; color: var(--green); }
+  .storage-levels { display: grid; grid-template-columns: repeat(4, 1fr); width: min(100%, 190px); margin-top: 8px; color: var(--green); }
+  .storage-levels i { min-width: 0; padding: 3px 2px; border: 1px solid #466328; font-size: 5.5px; font-style: normal; line-height: 1; }
+  .storage-levels i + i { border-left: 0; }
+  .system-storage { border-color: var(--green); }
+  .system-storage::after { background-image: radial-gradient(circle, #405b24 1px, transparent 1.2px), radial-gradient(circle, #405b24 1px, transparent 1.2px); }
+  .system-client { border-color: #8c9a96; }
+  .wide-node { grid-column: 1 / 4; }
+  .wide-node + .storage-link { grid-column: 4; }
+  .system-link { position: relative; height: 1px; background: #697873; }
+  .system-link::after { content: ""; position: absolute; top: -3px; right: -1px; border-left: 6px solid var(--cyan); border-block: 3px solid transparent; }
+  .system-link span { position: absolute; top: -17px; left: 50%; color: #82918c; font-size: 7px; letter-spacing: .04em; transform: translateX(-50%); white-space: nowrap; }
+  .storage-link::after { border-left-color: var(--green); }
   .story-footer { display: flex; justify-content: space-between; padding: 13px 0 0; color: #71817b; font-family: monospace; font-size: 8px; letter-spacing: .09em; }
   .benchmark-bar { padding: 32px 0 23px; border-block: 1px solid var(--ink); color: var(--ink); background: var(--green); }
   .benchmark-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
@@ -423,7 +459,10 @@ hits = session.<span class="fn">collect</span>(
   @media (max-width: 700px) {
     .hero { padding: 64px 0 72px; }.hero-grid { gap: 52px; width: calc(100% - 28px); }.release-pill > span:not(.release-dot) { display: none; }
     h1 { font-size: clamp(46px, 15vw, 66px); }.hero-copy > p { font-size: 17px; }
-    .query-card-head { grid-template-columns: 1fr 1fr; }.query-card-head > span:nth-child(2) { display: none; }.ascii-desktop { display: none; }.ascii-mobile { display: block; font-size: clamp(9px, 2.45vw, 10px); line-height: 1.5; }.story-footer { gap: 8px; font-size: 7px; }
+    .query-card-head { grid-template-columns: 1fr 1fr; }.query-card-head > span:nth-child(2) { display: none; }
+    .system-map { gap: 12px; }.system-row { padding-top: 17px; }.system-mode { margin-bottom: 6px; font-size: 7px; }.system-mode b { margin-right: 5px; font-size: 6px; }
+    .system-flow { grid-template-columns: 58px 25px 76px 34px minmax(110px, 1fr); gap: 3px; }.system-node { height: 66px; padding: 5px 3px; }.system-node strong { font-size: 7px; }.system-node small { margin-top: 5px; font-size: 5px; }.node-inner { margin-top: 6px; }.node-inner b, .node-inner em { padding: 3px 2px; font-size: 4.5px; }.storage-levels { margin-top: 6px; }.storage-levels i { padding: 3px 1px; font-size: 4.5px; }.system-link span { top: -13px; font-size: 5.5px; }.system-node::after { right: -4px; bottom: -4px; }
+    .story-footer { gap: 8px; font-size: 7px; }
     .benchmark-grid { grid-template-columns: 1fr 1fr; gap: 28px 0; }.benchmark-grid > * { padding: 0 16px; }.benchmark-grid > *:nth-child(2) { border-right: 0; }.benchmark-grid > *:nth-child(3) { padding-left: 0; }
     .principles, .quickstart { padding-block: 96px; }.principle-grid { margin-top: 50px; }.principle-grid article { padding-inline: 18px; }
     .architecture { padding-block: 96px; }.runtime-map { grid-template-columns: 1fr; gap: 16px; }.map-connector { width: 1px; height: 45px; margin: 0 auto; }.map-connector::after { top: auto; right: -3px; bottom: -1px; border-top: 6px solid #6687b8; border-inline: 3px solid transparent; border-bottom: 0; }.map-connector b { top: 14px; left: 12px; transform: none; }.runtime-nodes { grid-column: auto; grid-template-columns: 1fr; margin-top: 10px; }
