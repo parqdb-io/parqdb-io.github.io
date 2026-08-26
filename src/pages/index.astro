@@ -372,7 +372,7 @@ hits = session.<span class="fn">collect</span>(
 
 <style>
   .hero { position: relative; overflow: hidden; padding: 88px 0 94px; border-bottom: 1px solid #3b454c; background: #090c10; }
-  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(82,229,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(82,229,255,.08) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(to right, black, rgba(0,0,0,.22)); }
+  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 52% 66% at 73% 43%, rgba(82,229,255,.045), transparent 72%), radial-gradient(ellipse 38% 48% at 20% 90%, rgba(182,243,74,.022), transparent 74%); }
   .hero::after { content: "PARQUET / OPEN INDEX / 00000001"; position: absolute; right: 18px; bottom: 10px; color: #4f5b62; font-family: monospace; font-size: 9px; letter-spacing: .14em; writing-mode: vertical-rl; }
   .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); align-items: center; gap: 44px; width: min(1320px, calc(100% - 40px)); }
   .release-pill { display: inline-flex; align-items: center; gap: 9px; padding: 7px 8px 7px 10px; border: 1px solid #566169; border-radius: 1px; color: var(--text-2); background: #11171d; font-family: monospace; font-size: 10px; letter-spacing: .035em; box-shadow: 3px 3px 0 #202a31; }
