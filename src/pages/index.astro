@@ -58,52 +58,74 @@ const description =
           <button id="architecture-tab-browser" role="tab" aria-selected="false" aria-controls="architecture-panel-browser" data-architecture-tab="browser" tabindex="-1"><b>03</b> Browser</button>
         </div>
 
-        <div class="architecture-stage">
-          <section id="architecture-panel-embedded" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-embedded" data-architecture-panel="embedded">
-            <div class="topology topology-embedded">
-              <div class="topology-boundary process-boundary">
-                <span class="topology-label">YOUR PROCESS</span>
-                <div class="embedded-flow">
-                  <div class="topology-component"><b>YOUR APP</b></div>
-                  <div class="topology-link"><span>CALL</span></div>
-                  <div class="topology-component engine-component"><b>PARQDB</b><small>PAGE CACHE</small></div>
-                  <div class="topology-link prune-link"><span>PRUNE</span></div>
-                  <div class="topology-component storage-component"><b>PARQUET</b><small>FILE › RG › COL › PAGE</small></div>
+        <div class="architecture-stage" data-architecture-stage data-mode="embedded">
+          <div class="runtime-stage">
+            <section id="architecture-panel-embedded" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-embedded" data-architecture-panel="embedded">
+              <div class="runtime-boundary">
+                <span class="topology-label">APP PROCESS</span>
+                <div class="query-origin"><i></i><b>APP</b></div>
+                <div class="engine-visual">
+                  <span class="engine-title">PARQDB</span>
+                  <div class="query-step route-step">
+                    <svg viewBox="0 0 64 44" aria-hidden="true"><path d="M6 22h15m0 0 14-14m-14 14 14 14m0-28h20M35 8l20 14M35 36l20-14"/><circle cx="6" cy="22" r="3"/><circle cx="35" cy="8" r="3"/><circle cx="35" cy="36" r="3"/><circle cx="55" cy="8" r="3"/><circle cx="55" cy="22" r="3"/><circle cx="55" cy="36" r="3"/></svg>
+                    <small>ROUTE</small>
+                  </div>
+                  <i class="flow-arrow"></i>
+                  <div class="query-step prune-step"><div class="rg-grid"><i></i><i></i><i class="hit"></i><i></i><i></i><i></i><i class="hit"></i><i></i><i></i><i></i><i></i><i class="hit"></i></div><small>PRUNE</small></div>
+                  <i class="flow-arrow"></i>
+                  <div class="query-step cache-step"><div class="cache-pages"><i></i><i></i><i></i></div><small>PAGE CACHE</small></div>
+                  <i class="flow-arrow"></i>
+                  <div class="query-step rank-step"><div class="rank-bars"><i></i><i></i><i></i><i></i></div><small>TOP-K</small></div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section id="architecture-panel-server" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-server" data-architecture-panel="server" hidden>
-            <div class="topology topology-server">
-              <div class="topology-external client-node"><b>CLIENT</b></div>
-              <div class="topology-link"><span>API</span></div>
-              <div class="topology-boundary server-boundary">
-                <span class="topology-label">PARQDB SERVER</span>
-                <div class="topology-component engine-component"><b>QUERY ENGINE</b><small>PAGE CACHE</small></div>
+            <section id="architecture-panel-server" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-server" data-architecture-panel="server" hidden>
+              <div class="client-server-flow">
+                <div class="client-node"><i></i><b>CLIENT</b></div><div class="api-arrow"><span>API</span></div>
+                <div class="runtime-boundary server-runtime">
+                  <span class="topology-label">PARQDB SERVER</span>
+                  <div class="engine-visual">
+                    <span class="engine-title">QUERY ENGINE</span>
+                    <div class="query-step route-step"><svg viewBox="0 0 64 44" aria-hidden="true"><path d="M6 22h15m0 0 14-14m-14 14 14 14m0-28h20M35 8l20 14M35 36l20-14"/><circle cx="6" cy="22" r="3"/><circle cx="35" cy="8" r="3"/><circle cx="35" cy="36" r="3"/><circle cx="55" cy="8" r="3"/><circle cx="55" cy="22" r="3"/><circle cx="55" cy="36" r="3"/></svg><small>ROUTE</small></div>
+                    <i class="flow-arrow"></i><div class="query-step prune-step"><div class="rg-grid"><i></i><i></i><i class="hit"></i><i></i><i></i><i></i><i class="hit"></i><i></i><i></i><i></i><i></i><i class="hit"></i></div><small>PRUNE</small></div>
+                    <i class="flow-arrow"></i><div class="query-step cache-step"><div class="cache-pages"><i></i><i></i><i></i></div><small>PAGE CACHE</small></div>
+                    <i class="flow-arrow"></i><div class="query-step rank-step"><div class="rank-bars"><i></i><i></i><i></i><i></i></div><small>TOP-K</small></div>
+                  </div>
+                </div>
               </div>
-              <div class="topology-link prune-link"><span>PRUNE · RANGE</span></div>
-              <div class="topology-external object-node"><b>OBJECT STORAGE</b><small>PARQUET<br />FILE › RG › COL › PAGE</small></div>
-            </div>
-          </section>
+            </section>
 
-          <section id="architecture-panel-browser" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-browser" data-architecture-panel="browser" hidden>
-            <div class="topology topology-browser">
-              <div class="topology-boundary browser-boundary">
+            <section id="architecture-panel-browser" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-browser" data-architecture-panel="browser" hidden>
+              <div class="runtime-boundary browser-runtime">
                 <span class="topology-label">BROWSER TAB</span>
-                <div class="browser-flow">
-                  <div class="topology-component"><b>QUERY</b></div>
-                  <div class="topology-link"><span>LOCAL</span></div>
-                  <div class="topology-component engine-component"><b>PARQDB WASM</b><small>PAGE CACHE</small></div>
+                <div class="browser-query"><i></i><i></i><i></i><span></span></div>
+                <div class="engine-visual">
+                  <span class="engine-title">PARQDB WASM</span>
+                  <div class="query-step route-step"><svg viewBox="0 0 64 44" aria-hidden="true"><path d="M6 22h15m0 0 14-14m-14 14 14 14m0-28h20M35 8l20 14M35 36l20-14"/><circle cx="6" cy="22" r="3"/><circle cx="35" cy="8" r="3"/><circle cx="35" cy="36" r="3"/><circle cx="55" cy="8" r="3"/><circle cx="55" cy="22" r="3"/><circle cx="55" cy="36" r="3"/></svg><small>ROUTE</small></div>
+                  <i class="flow-arrow"></i><div class="query-step prune-step"><div class="rg-grid"><i></i><i></i><i class="hit"></i><i></i><i></i><i></i><i class="hit"></i><i></i><i></i><i></i><i></i><i class="hit"></i></div><small>PRUNE</small></div>
+                  <i class="flow-arrow"></i><div class="query-step cache-step"><div class="cache-pages"><i></i><i></i><i></i></div><small>PAGE CACHE</small></div>
+                  <i class="flow-arrow"></i><div class="query-step rank-step"><div class="rank-bars"><i></i><i></i><i></i><i></i></div><small>TOP-K</small></div>
                 </div>
               </div>
-              <div class="topology-link prune-link"><span>PRUNE · HTTP RANGE</span></div>
-              <div class="topology-external object-node"><b>OBJECT STORAGE</b><small>PARQUET<br />FILE › RG › COL › PAGE</small></div>
+            </section>
+          </div>
+
+          <div class="range-link" aria-hidden="true"><i class="request-line"></i><i class="response-line"></i><span class="range-request">RANGE</span><span class="range-response">BYTES</span></div>
+
+          <div class="object-store">
+            <span class="topology-label">OBJECT STORAGE</span>
+            <div class="object-assets"><div class="manifest-object"><i></i><small>MANIFEST</small></div><div class="centroid-object"><i></i><i></i><i></i><i></i><i></i><small>CENTROIDS</small></div></div>
+            <div class="parquet-files" aria-label="Parquet files with pruned row groups">
+              <div><b>FILE 00</b><i></i><i></i><i></i><i></i></div>
+              <div class="selected"><b>FILE 01</b><i></i><i class="hit"></i><i></i><i></i></div>
+              <div><b>FILE 02</b><i></i><i></i><i class="hit"></i><i></i></div>
             </div>
-          </section>
+            <div class="page-zoom"><b>ROW GROUP</b><div><span><i></i><i></i><i></i></span><span><i></i><i class="hit"></i><i class="hit"></i></span><span><i></i><i></i><i></i></span></div><small>COLUMNS / PAGES</small></div>
+          </div>
         </div>
         <div class="story-footer">
-          <span>FILE → ROW GROUP → COLUMN → PAGE</span><span>EMBEDDED · SERVER · BROWSER</span>
+          <span>ONE IMMUTABLE INDEX</span><span>READ ONLY THE HIGHLIGHTED BYTES</span>
         </div>
       </div>
     </div>
@@ -310,6 +332,8 @@ hits = session.<span class="fn">collect</span>(
       document.querySelectorAll("[data-architecture-panel]").forEach((panel) => {
         if (panel instanceof HTMLElement) panel.hidden = panel.dataset.architecturePanel !== selected;
       });
+      const stage = document.querySelector("[data-architecture-stage]");
+      if (stage instanceof HTMLElement && selected) stage.dataset.mode = selected;
     };
 
     architectureTabs.forEach((tab, index) => {
@@ -368,34 +392,66 @@ hits = session.<span class="fn">collect</span>(
   .architecture-tabs button:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
   .architecture-tabs button[aria-selected="true"] { border-bottom-color: var(--green); color: var(--white); background: rgba(182, 243, 74, .045); }
   .architecture-tabs button b { margin-right: 7px; color: var(--green); font-size: 7px; }
-  .architecture-stage { display: grid; min-height: 270px; align-items: center; isolation: isolate; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-  .architecture-scene { min-width: 0; animation: sceneIn 160ms ease-out; }
+  .architecture-stage { display: grid; grid-template-columns: minmax(0, 1.55fr) 58px minmax(190px, .85fr); min-height: 278px; align-items: center; gap: 10px; isolation: isolate; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+  .runtime-stage, .architecture-scene { min-width: 0; }
+  .architecture-scene { animation: sceneIn 160ms ease-out; }
   .architecture-scene[hidden] { display: none; }
-  .topology { min-width: 0; padding: 12px 0 20px; }
-  .topology-embedded { display: block; }
-  .topology-server { display: grid; grid-template-columns: 96px 48px minmax(170px, 1fr) 70px minmax(160px, 1fr); gap: 9px; align-items: center; }
-  .topology-browser { display: grid; grid-template-columns: minmax(330px, 1.45fr) 82px minmax(170px, 1fr); gap: 11px; align-items: center; }
-  .topology-boundary, .topology-external { position: relative; z-index: 0; color: #e9f0ec; background: #0d1318; }
-  .topology-boundary { min-height: 220px; padding: 36px 26px 26px; border: 2px solid #c0ccc7; }
-  .topology-external { display: flex; min-height: 128px; align-items: center; justify-content: center; flex-direction: column; padding: 15px 10px; border: 2px solid #c0ccc7; text-align: center; }
-  .topology-boundary::after, .topology-external::after { content: ""; position: absolute; z-index: -1; background-image: radial-gradient(circle, #6c7d83 1.15px, transparent 1.4px); background-size: 4px 4px; }
-  .topology-boundary::after { inset: 0 -18px -18px 0; clip-path: polygon(calc(100% - 18px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 18px), calc(100% - 18px) calc(100% - 18px)); }
-  .topology-external::after { inset: 0 -14px -14px 0; clip-path: polygon(calc(100% - 14px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 14px), calc(100% - 14px) calc(100% - 14px)); }
-  .topology-label { position: absolute; top: -9px; left: 18px; padding: 0 8px; color: var(--green); background: #090c10; font-size: 12px; font-weight: 700; letter-spacing: .065em; white-space: nowrap; }
-  .embedded-flow { display: grid; grid-template-columns: minmax(95px, .85fr) 54px minmax(125px, 1.1fr) 56px minmax(125px, 1fr); gap: 10px; align-items: center; min-height: 156px; }
-  .browser-flow { display: grid; grid-template-columns: minmax(80px, .75fr) 44px minmax(125px, 1.25fr); gap: 8px; align-items: center; min-height: 156px; }
-  .server-boundary { display: flex; align-items: center; justify-content: center; padding-inline: 18px; }
-  .server-boundary .topology-component { width: 100%; }
-  .topology-component { display: flex; min-width: 0; min-height: 126px; align-items: center; justify-content: center; flex-direction: column; padding: 15px 9px; border: 2px solid #c0ccc7; background: #0a0f13; text-align: center; }
-  .topology-component b, .topology-external b { color: #e9f0ec; font-size: 10px; letter-spacing: .045em; }
-  .topology-component small, .topology-external small { margin-top: 14px; color: var(--green); font-size: 7px; line-height: 1.65; letter-spacing: .035em; }
-  .engine-component b { color: var(--cyan); }
-  .storage-component, .object-node { border-color: var(--green); }
-  .storage-component b, .object-node b { color: var(--green); }
-  .object-node::after { background-image: radial-gradient(circle, #668c31 1.15px, transparent 1.4px); }
-  .topology-link { position: relative; height: 1px; background: #879590; }
-  .topology-link::after { content: ""; position: absolute; top: -4px; right: -1px; border-left: 7px solid var(--green); border-block: 4px solid transparent; }
-  .topology-link span { position: absolute; top: -23px; left: 50%; color: #a4b0ac; font-size: 7px; letter-spacing: .035em; transform: translateX(-50%); white-space: nowrap; }
+  .runtime-boundary, .object-store, .client-node { position: relative; z-index: 0; color: #e9f0ec; background: #0d1318; }
+  .runtime-boundary { display: flex; min-height: 220px; align-items: center; padding: 34px 16px 18px; border: 2px solid #c0ccc7; }
+  .runtime-boundary::after, .object-store::after, .client-node::after { content: ""; position: absolute; z-index: -1; inset: 0 -16px -16px 0; clip-path: polygon(calc(100% - 16px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 16px), calc(100% - 16px) calc(100% - 16px)); background-image: radial-gradient(circle, #6c7d83 1.1px, transparent 1.4px); background-size: 4px 4px; }
+  .topology-label { position: absolute; top: -9px; left: 14px; z-index: 2; padding: 0 7px; color: var(--green); background: #090c10; font-size: 10px; font-weight: 750; letter-spacing: .065em; white-space: nowrap; }
+  .query-origin { display: grid; width: 44px; flex: 0 0 44px; place-items: center; gap: 7px; margin-right: 11px; color: #9ca9a4; font-size: 7px; }
+  .query-origin i { width: 22px; height: 15px; border: 1px solid #81908b; box-shadow: 3px 3px 0 #253039; }
+  .engine-visual { position: relative; display: grid; min-width: 0; flex: 1; grid-template-columns: 1fr 9px 1fr 9px 1fr 9px 1fr; align-items: center; gap: 3px; padding: 31px 9px 11px; border: 1px solid #4fbdcf; background: #080d11; }
+  .engine-title { position: absolute; top: 8px; left: 10px; color: var(--cyan); font-size: 8px; font-weight: 800; letter-spacing: .08em; }
+  .query-step { display: flex; min-width: 0; height: 88px; align-items: center; justify-content: center; flex-direction: column; gap: 9px; }
+  .query-step small { color: #8d9a95; font-size: 5.5px; font-weight: 700; letter-spacing: .04em; white-space: nowrap; }
+  .route-step svg { width: 100%; max-width: 52px; overflow: visible; }
+  .route-step path { fill: none; stroke: #536068; stroke-width: 1.5; }
+  .route-step path:first-of-type { stroke: var(--green); }
+  .route-step circle { fill: #0a0f13; stroke: #6a7875; stroke-width: 1.5; }
+  .route-step circle:nth-of-type(1), .route-step circle:nth-of-type(2), .route-step circle:nth-of-type(4) { fill: var(--green); stroke: var(--green); }
+  .flow-arrow, .api-arrow { position: relative; height: 1px; background: #64716d; }
+  .flow-arrow::after, .api-arrow::after { content: ""; position: absolute; top: -3px; right: -1px; border-left: 5px solid var(--green); border-block: 3px solid transparent; }
+  .rg-grid { display: grid; width: 42px; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+  .rg-grid i { aspect-ratio: 1; border: 1px solid #3f4b51; background: #161e24; }
+  .rg-grid i.hit { border-color: var(--green); background: var(--green); box-shadow: 0 0 7px rgba(182,243,74,.35); }
+  .cache-pages { position: relative; width: 42px; height: 42px; }
+  .cache-pages i { position: absolute; width: 31px; height: 22px; border: 1px solid var(--cyan); background: #10242b; }
+  .cache-pages i:nth-child(1) { top: 0; left: 0; }.cache-pages i:nth-child(2) { top: 8px; left: 6px; }.cache-pages i:nth-child(3) { top: 16px; left: 12px; background: #1d5260; }
+  .rank-bars { display: flex; width: 42px; height: 42px; align-items: flex-end; gap: 4px; }
+  .rank-bars i { width: 7px; background: #405058; }.rank-bars i:nth-child(1) { height: 100%; background: var(--green); }.rank-bars i:nth-child(2) { height: 73%; }.rank-bars i:nth-child(3) { height: 50%; }.rank-bars i:nth-child(4) { height: 31%; }
+  .client-server-flow { display: grid; grid-template-columns: 52px 25px minmax(0, 1fr); align-items: center; gap: 7px; }
+  .client-node { display: grid; min-height: 82px; place-items: center; padding: 9px 4px; border: 1px solid #c0ccc7; color: #b9c5c0; font-size: 7px; }
+  .client-node i { width: 24px; height: 17px; border: 1px solid #81908b; }
+  .client-node::after { inset: 0 -8px -8px 0; clip-path: polygon(calc(100% - 8px) 0,100% 0,100% 100%,0 100%,0 calc(100% - 8px),calc(100% - 8px) calc(100% - 8px)); background-size: 3px 3px; }
+  .api-arrow span { position: absolute; top: -15px; left: 50%; color: #7f8e89; font-size: 5px; transform: translateX(-50%); }
+  .server-runtime { padding-inline: 10px; }
+  .browser-runtime { flex-direction: column; justify-content: center; }
+  .browser-query { display: flex; width: 100%; height: 22px; align-items: center; gap: 3px; margin-bottom: 9px; padding: 5px 7px; border: 1px solid #4d595f; background: #0a0f13; }
+  .browser-query i { width: 4px; height: 4px; background: #536068; }.browser-query i:first-child { background: var(--orange); }
+  .browser-query span { width: 42%; height: 4px; margin-left: 5px; background: #304047; }
+  .browser-runtime .engine-visual { width: 100%; }
+  .range-link { position: relative; height: 44px; }
+  .range-link > i { position: absolute; left: 0; width: 100%; height: 1px; background: #697873; }
+  .request-line { top: 12px; background: var(--green) !important; }.response-line { bottom: 12px; background: var(--cyan) !important; }
+  .request-line::after, .response-line::before { content: ""; position: absolute; top: -3px; border-block: 3px solid transparent; }
+  .request-line::after { right: -1px; border-left: 6px solid var(--green); }.response-line::before { left: -1px; border-right: 6px solid var(--cyan); }
+  .range-link span { position: absolute; left: 50%; color: #7f8e89; font-size: 5px; letter-spacing: .05em; transform: translateX(-50%); }
+  .range-request { top: -1px; }.range-response { bottom: -1px; }
+  .object-store { min-height: 238px; padding: 28px 13px 13px; border: 2px solid var(--green); }
+  .object-store::after { background-image: radial-gradient(circle, #668c31 1.1px, transparent 1.4px); }
+  .object-assets { display: grid; grid-template-columns: 1fr 1.45fr; gap: 7px; }
+  .manifest-object, .centroid-object { position: relative; height: 42px; border: 1px solid #536068; background: #0a0f13; }
+  .manifest-object i { position: absolute; top: 7px; left: 9px; width: 16px; height: 20px; border: 1px solid var(--cyan); background: repeating-linear-gradient(to bottom, transparent 0 4px,#29505a 4px 5px); }
+  .object-assets small { position: absolute; right: 4px; bottom: 3px; color: #74827d; font-size: 4.5px; letter-spacing: .03em; }
+  .centroid-object i { position: absolute; width: 5px; height: 5px; border: 1px solid var(--green); border-radius: 50%; }
+  .centroid-object i:nth-child(1) { top: 7px; left: 12px; background: var(--green); }.centroid-object i:nth-child(2) { top: 18px; left: 29px; }.centroid-object i:nth-child(3) { top: 8px; right: 15px; }.centroid-object i:nth-child(4) { bottom: 7px; left: 14px; }.centroid-object i:nth-child(5) { bottom: 7px; right: 12px; }
+  .parquet-files { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 8px; }
+  .parquet-files > div { display: grid; grid-template-rows: 11px repeat(4, 1fr); gap: 2px; height: 64px; padding: 3px; border: 1px solid #4d595f; background: #0a0f13; }
+  .parquet-files b { color: #6f7d78; font-size: 4px; font-weight: 600; }.parquet-files i { background: #202a30; }.parquet-files i.hit { background: var(--green); box-shadow: 0 0 5px rgba(182,243,74,.35); }.parquet-files .selected { border-color: var(--cyan); }
+  .page-zoom { display: grid; grid-template-columns: 44px 1fr; grid-template-rows: 1fr 10px; gap: 3px 6px; align-items: center; margin-top: 8px; padding: 5px; border: 1px solid #526069; background: #0a0f13; }
+  .page-zoom > b { color: var(--green); font-size: 5px; line-height: 1.35; }.page-zoom > div { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }.page-zoom span { display: grid; gap: 2px; }.page-zoom i { height: 5px; background: #263137; }.page-zoom i.hit { background: var(--cyan); }.page-zoom small { grid-column: 2; color: #63716d; font-size: 4px; }
   @keyframes sceneIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   .story-footer { display: flex; justify-content: space-between; padding: 13px 0 0; color: #71817b; font-family: monospace; font-size: 8px; letter-spacing: .09em; }
   .benchmark-bar { padding: 32px 0 23px; border-block: 1px solid var(--ink); color: var(--ink); background: var(--green); }
@@ -503,8 +559,12 @@ hits = session.<span class="fn">collect</span>(
     h1 { font-size: clamp(46px, 15vw, 66px); }.hero-copy > p { font-size: 17px; }
     .query-card-head { grid-template-columns: 1fr 1fr; }.query-card-head > span:nth-child(2) { display: none; }
     .architecture-tabs { margin-bottom: 16px; }.architecture-tabs button { padding: 10px 3px 9px; font-size: 6.5px; }.architecture-tabs button b { margin-right: 3px; font-size: 5px; }
-    .architecture-stage { min-height: 218px; }.topology { padding: 6px 0 14px; }.topology-server { grid-template-columns: 48px 21px 86px 35px minmax(100px, 1fr); gap: 3px; }.topology-browser { grid-template-columns: minmax(190px, 1.35fr) 35px minmax(105px, 1fr); gap: 5px; }
-    .topology-boundary { min-height: 166px; padding: 22px 9px 13px; border-width: 1px; }.topology-external { min-height: 92px; padding: 9px 3px; border-width: 1px; }.topology-boundary::after { inset: 0 -12px -12px 0; clip-path: polygon(calc(100% - 12px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 12px), calc(100% - 12px) calc(100% - 12px)); background-size: 3px 3px; }.topology-external::after { inset: 0 -9px -9px 0; clip-path: polygon(calc(100% - 9px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 9px), calc(100% - 9px) calc(100% - 9px)); background-size: 3px 3px; }.topology-label { top: -6px; left: 9px; padding-inline: 5px; font-size: 7px; }.embedded-flow { grid-template-columns: minmax(52px, .8fr) 20px minmax(72px, 1.1fr) 24px minmax(72px, 1fr); gap: 4px; min-height: 124px; }.browser-flow { grid-template-columns: minmax(45px, .75fr) 20px minmax(72px, 1.25fr); gap: 3px; min-height: 124px; }.server-boundary { padding-inline: 5px; }.topology-component { min-height: 96px; padding: 8px 3px; border-width: 1px; }.topology-component b, .topology-external b { font-size: 6px; }.topology-component small, .topology-external small { margin-top: 8px; font-size: 4.5px; line-height: 1.5; }.topology-link span { top: -15px; font-size: 4px; }.topology-link::after { top: -3px; border-left-width: 6px; border-block-width: 3px; }
+    .architecture-stage { grid-template-columns: 1fr; min-height: 0; gap: 13px; padding-top: 5px; }
+    .runtime-boundary { min-height: 184px; padding: 29px 10px 14px; border-width: 1px; }.runtime-boundary::after, .object-store::after { inset: 0 -11px -11px 0; clip-path: polygon(calc(100% - 11px) 0,100% 0,100% 100%,0 100%,0 calc(100% - 11px),calc(100% - 11px) calc(100% - 11px)); background-size: 3px 3px; }.topology-label { top: -6px; left: 9px; padding-inline: 5px; font-size: 7px; }
+    .query-origin { width: 36px; flex-basis: 36px; margin-right: 7px; }.engine-visual { padding: 28px 6px 8px; gap: 2px; }.engine-title { font-size: 7px; }.query-step { height: 76px; gap: 6px; }.query-step small { font-size: 4.5px; }.rg-grid, .cache-pages, .rank-bars { width: 36px; }.cache-pages { height: 36px; }.cache-pages i { width: 27px; height: 19px; }.route-step svg { max-width: 46px; }
+    .client-server-flow { grid-template-columns: 43px 20px minmax(0,1fr); gap: 5px; }.client-node { min-height: 70px; font-size: 5.5px; }.server-runtime { padding-inline: 7px; }.browser-query { height: 19px; margin-bottom: 7px; }
+    .range-link { width: 44px; height: 34px; justify-self: center; }.range-link > i { top: 0; bottom: auto; width: 1px; height: 100%; }.request-line { left: 13px !important; }.response-line { right: 13px; left: auto !important; }.request-line::after { top: auto; right: -3px; bottom: -1px; border-top: 6px solid var(--green); border-right: 3px solid transparent; border-bottom: 0; border-left: 3px solid transparent; }.response-line::before { top: -1px; left: -3px; border-right: 3px solid transparent; border-bottom: 6px solid var(--cyan); border-left: 3px solid transparent; border-top: 0; }.range-link span { top: 50%; bottom: auto; font-size: 4px; transform: translate(-50%,-50%); }.range-request { left: 0 !important; writing-mode: vertical-rl; }.range-response { right: -7px; left: auto !important; writing-mode: vertical-rl; }
+    .object-store { min-height: 208px; padding: 25px 12px 11px; border-width: 1px; }.object-assets { grid-template-columns: 1fr 1.6fr; }.parquet-files > div { height: 55px; }.page-zoom { grid-template-columns: 55px 1fr; }
     .story-footer { gap: 8px; font-size: 7px; }
     .benchmark-grid { grid-template-columns: 1fr 1fr; gap: 28px 0; }.benchmark-grid > * { padding: 0 16px; }.benchmark-grid > *:nth-child(2) { border-right: 0; }.benchmark-grid > *:nth-child(3) { padding-left: 0; }
     .principles, .quickstart { padding-block: 96px; }.principle-grid { margin-top: 50px; }.principle-grid article { padding-inline: 18px; }
