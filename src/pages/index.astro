@@ -52,47 +52,38 @@ const description =
           <span>ONE INDEX / THREE RUNTIMES</span>
           <span class="live"><b></b> OPEN</span>
         </div>
-        <pre class="ascii-system ascii-desktop" aria-hidden="true"><span class="ascii-blue">┌─ ONE INDEX / THREE QUERY ARCHITECTURES ────────────────────────┐</span><span class="ascii-shadow">░</span>
-│                                                                │<span class="ascii-shadow">░</span>
-│ <span class="ascii-blue">┌─ EMBEDDED ───────┐</span>  <span class="ascii-green">┌─ CLIENT / SERVER ──┐</span>  <span class="ascii-blue">┌─ BROWSER ────────┐</span> │<span class="ascii-shadow">░</span>
-│ │ APP             │  │ APP ──REQUEST──┐   │  │ TAB              │ │<span class="ascii-shadow">░</span>
-│ │ PARQDB ENGINE   │  │         SERVER │   │  │ PARQDB / WASM    │ │<span class="ascii-shadow">░</span>
-│ │ <span class="ascii-green">[PAGE CACHE]</span>    │  │ PARQDB <span class="ascii-green">[PAGE CACHE]</span>│   │  │ <span class="ascii-green">[PAGE CACHE]</span>     │ │<span class="ascii-shadow">░</span>
-│ │ SAME PROCESS    │  │ REMOTE COMPUTE     │  │ NO QUERY SERVER  │ │<span class="ascii-shadow">░</span>
-│ <span class="ascii-blue">└────────┬─────────┘</span>  <span class="ascii-green">└─────────┬──────────┘</span>  <span class="ascii-blue">└─────────┬──────────┘</span> │<span class="ascii-shadow">░</span>
-│        READ                  RANGE             HTTP RANGE      │<span class="ascii-shadow">░</span>
-│          └─────────────────────┼────────────────────┘           │<span class="ascii-shadow">░</span>
-│                                ▼                               │<span class="ascii-shadow">░</span>
-│ <span class="ascii-green">┌─ OBJECT STORAGE / IMMUTABLE PARQUET INDEX ────────────────┐</span> │<span class="ascii-shadow">░</span>
-│ │ FILE  ivf_postings/part-00042.parquet                       │ │<span class="ascii-shadow">░</span>
-│ │ └─ ROW GROUP 17                                             │ │<span class="ascii-shadow">░</span>
-│ │    ├─ COLUMN CHUNK: cid     [MIN / MAX → PRUNE]             │ │<span class="ascii-shadow">░</span>
-│ │    └─ COLUMN CHUNK: vector  <span class="ascii-blue">[PAGE 0] [PAGE 1] [PAGE 2]</span> ...  │ │<span class="ascii-shadow">░</span>
-│ <span class="ascii-green">└────────────────────────────────────────────────────────────┘</span> │<span class="ascii-shadow">░</span>
-<span class="ascii-blue">└────────────────────────────────────────────────────────────────┘</span><span class="ascii-shadow">░
- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
-        <pre class="ascii-system ascii-mobile" aria-hidden="true"><span class="ascii-blue">┌─ EMBEDDED ──────────────────┐</span><span class="ascii-shadow">░</span>
-│ APP + PARQDB ENGINE        │<span class="ascii-shadow">░</span>
-│ <span class="ascii-green">[PAGE CACHE]</span> · SAME PROCESS │── READ ──┐
-<span class="ascii-blue">└─────────────────────────────┘</span><span class="ascii-shadow">░</span>          │
-<span class="ascii-green">┌─ CLIENT / SERVER ───────────┐</span><span class="ascii-shadow">░</span>          │
-│ APP ──REQUEST──▶ SERVER    │<span class="ascii-shadow">░</span>          │
-│          PARQDB            │<span class="ascii-shadow">░</span>          │
-│          <span class="ascii-green">[PAGE CACHE]</span>      │── RANGE ─┤
-<span class="ascii-green">└─────────────────────────────┘</span><span class="ascii-shadow">░</span>          │
-<span class="ascii-blue">┌─ BROWSER ───────────────────┐</span><span class="ascii-shadow">░</span>          │
-│ TAB + PARQDB / WASM        │<span class="ascii-shadow">░</span>          │
-│ <span class="ascii-green">[PAGE CACHE]</span> · NO SERVER  │── HTTP ──┘
-<span class="ascii-blue">└─────────────────────────────┘</span><span class="ascii-shadow">░</span>          │
-                                        ▼
-<span class="ascii-green">┌─ OBJECT STORAGE / PARQUET INDEX ───┐</span><span class="ascii-shadow">░</span>
-│ FILE part-00042.parquet            │<span class="ascii-shadow">░</span>
-│ └─ ROW GROUP 17                    │<span class="ascii-shadow">░</span>
-│    ├─ COLUMN CHUNK: cid [STATS]    │<span class="ascii-shadow">░</span>
-│    └─ COLUMN: vector               │<span class="ascii-shadow">░</span>
-│       <span class="ascii-blue">[PAGE 0] [PAGE 1] [PAGE 2]</span>  │<span class="ascii-shadow">░</span>
+        <pre class="ascii-system ascii-desktop" aria-hidden="true"><span class="ascii-green">┌─ PARQUET INDEX / OBJECT STORAGE ─────────────────────────────┐</span><span class="ascii-shadow">░</span>
+│ FILE  part-00042.parquet                                     │<span class="ascii-shadow">░</span>
+│ └─ ROW GROUP 17                                              │<span class="ascii-shadow">░</span>
+│    ├─ COLUMN cid      [STATS]                                │<span class="ascii-shadow">░</span>
+│    └─ COLUMN vector   <span class="ascii-blue">[PAGE 0] [PAGE 1] [PAGE 2]</span>             │<span class="ascii-shadow">░</span>
+<span class="ascii-green">└──────────────────────────────────────────────────────────────┘</span><span class="ascii-shadow">░
+ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
+         │                     │                     │
+        READ                 RANGE               HTTP RANGE
+         ▼                     ▼                     ▼
+<span class="ascii-blue">┌─ EMBEDDED ───────┐</span><span class="ascii-shadow">░</span>  <span class="ascii-green">┌─ CLIENT / SERVER ┐</span><span class="ascii-shadow">░</span>  <span class="ascii-blue">┌─ BROWSER ────────┐</span><span class="ascii-shadow">░</span>
+│ APP + PARQDB     │<span class="ascii-shadow">░</span>  │ APP -&gt; SERVER    │<span class="ascii-shadow">░</span>  │ TAB + WASM       │<span class="ascii-shadow">░</span>
+│ <span class="ascii-green">PAGE CACHE</span>       │<span class="ascii-shadow">░</span>  │ PARQDB + <span class="ascii-green">CACHE</span>   │<span class="ascii-shadow">░</span>  │ <span class="ascii-green">PAGE CACHE</span>       │<span class="ascii-shadow">░</span>
+<span class="ascii-blue">└──────────────────┘</span><span class="ascii-shadow">░</span>  <span class="ascii-green">└──────────────────┘</span><span class="ascii-shadow">░</span>  <span class="ascii-blue">└──────────────────┘</span><span class="ascii-shadow">░
+ ░░░░░░░░░░░░░░░░░░░░  ░░░░░░░░░░░░░░░░░░░░  ░░░░░░░░░░░░░░░░░░░░</span></pre>
+        <pre class="ascii-system ascii-mobile" aria-hidden="true"><span class="ascii-green">┌─ PARQUET INDEX / OBJECT STORE ───────┐</span><span class="ascii-shadow">░</span>
+│ FILE part-00042.parquet              │<span class="ascii-shadow">░</span>
+│ └─ ROW GROUP 17                      │<span class="ascii-shadow">░</span>
+│    └─ COLUMN vector                  │<span class="ascii-shadow">░</span>
+│       <span class="ascii-blue">[PAGE 0] [PAGE 1] [PAGE 2]</span>     │<span class="ascii-shadow">░</span>
 <span class="ascii-green">└──────────────────────────────────────┘</span><span class="ascii-shadow">░
- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
+ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
+
+<span class="ascii-blue">┌─ EMBEDDED ───────────────────────────┐</span><span class="ascii-shadow">░</span>
+│ APP + PARQDB  |  <span class="ascii-green">PAGE CACHE</span>          │<span class="ascii-shadow">░</span>
+<span class="ascii-blue">└──────────────────────────────────────┘</span><span class="ascii-shadow">░</span>
+<span class="ascii-green">┌─ CLIENT / SERVER ────────────────────┐</span><span class="ascii-shadow">░</span>
+│ APP -&gt; SERVER  |  PARQDB + <span class="ascii-green">CACHE</span>     │<span class="ascii-shadow">░</span>
+<span class="ascii-green">└──────────────────────────────────────┘</span><span class="ascii-shadow">░</span>
+<span class="ascii-blue">┌─ BROWSER ────────────────────────────┐</span><span class="ascii-shadow">░</span>
+│ TAB + WASM  |  <span class="ascii-green">PAGE CACHE</span>            │<span class="ascii-shadow">░</span>
+<span class="ascii-blue">└──────────────────────────────────────┘</span><span class="ascii-shadow">░</span></pre>
         <div class="story-footer">
           <span>FILE → ROW GROUP → COLUMN PAGE</span><span>EMBEDDED · SERVER · BROWSER</span>
         </div>
@@ -343,6 +334,9 @@ hits = session.<span class="fn">collect</span>(
   .principles .section-copy { color: #3f4947; }
   .principle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 68px; }
   .principle-grid article { position: relative; min-height: 400px; padding: 38px 30px 31px; border: 1px solid var(--ink); background: var(--paper-muted); transition: transform 140ms ease, border-color 140ms ease, background 140ms ease; }
+  .principle-grid article:nth-child(1) { box-shadow: 7px 7px 0 #35a7ff; }
+  .principle-grid article:nth-child(2) { box-shadow: 7px 7px 0 #8fbe31; }
+  .principle-grid article:nth-child(3) { box-shadow: 7px 7px 0 #765ed2; }
   .principle-grid article:hover { border-color: #0b72d9; background: var(--paper); transform: translateY(-3px); }
   .feature-index { position: absolute; top: 15px; right: 17px; color: #56615e; font-family: monospace; font-size: 9px; }
   .feature-icon { position: relative; width: 54px; height: 54px; margin-bottom: 42px; }
