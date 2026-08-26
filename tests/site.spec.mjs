@@ -29,6 +29,7 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
     );
     expect(new Set(widths).size).toBe(1);
   };
+  await expectAlignedAscii(sharedObjectStore);
   await expectAlignedAscii(page.locator('[data-architecture-panel="embedded"] .ascii-runtime'));
 
   const serverArchitecture = page.getByRole("tab", { name: /Client \/ Server/ });

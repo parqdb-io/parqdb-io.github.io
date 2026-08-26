@@ -112,26 +112,22 @@ const description =
    │
  BYTES</pre>
 
-          <pre class="ascii-storage" aria-label="Object storage containing index objects and an expanded Parquet file"><span class="ascii-bucket">┌──────── <span class="ascii-engine">OBJECT STORAGE / BUCKET</span> ────────┐</span><span class="ascii-shadow">░░░</span>
-<span class="ascii-bucket">│</span>  manifest.json       centroids.parquet  <span class="ascii-bucket">│</span><span class="ascii-shadow">░░░</span>
-<span class="ascii-bucket">│</span>                                         <span class="ascii-bucket">│</span><span class="ascii-shadow">░░░</span>
-<span class="ascii-bucket">│</span>  postings/                              <span class="ascii-bucket">│</span><span class="ascii-shadow">░░░</span>
-<span class="ascii-bucket">│</span>  ├─ file-00.parquet                     <span class="ascii-bucket">│</span><span class="ascii-shadow">░░░</span>
-<span class="ascii-bucket">│</span>  ├─ <span class="ascii-selected">[file-01.parquet]</span>                   <span class="ascii-bucket">│</span><span class="ascii-shadow">░░░</span>
-<span class="ascii-bucket">│</span>  └─ file-02.parquet                     <span class="ascii-bucket">│</span><span class="ascii-shadow">░░░</span>
-<span class="ascii-bucket">└─────────────────────────────────────────┘</span><span class="ascii-shadow">░░░</span>
- <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
-  <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
-                      <span class="ascii-zoom">│ OPEN</span>
-                      <span class="ascii-zoom">▼</span>
-    ┌─────── <span class="ascii-file">PARQUET FILE 01</span> ────────┐<span class="ascii-shadow">░░░</span>
-    │  RG 00  ░░░░░░░░░░░░░░░░░░░░   │<span class="ascii-shadow">░░░</span>
-    │  <span class="ascii-selected">RG 01</span>  CID │ KEY │ LVQ8         │<span class="ascii-shadow">░░░</span>
-    │  PAGES  ░░░ │ ░░░ │ ░<span class="ascii-read">██</span>░<span class="ascii-read">█</span>░       │<span class="ascii-shadow">░░░</span>
-    │  RG 02  ░░░░░░░░░░░░░░░░░░░░   │<span class="ascii-shadow">░░░</span>
-    ╰───── <span class="ascii-footer">FOOTER</span> ────\_______/──────╯<span class="ascii-shadow">░░░</span>
-     <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
-      <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
+          <pre class="ascii-storage" aria-label="Object storage containing index objects and an expanded Parquet file"><span class="ascii-bucket">╔══════════ <span class="ascii-engine">OBJECT STORAGE / BUCKET</span> ══════════╗</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>  manifest.json        centroids.parquet     <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>                                             <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>  postings/                                  <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>  ├─ file-00.parquet                         <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┏━ <span class="ascii-file">FILE-01.PARQUET</span> ━━━━━━━━━━━━━━━━━┓</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃ ROW GROUP 00  ░░░░░░░░░░░░░░░░    ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┣━ <span class="ascii-selected">ROW GROUP 01</span> ━━━━━━━━━━━━━━━━━━━━┫</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃ CID │ KEY │ LVQ8                  ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃ ░░░ │ ░░░ │ ░<span class="ascii-read">██</span>░<span class="ascii-read">█</span>░                ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┣━ ROW GROUP 02 ━━━━━━━━━━━━━━━━━━━━┫</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┗━━━━ <span class="ascii-footer">FOOTER</span> ━━━━\_______/━━━━━━━━━━┛</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">║</span>  └─ file-02.parquet                         <span class="ascii-bucket">║</span><span class="ascii-shadow">░░</span>
+<span class="ascii-bucket">╚═════════════════════════════════════════════╝</span><span class="ascii-shadow">░░</span>
+ <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
+  <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
         </div>
         <div class="story-footer">
           <span>ONE IMMUTABLE INDEX</span><span>READ ONLY THE HIGHLIGHTED BYTES</span>
@@ -411,23 +407,23 @@ hits = session.<span class="fn">collect</span>(
   .architecture-tabs button:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
   .architecture-tabs button[aria-selected="true"] { border-bottom-color: var(--green); color: var(--white); background: rgba(182, 243, 74, .045); }
   .architecture-tabs button b { margin-right: 7px; color: var(--green); font-size: 7px; }
-  .architecture-stage { display: grid; grid-template-columns: minmax(225px, .88fr) 58px minmax(300px, 1.12fr); min-height: 276px; align-items: center; gap: 6px; isolation: isolate; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+  .architecture-stage { display: grid; grid-template-columns: minmax(215px, .85fr) 70px minmax(300px, 1.15fr); min-height: 246px; align-items: center; gap: 5px; isolation: isolate; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
   .runtime-stage, .architecture-scene { min-width: 0; }
-  .runtime-stage { display: grid; min-height: 276px; place-items: center; }
+  .runtime-stage { display: grid; min-height: 236px; place-items: center; }
   .architecture-scene { animation: sceneIn 160ms ease-out; }
   .architecture-scene[hidden] { display: none; }
   .ascii-runtime, .ascii-storage, .ascii-range { overflow: visible; margin: 0; padding: 0; border: 0; border-radius: 0; color: #aebbb6; background: transparent; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: clamp(8.5px, .72vw, 10px); font-variant-ligatures: none; font-weight: 600; line-height: 1.48; letter-spacing: 0; white-space: pre; }
   .ascii-runtime { width: max-content; max-width: 100%; color: #d4dcd8; font-size: clamp(10.5px, .9vw, 12.5px); }
-  .ascii-storage { justify-self: end; color: #7f8d88; font-size: clamp(9px, .73vw, 10.2px); line-height: 1.35; }
+  .ascii-storage { justify-self: end; color: #84948e; font-size: clamp(9px, .73vw, 10.2px); line-height: 1.35; }
   .ascii-engine, .ascii-file { color: var(--cyan); font-weight: 800; }
-  .ascii-bucket { color: #8eb8b8; }
-  .ascii-zoom { color: var(--cyan); font-weight: 800; }
+  .ascii-bucket { color: #88b8ba; font-weight: 700; }
+  .ascii-parquet { color: #bdc9c4; }
   .ascii-cache, .ascii-selected, .ascii-footer { color: var(--green); font-weight: 800; }
   .ascii-read { color: #081009; background: var(--green); box-shadow: 0 0 8px rgba(182,243,74,.4); }
   .ascii-client { color: var(--orange); font-weight: 800; }
   .ascii-shadow { color: #4b626d; font-weight: 500; }
   .ascii-storage .ascii-shadow { color: #668f36; }
-  .ascii-range { justify-self: stretch; color: #87958f; font-size: 6px; line-height: 2.1; text-align: center; }
+  .ascii-range { justify-self: stretch; color: #a5b3ae; font-size: 8px; line-height: 2; text-align: center; }
   .ascii-range span { color: var(--cyan); font-weight: 800; }
   .ascii-range-vertical { display: none; }
   @keyframes sceneIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
