@@ -60,47 +60,45 @@ const description =
 
         <div class="architecture-stage">
           <section id="architecture-panel-embedded" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-embedded" data-architecture-panel="embedded">
-            <div class="scene-composition">
-              <div class="scene-actor"><span>YOUR APP</span></div>
-              <div class="scene-link"><span>CALL</span></div>
-              <div class="scene-system">
-                <span class="scene-system-label">PARQDB / EMBEDDED</span>
-                <div class="scene-system-inner">
-                  <div class="scene-component scene-cache"><b>QUERY ENGINE</b><span>PAGE CACHE</span></div>
-                  <div class="scene-internal-link"><span>PRUNE</span></div>
-                  <div class="scene-component scene-parquet"><b>PARQUET</b><span>FILE › ROW GROUP<br />› COLUMN › PAGE</span></div>
+            <div class="topology topology-embedded">
+              <div class="topology-boundary process-boundary">
+                <span class="topology-label">YOUR PROCESS</span>
+                <div class="embedded-flow">
+                  <div class="topology-component"><b>YOUR APP</b></div>
+                  <div class="topology-link"><span>CALL</span></div>
+                  <div class="topology-component engine-component"><b>PARQDB</b><small>PAGE CACHE</small></div>
+                  <div class="topology-link prune-link"><span>PRUNE</span></div>
+                  <div class="topology-component storage-component"><b>PARQUET</b><small>FILE › RG › COL › PAGE</small></div>
                 </div>
               </div>
             </div>
           </section>
 
           <section id="architecture-panel-server" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-server" data-architecture-panel="server" hidden>
-            <div class="scene-composition">
-              <div class="scene-actor"><span>CLIENT</span></div>
-              <div class="scene-link"><span>REQUEST</span></div>
-              <div class="scene-system">
-                <span class="scene-system-label">PARQDB / SERVER</span>
-                <div class="scene-system-inner">
-                  <div class="scene-component scene-cache"><b>QUERY ENGINE</b><span>PAGE CACHE</span></div>
-                  <div class="scene-internal-link"><span>PRUNE · RANGE</span></div>
-                  <div class="scene-component scene-parquet"><b>OBJECT STORAGE</b><span>PARQUET<br />FILE › RG › COL › PAGE</span></div>
-                </div>
+            <div class="topology topology-server">
+              <div class="topology-external client-node"><b>CLIENT</b></div>
+              <div class="topology-link"><span>API</span></div>
+              <div class="topology-boundary server-boundary">
+                <span class="topology-label">PARQDB SERVER</span>
+                <div class="topology-component engine-component"><b>QUERY ENGINE</b><small>PAGE CACHE</small></div>
               </div>
+              <div class="topology-link prune-link"><span>PRUNE · RANGE</span></div>
+              <div class="topology-external object-node"><b>OBJECT STORAGE</b><small>PARQUET<br />FILE › RG › COL › PAGE</small></div>
             </div>
           </section>
 
           <section id="architecture-panel-browser" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-browser" data-architecture-panel="browser" hidden>
-            <div class="scene-composition">
-              <div class="scene-actor"><span>QUERY</span></div>
-              <div class="scene-link"><span>IN TAB</span></div>
-              <div class="scene-system">
-                <span class="scene-system-label">PARQDB / BROWSER</span>
-                <div class="scene-system-inner">
-                  <div class="scene-component scene-cache"><b>PARQDB WASM</b><span>PAGE CACHE</span></div>
-                  <div class="scene-internal-link"><span>PRUNE · HTTP RANGE</span></div>
-                  <div class="scene-component scene-parquet"><b>OBJECT STORAGE</b><span>PARQUET<br />FILE › RG › COL › PAGE</span></div>
+            <div class="topology topology-browser">
+              <div class="topology-boundary browser-boundary">
+                <span class="topology-label">BROWSER TAB</span>
+                <div class="browser-flow">
+                  <div class="topology-component"><b>QUERY</b></div>
+                  <div class="topology-link"><span>LOCAL</span></div>
+                  <div class="topology-component engine-component"><b>PARQDB WASM</b><small>PAGE CACHE</small></div>
                 </div>
               </div>
+              <div class="topology-link prune-link"><span>PRUNE · HTTP RANGE</span></div>
+              <div class="topology-external object-node"><b>OBJECT STORAGE</b><small>PARQUET<br />FILE › RG › COL › PAGE</small></div>
             </div>
           </section>
         </div>
@@ -373,25 +371,31 @@ hits = session.<span class="fn">collect</span>(
   .architecture-stage { display: grid; min-height: 270px; align-items: center; isolation: isolate; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
   .architecture-scene { min-width: 0; animation: sceneIn 160ms ease-out; }
   .architecture-scene[hidden] { display: none; }
-  .scene-composition { display: grid; grid-template-columns: 122px 76px minmax(0, 1fr); gap: 12px; align-items: center; min-width: 0; padding: 12px 0 20px; }
-  .scene-actor, .scene-system { position: relative; z-index: 0; color: #e9f0ec; background: #0d1318; }
-  .scene-actor { display: grid; min-height: 128px; place-items: center; border: 2px solid #c0ccc7; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
-  .scene-system { min-height: 222px; padding: 34px 28px 26px; border: 2px solid #c0ccc7; }
-  .scene-actor::after, .scene-system::after { content: ""; position: absolute; z-index: -1; background-image: radial-gradient(circle, #6c7d83 1.15px, transparent 1.4px); background-size: 4px 4px; }
-  .scene-actor::after { inset: 0 -14px -14px 0; clip-path: polygon(calc(100% - 14px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 14px), calc(100% - 14px) calc(100% - 14px)); }
-  .scene-system::after { inset: 0 -18px -18px 0; clip-path: polygon(calc(100% - 18px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 18px), calc(100% - 18px) calc(100% - 18px)); }
-  .scene-system-label { position: absolute; top: -9px; left: 18px; padding: 0 8px; color: var(--green); background: #090c10; font-size: 12px; font-weight: 700; letter-spacing: .065em; white-space: nowrap; }
-  .scene-system-inner { display: grid; grid-template-columns: minmax(110px, 1fr) 56px minmax(125px, 1fr); gap: 10px; align-items: center; min-height: 158px; }
-  .scene-component { display: flex; min-width: 0; min-height: 126px; align-items: center; justify-content: center; flex-direction: column; padding: 16px 10px; border: 2px solid #c0ccc7; background: #0a0f13; text-align: center; }
-  .scene-component b { color: var(--cyan); font-size: 11px; letter-spacing: .045em; }
-  .scene-component span { margin-top: 14px; color: var(--green); font-size: 7.5px; line-height: 1.65; letter-spacing: .035em; }
-  .scene-parquet { border-color: var(--green); }
-  .scene-parquet b { color: var(--green); }
-  .scene-internal-link, .scene-link { position: relative; height: 1px; background: #879590; }
-  .scene-internal-link::after, .scene-link::after { content: ""; position: absolute; top: -4px; right: -1px; border-left: 7px solid var(--green); border-block: 4px solid transparent; }
-  .scene-internal-link span, .scene-link span { position: absolute; top: -23px; left: 50%; color: #a4b0ac; font-size: 7px; letter-spacing: .035em; transform: translateX(-50%); white-space: nowrap; }
-  .scene-link { position: relative; height: 1px; background: #74827e; }
-  .scene-link span { font-size: 8px; }
+  .topology { min-width: 0; padding: 12px 0 20px; }
+  .topology-embedded { display: block; }
+  .topology-server { display: grid; grid-template-columns: 96px 48px minmax(170px, 1fr) 70px minmax(160px, 1fr); gap: 9px; align-items: center; }
+  .topology-browser { display: grid; grid-template-columns: minmax(330px, 1.45fr) 82px minmax(170px, 1fr); gap: 11px; align-items: center; }
+  .topology-boundary, .topology-external { position: relative; z-index: 0; color: #e9f0ec; background: #0d1318; }
+  .topology-boundary { min-height: 220px; padding: 36px 26px 26px; border: 2px solid #c0ccc7; }
+  .topology-external { display: flex; min-height: 128px; align-items: center; justify-content: center; flex-direction: column; padding: 15px 10px; border: 2px solid #c0ccc7; text-align: center; }
+  .topology-boundary::after, .topology-external::after { content: ""; position: absolute; z-index: -1; background-image: radial-gradient(circle, #6c7d83 1.15px, transparent 1.4px); background-size: 4px 4px; }
+  .topology-boundary::after { inset: 0 -18px -18px 0; clip-path: polygon(calc(100% - 18px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 18px), calc(100% - 18px) calc(100% - 18px)); }
+  .topology-external::after { inset: 0 -14px -14px 0; clip-path: polygon(calc(100% - 14px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 14px), calc(100% - 14px) calc(100% - 14px)); }
+  .topology-label { position: absolute; top: -9px; left: 18px; padding: 0 8px; color: var(--green); background: #090c10; font-size: 12px; font-weight: 700; letter-spacing: .065em; white-space: nowrap; }
+  .embedded-flow { display: grid; grid-template-columns: minmax(95px, .85fr) 54px minmax(125px, 1.1fr) 56px minmax(125px, 1fr); gap: 10px; align-items: center; min-height: 156px; }
+  .browser-flow { display: grid; grid-template-columns: minmax(80px, .75fr) 44px minmax(125px, 1.25fr); gap: 8px; align-items: center; min-height: 156px; }
+  .server-boundary { display: flex; align-items: center; justify-content: center; padding-inline: 18px; }
+  .server-boundary .topology-component { width: 100%; }
+  .topology-component { display: flex; min-width: 0; min-height: 126px; align-items: center; justify-content: center; flex-direction: column; padding: 15px 9px; border: 2px solid #c0ccc7; background: #0a0f13; text-align: center; }
+  .topology-component b, .topology-external b { color: #e9f0ec; font-size: 10px; letter-spacing: .045em; }
+  .topology-component small, .topology-external small { margin-top: 14px; color: var(--green); font-size: 7px; line-height: 1.65; letter-spacing: .035em; }
+  .engine-component b { color: var(--cyan); }
+  .storage-component, .object-node { border-color: var(--green); }
+  .storage-component b, .object-node b { color: var(--green); }
+  .object-node::after { background-image: radial-gradient(circle, #668c31 1.15px, transparent 1.4px); }
+  .topology-link { position: relative; height: 1px; background: #879590; }
+  .topology-link::after { content: ""; position: absolute; top: -4px; right: -1px; border-left: 7px solid var(--green); border-block: 4px solid transparent; }
+  .topology-link span { position: absolute; top: -23px; left: 50%; color: #a4b0ac; font-size: 7px; letter-spacing: .035em; transform: translateX(-50%); white-space: nowrap; }
   @keyframes sceneIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   .story-footer { display: flex; justify-content: space-between; padding: 13px 0 0; color: #71817b; font-family: monospace; font-size: 8px; letter-spacing: .09em; }
   .benchmark-bar { padding: 32px 0 23px; border-block: 1px solid var(--ink); color: var(--ink); background: var(--green); }
@@ -499,8 +503,8 @@ hits = session.<span class="fn">collect</span>(
     h1 { font-size: clamp(46px, 15vw, 66px); }.hero-copy > p { font-size: 17px; }
     .query-card-head { grid-template-columns: 1fr 1fr; }.query-card-head > span:nth-child(2) { display: none; }
     .architecture-tabs { margin-bottom: 16px; }.architecture-tabs button { padding: 10px 3px 9px; font-size: 6.5px; }.architecture-tabs button b { margin-right: 3px; font-size: 5px; }
-    .architecture-stage { min-height: 218px; }.scene-composition { grid-template-columns: 64px 30px minmax(0, 1fr); gap: 5px; padding: 6px 0 14px; }
-    .scene-actor { min-height: 88px; border-width: 1px; font-size: 7px; }.scene-system { min-height: 166px; padding: 22px 9px 13px; border-width: 1px; }.scene-actor::after { inset: 0 -9px -9px 0; clip-path: polygon(calc(100% - 9px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 9px), calc(100% - 9px) calc(100% - 9px)); background-size: 3px 3px; }.scene-system::after { inset: 0 -12px -12px 0; clip-path: polygon(calc(100% - 12px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 12px), calc(100% - 12px) calc(100% - 12px)); background-size: 3px 3px; }.scene-system-label { top: -6px; left: 9px; padding-inline: 5px; font-size: 7px; }.scene-system-inner { grid-template-columns: minmax(62px, 1fr) 28px minmax(70px, 1fr); gap: 4px; min-height: 124px; }.scene-component { min-height: 96px; padding: 8px 3px; border-width: 1px; }.scene-component b { font-size: 6px; }.scene-component span { margin-top: 8px; font-size: 4.5px; line-height: 1.5; }.scene-internal-link span, .scene-link span { top: -15px; font-size: 4px; }.scene-internal-link::after, .scene-link::after { top: -3px; border-left-width: 6px; border-block-width: 3px; }
+    .architecture-stage { min-height: 218px; }.topology { padding: 6px 0 14px; }.topology-server { grid-template-columns: 48px 21px 86px 35px minmax(100px, 1fr); gap: 3px; }.topology-browser { grid-template-columns: minmax(190px, 1.35fr) 35px minmax(105px, 1fr); gap: 5px; }
+    .topology-boundary { min-height: 166px; padding: 22px 9px 13px; border-width: 1px; }.topology-external { min-height: 92px; padding: 9px 3px; border-width: 1px; }.topology-boundary::after { inset: 0 -12px -12px 0; clip-path: polygon(calc(100% - 12px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 12px), calc(100% - 12px) calc(100% - 12px)); background-size: 3px 3px; }.topology-external::after { inset: 0 -9px -9px 0; clip-path: polygon(calc(100% - 9px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 9px), calc(100% - 9px) calc(100% - 9px)); background-size: 3px 3px; }.topology-label { top: -6px; left: 9px; padding-inline: 5px; font-size: 7px; }.embedded-flow { grid-template-columns: minmax(52px, .8fr) 20px minmax(72px, 1.1fr) 24px minmax(72px, 1fr); gap: 4px; min-height: 124px; }.browser-flow { grid-template-columns: minmax(45px, .75fr) 20px minmax(72px, 1.25fr); gap: 3px; min-height: 124px; }.server-boundary { padding-inline: 5px; }.topology-component { min-height: 96px; padding: 8px 3px; border-width: 1px; }.topology-component b, .topology-external b { font-size: 6px; }.topology-component small, .topology-external small { margin-top: 8px; font-size: 4.5px; line-height: 1.5; }.topology-link span { top: -15px; font-size: 4px; }.topology-link::after { top: -3px; border-left-width: 6px; border-block-width: 3px; }
     .story-footer { gap: 8px; font-size: 7px; }
     .benchmark-grid { grid-template-columns: 1fr 1fr; gap: 28px 0; }.benchmark-grid > * { padding: 0 16px; }.benchmark-grid > *:nth-child(2) { border-right: 0; }.benchmark-grid > *:nth-child(3) { padding-left: 0; }
     .principles, .quickstart { padding-block: 96px; }.principle-grid { margin-top: 50px; }.principle-grid article { padding-inline: 18px; }
