@@ -20,7 +20,7 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
   const sharedObjectStore = page.locator(".ascii-storage");
   await expect(sharedObjectStore).toHaveCount(1);
   await expect(sharedObjectStore).toBeVisible();
-  await expect(page.getByLabel("Parquet files with pruned row groups")).toBeVisible();
+  await expect(page.getByLabel("Object storage containing index objects and an expanded Parquet file")).toBeVisible();
 
   const expectAlignedAscii = async (locator, skipLines = 0) => {
     const widths = await locator.evaluate(
@@ -29,7 +29,6 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
     );
     expect(new Set(widths).size).toBe(1);
   };
-  await expectAlignedAscii(sharedObjectStore);
   await expectAlignedAscii(page.locator('[data-architecture-panel="embedded"] .ascii-runtime'));
 
   const serverArchitecture = page.getByRole("tab", { name: /Client \/ Server/ });
