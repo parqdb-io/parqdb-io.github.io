@@ -1,15 +1,18 @@
 ---
 import logo from "../assets/logo.svg";
+import logoDark from "../assets/logo-dark.svg";
 
 interface Props {
   href?: string;
+  variant?: "light" | "dark";
 }
 
-const { href = "/" } = Astro.props;
+const { href = "/", variant = "light" } = Astro.props;
+const source = variant === "dark" ? logoDark : logo;
 ---
 
 <a class="brand" href={href} aria-label="ParqDB home">
-  <img src={logo.src} width="150" height="56" alt="ParqDB" />
+  <img src={source.src} width="150" height="56" alt="ParqDB" />
 </a>
 
 <style>

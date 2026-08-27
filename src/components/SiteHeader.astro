@@ -13,7 +13,7 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
 <header class="site-header">
   <div class="nav-shell">
     <div class="nav-brand">
-      <Brand href={at("/")} />
+      <Brand href={at("/")} variant="dark" />
       <span><b></b> OPEN INDEX ENGINE</span>
     </div>
     <nav aria-label="Main navigation">
@@ -135,8 +135,6 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
   .github-link:hover { color: #fff; background: #0057b8; }
 
   .data-bus { display: none; }
-
-  :global(.site-header .brand img) { filter: brightness(0) invert(1); }
 
   @keyframes navBlink { 0%, 68% { opacity: 1; } 69%, 100% { opacity: .25; } }
 
