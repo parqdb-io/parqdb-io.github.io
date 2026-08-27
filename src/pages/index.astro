@@ -372,27 +372,29 @@ hits = session.<span class="fn">collect</span>(
 </SiteLayout>
 
 <style>
-  .hero { position: relative; overflow: hidden; padding: 84px 0 86px; border-bottom: 1px solid #2c374d; background: #0d1424; }
-  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(20,124,229,.06), transparent 42%); }
+  .hero { position: relative; overflow: hidden; padding: 70px 0 72px; border-bottom: 1px solid #344158; background: #0a1220; }
+  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(36,145,255,.08), transparent 36%); }
   .hero::after { display: none; }
-  .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr); align-items: center; gap: 54px; width: min(1280px, calc(100% - 48px)); }
-  h1 { max-width: 700px; margin: 0; color: #f7f9fc; font-family: "JetBrains Mono", monospace; font-size: clamp(48px, 5.25vw, 74px); font-weight: 700; line-height: .98; letter-spacing: -.055em; }
+  .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 62px; width: min(1280px, calc(100% - 48px)); }
+  h1 { max-width: 660px; margin: 0; color: #f7f9fc; font-family: "JetBrains Mono", monospace; font-size: clamp(48px, 4.5vw, 64px); font-weight: 700; line-height: .96; letter-spacing: -.055em; }
   h1 span { color: #2491ff; }
-  .hero-copy > p { max-width: 620px; margin: 30px 0 0; color: #b8c2d1; font-family: "JetBrains Mono", monospace; font-size: clamp(15px, 1.5vw, 18px); line-height: 1.6; }
-  .hero-actions { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 35px; }
+  .hero-copy > p { max-width: 620px; margin: 24px 0 0; color: #b8c2d1; font-family: "JetBrains Mono", monospace; font-size: clamp(15px, 1.35vw, 17px); line-height: 1.55; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 28px; }
   .hero-actions svg { width: 17px; height: 17px; }
-  .install-line { display: flex; width: min(100%, 390px); align-items: center; margin-top: 25px; padding: 11px 12px; border: 1px solid #3a465b; border-radius: 3px; color: #eef3fa; background: #111b2e; box-shadow: 4px 4px 0 rgba(0,0,0,.25); font-size: 12px; }
+  .install-line { display: flex; width: min(100%, 390px); align-items: center; margin-top: 20px; padding: 10px 12px; border: 1px solid #43516a; border-radius: 3px; color: #eef3fa; background: #111b2e; box-shadow: 4px 4px 0 #050a12; font-size: 12px; }
   .install-line .prompt { margin-right: 10px; color: var(--accent); }
   .copy-command { width: 28px; height: 28px; margin-left: auto; padding: 5px; border: 1px solid transparent; color: var(--text-3); background: transparent; cursor: pointer; }
   .copy-command:hover { color: var(--cyan); border-color: #39434a; }
   .copy-command svg { width: 16px; height: 16px; }
   .check-icon, .copy-command.copied .copy-icon { display: none; }
   .copy-command.copied .check-icon { display: block; color: var(--accent); }
-  .hero-index { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 25px; color: #8e9aad; font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: .08em; }
+  .hero-index { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 19px; color: #8e9aad; font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: .08em; }
   .hero-index b { color: #d0d7e2; font-weight: 400; }
-  .hero .button-secondary { color: #eef3fa; border-color: #657187; background: #182237; box-shadow: 4px 4px 0 #080d17; }
-  .hero .button-secondary:hover { color: #fff; border-color: #8da0ba; background: #202c43; }
-  .query-card { position: relative; min-width: 0; padding: 26px 26px 22px; border: 1px solid #3a465b; border-radius: 3px; color: #f5f5f7; background: #101827; box-shadow: 8px 8px 0 #080d17; }
+  .hero .button-primary { color: #17120f; border-color: #eda06f; background: #e49366; box-shadow: 4px 4px 0 #70422d; }
+  .hero .button-primary:hover { color: #17120f; border-color: #f4aa79; background: #efa071; box-shadow: 5px 5px 0 #70422d; }
+  .hero .button-secondary { color: #172033; border-color: #d9e0ea; background: #eef2f8; box-shadow: 4px 4px 0 #667287; }
+  .hero .button-secondary:hover { color: #0066cc; border-color: #fff; background: #fff; box-shadow: 5px 5px 0 #667287; }
+  .query-card { position: relative; min-width: 0; padding: 26px 26px 22px; border: 1px solid #4a5870; border-radius: 3px; color: #f5f5f7; background: #141e30; box-shadow: 8px 8px 0 #040912; }
   .query-card-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 12px 0; color: #8f959f; font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: .08em; }
   .query-card-head > div { display: flex; gap: 4px; }
   .query-card-head i { width: 7px; height: 7px; background: #727780; }
@@ -425,7 +427,7 @@ hits = session.<span class="fn">collect</span>(
   .diagram-mobile { display: none; }
   @keyframes sceneIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   .story-footer { display: flex; justify-content: space-between; padding: 13px 0 0; color: #8f959f; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: .09em; }
-  .benchmark-bar { padding: 32px 0 25px; border-bottom: 1px solid #2c374d; color: #f5f5f7; background: #0d1424; }
+  .benchmark-bar { padding: 30px 0 24px; border-top: 1px solid #26334a; border-bottom: 1px solid #36435a; color: #f5f5f7; background: #121b2b; }
   .benchmark-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
   .benchmark-grid > * { padding: 0 28px; border-right: 1px solid #465268; color: #f5f5f7; text-decoration: none; }
   .benchmark-grid > *:first-child { padding-left: 0; }
@@ -512,7 +514,7 @@ hits = session.<span class="fn">collect</span>(
   .final-cta > div { display: flex; justify-content: center; gap: 15px; margin-top: 34px; }
   .final-cta .button-secondary { color: var(--ink); border-color: var(--line); background: #fff; }
 
-  @media (max-width: 1320px) {
+  @media (max-width: 1240px) {
     .hero-grid { grid-template-columns: 1fr; max-width: 920px; }.query-card { width: 100%; max-width: 900px; justify-self: center; }
     .runtime-diagram, .client-diagram, .storage-diagram { font-size: 16px; }
   }
