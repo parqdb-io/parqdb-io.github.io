@@ -38,8 +38,8 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     position: sticky;
     top: 0;
     z-index: 20;
-    border-bottom: 1px solid rgba(29, 29, 31, .1);
-    background: rgba(255, 255, 255, .82);
+    border-bottom: 1px solid #2c374d;
+    background: rgba(13, 20, 36, .94);
     backdrop-filter: saturate(180%) blur(18px);
   }
 
@@ -64,8 +64,8 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    color: var(--text-3);
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    color: #9ca7b8;
+    font-family: "JetBrains Mono", monospace;
     font-size: 8px;
     letter-spacing: .1em;
     white-space: nowrap;
@@ -82,8 +82,8 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
 
   nav a,
   .github-link {
-    color: var(--text-2);
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    color: #c9d1de;
+    font-family: "JetBrains Mono", monospace;
     font-size: 11px;
     font-weight: 650;
     letter-spacing: .045em;
@@ -103,7 +103,7 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
   }
 
   nav a:first-child { border-left: 0; }
-  nav a b { color: var(--text-3); font-size: 8px; }
+  nav a b { color: #8997aa; font-size: 8px; }
   nav a:hover { color: var(--accent); background: transparent; }
   nav a:hover b { color: var(--accent); }
 
@@ -125,7 +125,7 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     margin: 0;
     padding: 10px 16px;
     border: 1px solid var(--accent);
-    border-radius: 999px;
+    border-radius: 3px;
     color: #fff;
     background: var(--accent);
   }
@@ -135,6 +135,8 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
   .github-link:hover { color: #fff; background: #0057b8; }
 
   .data-bus { display: none; }
+
+  :global(.site-header .brand img) { filter: brightness(0) invert(1); }
 
   @keyframes navBlink { 0%, 68% { opacity: 1; } 69%, 100% { opacity: .25; } }
 

@@ -35,7 +35,10 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
   await serverArchitecture.click();
   const serverRuntime = page.locator('[data-architecture-panel="server"] .runtime-diagram:visible');
   await expect(serverRuntime).toBeVisible();
+  const clientRuntime = page.locator('[data-architecture-panel="server"] .client-diagram:visible');
+  await expect(clientRuntime).toBeVisible();
   await expectAlignedAscii(serverRuntime);
+  await expectAlignedAscii(clientRuntime);
 
   const browserArchitecture = page.getByRole("tab", { name: /Browser/ });
   await browserArchitecture.click();
