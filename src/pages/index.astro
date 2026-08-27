@@ -59,45 +59,45 @@ const description =
         <div class="architecture-stage" data-architecture-stage data-mode="embedded">
           <div class="runtime-stage">
             <section id="architecture-panel-embedded" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-embedded" data-architecture-panel="embedded">
-              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗&#32;
-║                    ║░
-║  PARQDB  │  CACHE  ║░
-║                    ║░
-╚════════════════════╝░</pre>
-              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗&#32;
-║                    ║░
-║  PARQDB  │  CACHE  ║░
-║                    ║░
-╚════════════════════╝░</pre>
+              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗
+║                    ║
+║  PARQDB  │  CACHE  ║
+║                    ║
+╚════════════════════╝</pre>
+              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗
+║                    ║
+║  PARQDB  │  CACHE  ║
+║                    ║
+╚════════════════════╝</pre>
             </section>
 
             <section id="architecture-panel-server" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-server" data-architecture-panel="server" hidden>
               <div class="server-runtime" role="img" aria-label="A separate client querying ParqDB server over HTTP">
-                <pre class="client-diagram" aria-hidden="true">╔═ CLIENT ═══╗&#32;
-║            ║░
-╚════════════╝░</pre>
+                <pre class="client-diagram" aria-hidden="true">╔═ CLIENT ═══╗
+║            ║
+╚════════════╝</pre>
                 <pre class="server-link" aria-hidden="true">HTTP
  │
  ▼</pre>
-                <pre class="runtime-diagram server-diagram" aria-hidden="true">╔═ PARQDB SERVER ════╗&#32;
-║                    ║░
-║  PARQDB  │  CACHE  ║░
-║                    ║░
-╚════════════════════╝░</pre>
+                <pre class="runtime-diagram server-diagram" aria-hidden="true">╔═ PARQDB SERVER ════╗
+║                    ║
+║  PARQDB  │  CACHE  ║
+║                    ║
+╚════════════════════╝</pre>
               </div>
             </section>
 
             <section id="architecture-panel-browser" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-browser" data-architecture-panel="browser" hidden>
-              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗&#32;
-║                    ║░
-║PARQDB WASM │ CACHE ║░
-║                    ║░
-╚════════════════════╝░</pre>
-              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗&#32;
-║                    ║░
-║PARQDB WASM │ CACHE ║░
-║                    ║░
-╚════════════════════╝░</pre>
+              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗
+║                    ║
+║PARQDB WASM │ CACHE ║
+║                    ║
+╚════════════════════╝</pre>
+              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗
+║                    ║
+║PARQDB WASM │ CACHE ║
+║                    ║
+╚════════════════════╝</pre>
             </section>
           </div>
 
@@ -107,20 +107,20 @@ const description =
   │      ▲
   ▼      │</pre>
 
-          <pre class="storage-diagram diagram-desktop" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════════╗&#32;
-║                         ║░
-║   index-00.parquet  ░░  ║░
-║   index-01.parquet  <span>█</span>░  ║░
-║   index-02.parquet  ░░  ║░
-║                         ║░
-╚═════════════════════════╝░</pre>
-          <pre class="storage-diagram diagram-mobile" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════════╗&#32;
-║                         ║░
-║   index-00.parquet  ░░  ║░
-║   index-01.parquet  <span>█</span>░  ║░
-║   index-02.parquet  ░░  ║░
-║                         ║░
-╚═════════════════════════╝░</pre>
+          <pre class="storage-diagram diagram-desktop" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════════╗
+║                         ║
+║   index-00.parquet  ░░  ║
+║   index-01.parquet  <span>█</span>░  ║
+║   index-02.parquet  ░░  ║
+║                         ║
+╚═════════════════════════╝</pre>
+          <pre class="storage-diagram diagram-mobile" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════════╗
+║                         ║
+║   index-00.parquet  ░░  ║
+║   index-01.parquet  <span>█</span>░  ║
+║   index-02.parquet  ░░  ║
+║                         ║
+╚═════════════════════════╝</pre>
         </div>
         <div class="story-footer">
           <span>ONE IMMUTABLE INDEX</span><span>READ ONLY THE HIGHLIGHTED RANGE</span>
@@ -407,14 +407,26 @@ hits = session.<span class="fn">collect</span>(
   .architecture-scene { animation: sceneIn 160ms ease-out; }
   .architecture-scene[hidden] { display: none; }
   .runtime-diagram, .client-diagram, .server-link, .range-diagram, .storage-diagram { overflow: visible; margin: 0; padding: 0; border: 0; color: #f5f5f7; background: transparent; font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 1vw, 15px); font-variant-ligatures: none; font-weight: 400; line-height: 1; letter-spacing: 0; white-space: pre; }
+  .runtime-diagram, .client-diagram, .storage-diagram { position: relative; }
   .runtime-diagram { justify-self: center; }
-  .runtime-diagram::after, .client-diagram::after, .storage-diagram::after {
-    display: block;
-    width: calc(100% - 1ch);
-    height: 5px;
-    margin: 5px 0 0 1ch;
+  .runtime-diagram::before, .runtime-diagram::after,
+  .client-diagram::before, .client-diagram::after,
+  .storage-diagram::before, .storage-diagram::after {
+    position: absolute;
     background: radial-gradient(circle, rgba(245, 245, 247, .42) .6px, transparent .8px) 0 0 / 3px 3px;
     content: "";
+  }
+  .runtime-diagram::before, .client-diagram::before, .storage-diagram::before {
+    top: 5px;
+    left: calc(100% + 5px);
+    width: 5px;
+    height: 100%;
+  }
+  .runtime-diagram::after, .client-diagram::after, .storage-diagram::after {
+    top: calc(100% + 5px);
+    left: 5px;
+    width: 100%;
+    height: 5px;
   }
   .server-runtime { display: grid; justify-items: center; gap: 10px; }
   .client-diagram { font-size: clamp(11px, .85vw, 13px); }
