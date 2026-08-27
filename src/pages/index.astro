@@ -59,13 +59,13 @@ const description =
         <div class="architecture-stage" data-architecture-stage data-mode="embedded">
           <div class="runtime-stage">
             <section id="architecture-panel-embedded" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-embedded" data-architecture-panel="embedded">
-              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗░
+              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗&#32;
 ║                    ║░
 ║  PARQDB  │  CACHE  ║░
 ║                    ║░
 ╚════════════════════╝░
  ░░░░░░░░░░░░░░░░░░░░░░</pre>
-              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗░
+              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗&#32;
 ║                    ║░
 ║  PARQDB  │  CACHE  ║░
 ║                    ║░
@@ -75,14 +75,14 @@ const description =
 
             <section id="architecture-panel-server" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-server" data-architecture-panel="server" hidden>
               <div class="server-runtime" role="img" aria-label="A separate client querying ParqDB server over HTTP">
-                <pre class="client-diagram" aria-hidden="true">╔═ CLIENT ═══╗░
+                <pre class="client-diagram" aria-hidden="true">╔═ CLIENT ═══╗&#32;
 ║            ║░
 ╚════════════╝░
  ░░░░░░░░░░░░░░</pre>
                 <pre class="server-link" aria-hidden="true">HTTP
  │
  ▼</pre>
-                <pre class="runtime-diagram server-diagram" aria-hidden="true">╔═ PARQDB SERVER ════╗░
+                <pre class="runtime-diagram server-diagram" aria-hidden="true">╔═ PARQDB SERVER ════╗&#32;
 ║                    ║░
 ║  PARQDB  │  CACHE  ║░
 ║                    ║░
@@ -92,13 +92,13 @@ const description =
             </section>
 
             <section id="architecture-panel-browser" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-browser" data-architecture-panel="browser" hidden>
-              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗░
+              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗&#32;
 ║                    ║░
 ║PARQDB WASM │ CACHE ║░
 ║                    ║░
 ╚════════════════════╝░
  ░░░░░░░░░░░░░░░░░░░░░░</pre>
-              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗░
+              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗&#32;
 ║                    ║░
 ║PARQDB WASM │ CACHE ║░
 ║                    ║░
@@ -114,18 +114,22 @@ const description =
   ▼
 BYTES</pre>
 
-          <pre class="storage-diagram diagram-desktop" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════╗░
-║ index-00.parquet ░░ ║░
-║ index-01.parquet <span>█</span>░ ║░
-║ index-02.parquet ░░ ║░
-╚═════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░░</pre>
-          <pre class="storage-diagram diagram-mobile" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════╗░
-║ index-00.parquet ░░ ║░
-║ index-01.parquet <span>█</span>░ ║░
-║ index-02.parquet ░░ ║░
-╚═════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░░</pre>
+          <pre class="storage-diagram diagram-desktop" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════════╗&#32;
+║                         ║░
+║   index-00.parquet  ░░  ║░
+║   index-01.parquet  <span>█</span>░  ║░
+║   index-02.parquet  ░░  ║░
+║                         ║░
+╚═════════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░░░░░░</pre>
+          <pre class="storage-diagram diagram-mobile" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════════╗&#32;
+║                         ║░
+║   index-00.parquet  ░░  ║░
+║   index-01.parquet  <span>█</span>░  ║░
+║   index-02.parquet  ░░  ║░
+║                         ║░
+╚═════════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░░░░░░</pre>
         </div>
         <div class="story-footer">
           <span>ONE IMMUTABLE INDEX</span><span>READ ONLY THE HIGHLIGHTED RANGE</span>
