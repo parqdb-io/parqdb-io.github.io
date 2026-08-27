@@ -51,36 +51,31 @@ const description =
           <strong>ONE PARQUET INDEX.<br /><span>QUERY IT ANYWHERE.</span></strong>
         </div>
         <div class="runtime-overview" role="img" aria-label="Three query paths share one Parquet index: ParqDB embedded inside an application, a client using Arrow IPC with a ParqDB server, and ParqDB WebAssembly with a cache inside the browser using HTTP range requests">
-          <div class="runtime-lanes" aria-hidden="true">
-            <div class="runtime-lane embedded-lane">
+          <div class="runtime-topologies" aria-hidden="true">
+            <div class="runtime-topology embedded-topology">
               <span>EMBEDDED</span>
-              <div class="contained-node"><small>YOUR APP</small><strong>PARQDB <em>IN PROCESS</em></strong></div>
+              <div class="runtime-boundary"><small>APP</small><b>PARQDB</b></div>
             </div>
-            <div class="runtime-lane server-lane">
-              <span>CLIENT / SERVER</span>
-              <div class="server-flow"><b>CLIENT</b><i><small>ARROW IPC</small>→</i><b>PARQDB SERVER</b></div>
+            <div class="runtime-topology server-topology">
+              <span>SERVER</span>
+              <div class="server-runtime"><small>CLIENT</small><i>→</i><b>PARQDB</b></div>
             </div>
-            <div class="runtime-lane browser-lane">
+            <div class="runtime-topology browser-topology">
               <span>BROWSER</span>
-              <div class="contained-node"><small>BROWSER TAB</small><strong>WASM + CACHE</strong></div>
+              <div class="runtime-boundary"><small>TAB</small><b>WASM</b><i class="cache-lines"></i></div>
             </div>
           </div>
-          <div class="storage-access" aria-hidden="true">
-            <span>DIRECT READ <b>→</b></span>
-            <span>OBJECT READ <b>→</b></span>
-            <span>HTTP RANGE <b>→</b></span>
+          <div class="runtime-drops" aria-hidden="true">
+            <i></i><i></i><i></i>
           </div>
-          <pre class="storage-diagram" aria-hidden="true">╔═ OBJECT STORAGE ═╗
-║                  ║░
-║ index-00.parquet ║░
-║ index-01.parquet<span class="selected-range">█</span>║░
-║ index-02.parquet ║░
-║                  ║░
-╚══════════════════╝░
-<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░░░░░░</span></pre>
-        </div>
-        <div class="story-footer">
-          <span>ONE IMMUTABLE INDEX</span><span>READ ONLY THE HIGHLIGHTED RANGE</span>
+          <div class="shared-storage" aria-hidden="true">
+            <span>OBJECT STORAGE</span>
+            <div class="parquet-files">
+              <i><b>PARQUET</b><small></small></i>
+              <i><b>PARQUET</b><small></small></i>
+              <i><b>PARQUET</b><small></small></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -322,28 +317,29 @@ hits = session.<span class="fn">collect</span>(
   .architecture-message { margin: 12px 0 18px; }
   .architecture-message strong { display: block; color: #f5f5f7; font-size: clamp(20px, 2vw, 27px); font-weight: 850; line-height: 1.03; letter-spacing: -.045em; }
   .architecture-message strong span { color: var(--accent); }
-  .runtime-overview { display: grid; grid-template-columns: minmax(0, 1fr) 88px auto; min-height: 276px; align-items: stretch; gap: 0 10px; padding-top: 12px; }
-  .runtime-lanes, .storage-access { display: grid; grid-template-rows: repeat(3, 1fr); gap: 10px; }
-  .runtime-lane { position: relative; display: grid; grid-template-rows: auto 1fr; min-width: 0; padding-top: 9px; border-top: 1px solid #536176; }
-  .runtime-lane::before { content: ""; position: absolute; top: -1px; left: 0; width: 34%; height: 2px; background: #9b69ff; }
-  .runtime-lane:nth-child(2)::before { background: #2491ff; }
-  .runtime-lane:nth-child(3)::before { background: #28b9ff; }
-  .runtime-lane > span { color: #8492a6; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: .08em; }
-  .contained-node { display: flex; min-width: 0; align-items: center; justify-content: space-between; align-self: end; margin-top: 6px; padding: 8px 10px; border: 1px solid #66758b; color: #dce5f1; font-family: "JetBrains Mono", monospace; }
-  .contained-node small { color: #8492a6; font-size: 8px; letter-spacing: .06em; }
-  .contained-node strong { font-size: 11px; font-weight: 600; white-space: nowrap; }
-  .contained-node em { margin-left: 5px; color: #8492a6; font-size: 7px; font-style: normal; font-weight: 400; }
-  .server-flow { display: grid; grid-template-columns: auto minmax(42px, 1fr) auto; align-items: end; align-self: end; margin-top: 6px; color: #dce5f1; font-family: "JetBrains Mono", monospace; }
-  .server-flow b { padding: 8px 7px; border: 1px solid #66758b; font-size: 9px; font-weight: 600; white-space: nowrap; }
-  .server-flow i { display: flex; align-items: center; justify-content: center; gap: 4px; padding-bottom: 9px; color: #8dbfff; font-size: 10px; font-style: normal; }
-  .server-flow small { color: #8492a6; font-size: 6.5px; white-space: nowrap; }
-  .storage-access { padding-top: 19px; padding-bottom: 4px; }
-  .storage-access span { display: flex; align-items: center; justify-content: flex-end; gap: 6px; color: #a4b0c1; font-family: "JetBrains Mono", monospace; font-size: 7px; letter-spacing: .04em; white-space: nowrap; }
-  .storage-access b { color: #8dbfff; font-size: 11px; font-weight: 400; }
-  .storage-diagram { align-self: center; justify-self: end; overflow: visible; margin: 0; padding: 0; border: 0; color: #f5f5f7; background: transparent; font-family: "JetBrains Mono", monospace; font-size: 12.5px; font-variant-ligatures: none; font-weight: 400; line-height: 1.18; letter-spacing: 0; white-space: pre; }
-  .ascii-shadow-bottom { position: relative; top: 3px; }
-  .storage-diagram .selected-range { color: #28b9ff; font-weight: 400; }
-  .story-footer { display: flex; justify-content: space-between; padding: 13px 0 0; color: #8f959f; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: .09em; }
+  .runtime-overview { min-height: 268px; padding-top: 14px; }
+  .runtime-topologies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+  .runtime-topology { min-width: 0; }
+  .runtime-topology > span { display: block; margin-bottom: 9px; color: #8492a6; font-family: "JetBrains Mono", monospace; font-size: 7px; letter-spacing: .1em; text-align: center; }
+  .runtime-boundary, .server-runtime { height: 58px; color: #dce5f1; font-family: "JetBrains Mono", monospace; }
+  .runtime-boundary { position: relative; display: grid; place-items: center; border: 1px solid #66758b; }
+  .runtime-boundary small { position: absolute; top: 5px; left: 7px; color: #8492a6; font-size: 6px; letter-spacing: .08em; }
+  .runtime-boundary b { padding: 6px 10px; border: 1px solid #8da0b8; font-size: 9px; font-weight: 600; }
+  .server-runtime { display: grid; grid-template-columns: auto 1fr auto; align-items: center; }
+  .server-runtime small, .server-runtime b { padding: 8px 7px; border: 1px solid #8da0b8; font-size: 7px; font-weight: 600; }
+  .server-runtime i { color: #8dbfff; font-size: 13px; font-style: normal; text-align: center; }
+  .cache-lines { position: absolute; right: 8px; bottom: 7px; width: 17px; height: 7px; border-block: 1px solid #28b9ff; }
+  .cache-lines::after { content: ""; position: absolute; top: 2px; right: 0; left: 5px; border-top: 1px solid #28b9ff; }
+  .runtime-drops { display: grid; grid-template-columns: repeat(3, 1fr); height: 47px; }
+  .runtime-drops i { position: relative; justify-self: center; width: 1px; height: 36px; background: #66758b; }
+  .runtime-drops i::after { content: ""; position: absolute; bottom: -1px; left: -3px; border-top: 6px solid #8dbfff; border-inline: 3px solid transparent; }
+  .shared-storage { position: relative; min-height: 98px; padding: 25px 24px 18px; border: 2px solid #dce5f1; color: #f5f5f7; box-shadow: 6px 6px 0 #27354a; }
+  .shared-storage > span { position: absolute; top: -8px; left: 18px; padding: 0 8px; background: #0a1220; font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .06em; }
+  .parquet-files { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+  .parquet-files > i { position: relative; display: grid; height: 43px; place-items: center; overflow: hidden; border: 1px solid #66758b; font-style: normal; }
+  .parquet-files b { position: relative; z-index: 1; font-family: "JetBrains Mono", monospace; font-size: 7px; font-weight: 500; letter-spacing: .06em; }
+  .parquet-files small { position: absolute; right: 0; bottom: 0; left: 0; height: 8px; background: repeating-linear-gradient(90deg, #344158 0 8px, transparent 8px 11px); }
+  .parquet-files > i:nth-child(2) small::after { content: ""; position: absolute; top: 0; left: 42%; width: 20%; height: 100%; background: #28b9ff; }
   .benchmark-bar { position: relative; padding: 31px 0 25px; border-bottom: 1px solid #d5dae2; color: #111827; background: #f7f8fa; }
   .benchmark-bar > .shell { width: min(1280px, calc(100% - 48px)); }
   .benchmark-grid { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); }
@@ -454,23 +450,22 @@ hits = session.<span class="fn">collect</span>(
     .hero { padding: 44px 0 56px; }.hero-grid { gap: 42px; width: calc(100% - 28px); }.query-card { padding: 0; }
     h1 { font-size: clamp(36px, 11vw, 43px); }.hero-copy > p { font-size: 15px; }
     .query-card-head { grid-template-columns: 1fr 1fr; }.query-card-head > span:nth-child(2) { display: none; }
-    .runtime-overview { grid-template-columns: minmax(0, 1fr) 48px auto; min-height: 224px; gap: 0 5px; padding-top: 8px; }
-    .runtime-lanes, .storage-access { gap: 6px; }
-    .runtime-lane { padding-top: 6px; }
-    .runtime-lane > span { font-size: 5.5px; }
-    .contained-node { margin-top: 4px; padding: 5px; }
-    .contained-node small { font-size: 5px; }
-    .contained-node strong { font-size: 6.5px; }
-    .contained-node em { display: none; }
-    .server-flow { grid-template-columns: auto minmax(20px, 1fr) auto; margin-top: 4px; }
-    .server-flow b { padding: 5px 3px; font-size: 5.5px; }
-    .server-flow i { gap: 2px; padding-bottom: 6px; font-size: 7px; }
-    .server-flow small { font-size: 4px; }
-    .storage-access { padding-top: 13px; padding-bottom: 2px; }
-    .storage-access span { gap: 2px; font-size: 4.5px; }
-    .storage-access b { font-size: 7px; }
-    .storage-diagram { font-size: clamp(6.4px, 2.05vw, 8px); }
-    .story-footer { gap: 8px; font-size: 7px; }
+    .runtime-overview { min-height: 234px; padding-top: 9px; }
+    .runtime-topologies { gap: 8px; }
+    .runtime-topology > span { margin-bottom: 6px; font-size: 6px; }
+    .runtime-boundary, .server-runtime { height: 48px; }
+    .runtime-boundary small { top: 4px; left: 5px; font-size: 5px; }
+    .runtime-boundary b { padding: 5px 6px; font-size: 6.5px; }
+    .server-runtime small, .server-runtime b { padding: 6px 3px; font-size: 5.5px; }
+    .server-runtime i { font-size: 9px; }
+    .cache-lines { right: 5px; bottom: 5px; width: 12px; }
+    .runtime-drops { height: 38px; }
+    .runtime-drops i { height: 28px; }
+    .shared-storage { min-height: 84px; padding: 21px 12px 13px; box-shadow: 4px 4px 0 #27354a; }
+    .shared-storage > span { top: -7px; left: 11px; font-size: 8px; }
+    .parquet-files { gap: 8px; }
+    .parquet-files > i { height: 38px; }
+    .parquet-files b { font-size: 6px; }
     .benchmark-bar > .shell { width: calc(100% - 28px); }.benchmark-grid { grid-template-columns: 1fr 1fr; gap: 28px 0; }.benchmark-grid > * { padding: 0 16px; }.benchmark-grid > *:nth-child(2) { border-right: 0; }.benchmark-grid > *:nth-child(3) { padding-left: 0; }
     .principles, .quickstart { padding-block: 82px; }.principle-grid { margin-top: 42px; }.principle-grid article { padding-inline: 18px; }
     .architecture { padding-block: 82px; }.runtime-map { grid-template-columns: 1fr; gap: 12px; margin-top: 56px; }.map-node { min-height: 150px; }.map-connector { width: 1px; height: 34px; margin: 0 auto; }.map-connector::after { top: auto; right: -3px; bottom: -1px; border-top: 6px solid #9fb6b6; border-inline: 3px solid transparent; border-bottom: 0; }.map-connector b { top: 9px; left: 12px; transform: none; }.runtime-nodes { grid-column: auto; grid-template-columns: 1fr; margin-top: 8px; }

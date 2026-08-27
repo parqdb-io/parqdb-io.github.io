@@ -17,7 +17,7 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
   await expect(page.getByText("ONE PARQUET INDEX.")).toBeVisible();
   await expect(page.getByText("QUERY IT ANYWHERE.")).toBeVisible();
 
-  const sharedObjectStore = page.locator(".storage-diagram:visible");
+  const sharedObjectStore = page.locator(".shared-storage:visible");
   await expect(sharedObjectStore).toHaveCount(1);
   await expect(sharedObjectStore).toBeVisible();
   await expect(
@@ -25,22 +25,11 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
       name: "Three query paths share one Parquet index: ParqDB embedded inside an application, a client using Arrow IPC with a ParqDB server, and ParqDB WebAssembly with a cache inside the browser using HTTP range requests",
     }),
   ).toBeVisible();
-  await expect(page.locator(".runtime-lane")).toHaveCount(3);
-  await expect(page.locator(".embedded-lane")).toContainText("YOUR APP");
-  await expect(page.locator(".server-lane")).toContainText("ARROW IPC");
-  await expect(page.locator(".browser-lane")).toContainText("WASM + CACHE");
-  await expect(page.locator(".storage-access")).toContainText("HTTP RANGE");
-
-  const expectAlignedAscii = async (locator) => {
-    const widths = await locator.evaluate((element) =>
-      element.textContent
-        .split("\n")
-        .filter((line) => /[╔║╚]/u.test(line))
-        .map((line) => [...line.replace(/░$/u, "")].length),
-    );
-    expect(new Set(widths).size).toBe(1);
-  };
-  await expectAlignedAscii(sharedObjectStore);
+  await expect(page.locator(".runtime-topology")).toHaveCount(3);
+  await expect(page.locator(".embedded-topology")).toContainText("APP");
+  await expect(page.locator(".server-topology")).toContainText("CLIENT");
+  await expect(page.locator(".browser-topology")).toContainText("WASM");
+  await expect(page.locator(".parquet-files > i")).toHaveCount(3);
 
   const bodyWidth = await page.locator("body").evaluate((element) => element.scrollWidth);
   const viewportWidth = page.viewportSize()?.width ?? bodyWidth;
