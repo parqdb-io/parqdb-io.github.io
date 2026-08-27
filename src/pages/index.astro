@@ -427,15 +427,16 @@ hits = session.<span class="fn">collect</span>(
   .diagram-mobile { display: none; }
   @keyframes sceneIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   .story-footer { display: flex; justify-content: space-between; padding: 13px 0 0; color: #8f959f; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: .09em; }
-  .benchmark-bar { padding: 30px 0 24px; border-top: 1px solid #9fb4cc; border-bottom: 1px solid #bdcad9; color: #111a29; background: #dce7f3; }
+  .benchmark-bar { position: relative; z-index: 2; width: min(1280px, calc(100% - 48px)); margin: -26px auto 0; padding: 26px 28px 21px; border: 1px solid #8f99a8; border-radius: 2px; color: #111827; background: #f7f8fa; box-shadow: 7px 7px 0 #cbd1da; }
+  .benchmark-bar > .shell { width: 100%; }
   .benchmark-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-  .benchmark-grid > * { padding: 0 28px; border-right: 1px solid #aab9ca; color: #111a29; text-decoration: none; }
+  .benchmark-grid > * { padding: 0 28px; border-right: 1px solid #c3cad4; color: #111827; text-decoration: none; }
   .benchmark-grid > *:first-child { padding-left: 0; }
   .benchmark-grid > *:last-child { border: 0; }
-  .benchmark-grid strong { display: block; color: #111a29; font-family: "JetBrains Mono", monospace; font-size: 24px; font-weight: 700; letter-spacing: -.04em; }
-  .benchmark-grid span { display: block; margin-top: 4px; color: #50647b; font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+  .benchmark-grid strong { display: block; color: #111827; font-family: "JetBrains Mono", monospace; font-size: 24px; font-weight: 700; letter-spacing: -.04em; }
+  .benchmark-grid span { display: block; margin-top: 4px; color: #5e6878; font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
   .benchmark-grid a:hover strong { color: #0068d8; }
-  .benchmark-note { margin-top: 24px; color: #61748a; font-family: "JetBrains Mono", monospace; font-size: 9px; text-transform: uppercase; letter-spacing: .07em; }
+  .benchmark-note { margin-top: 22px; color: #697384; font-family: "JetBrains Mono", monospace; font-size: 9px; text-transform: uppercase; letter-spacing: .07em; }
   .principles { padding-block: 136px; color: var(--ink); background: #fff; box-shadow: 0 0 0 100vmax #fff; clip-path: inset(0 -100vmax); }
   .principles .eyebrow { color: var(--accent); }
   .principles .section-heading { color: var(--ink); }
