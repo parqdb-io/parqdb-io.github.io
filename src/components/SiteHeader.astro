@@ -14,12 +14,11 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
   <div class="nav-shell">
     <div class="nav-brand">
       <Brand href={at("/")} variant="dark" />
-      <span><b></b> OPEN INDEX ENGINE</span>
     </div>
     <nav aria-label="Main navigation">
-      <a href={at("/docs")}><b>01</b><span>Docs</span></a>
-      <a href="https://search.parqdb.io/"><b>02</b><span>Live demo</span></a>
-      <a href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results"><b>03</b><span>Benchmarks</span></a>
+      <a href={at("/docs")}>Docs</a>
+      <a href="https://search.parqdb.io/">Live demo</a>
+      <a href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results">Benchmarks</a>
     </nav>
     <div class="nav-actions">
       <a class="github-link" href="https://github.com/parqdb-io/parqdb" aria-label="ParqDB on GitHub">
@@ -39,15 +38,14 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     top: 0;
     z-index: 20;
     border-bottom: 1px solid transparent;
-    background: #0a1220;
+    background: linear-gradient(90deg, rgba(36, 145, 255, .08), transparent 36%), #0a1220;
   }
 
   .nav-shell {
     width: min(1280px, calc(100% - 48px));
-    height: 64px;
+    height: 72px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr);
+    display: flex;
     align-items: center;
   }
 
@@ -55,65 +53,39 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     align-self: stretch;
     display: flex;
     align-items: center;
-    gap: 15px;
+    margin-right: auto;
     padding: 0;
   }
 
-  .nav-brand > span {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    color: #9ca7b8;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 8px;
-    letter-spacing: .1em;
-    white-space: nowrap;
-  }
-
-  .nav-brand > span b { width: 6px; height: 6px; background: var(--accent); animation: navBlink 2.2s steps(2, end) infinite; }
-
   nav {
-    align-self: stretch;
     display: flex;
     align-items: center;
-    gap: 0;
+    gap: 32px;
   }
 
   nav a,
   .github-link {
     color: #c9d1de;
     font-family: "JetBrains Mono", monospace;
-    font-size: 11px;
-    font-weight: 650;
-    letter-spacing: .045em;
-    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
     text-decoration: none;
     transition: color 160ms ease;
   }
 
   nav a {
-    align-self: stretch;
-    display: grid;
-    grid-template-columns: auto auto;
-    align-content: center;
-    gap: 7px;
-    min-width: auto;
-    padding: 0 15px;
+    padding: 8px 0;
   }
 
-  nav a:first-child { border-left: 0; }
-  nav a b { color: #8997aa; font-size: 8px; }
   nav a:hover { color: var(--accent); background: transparent; }
-  nav a:hover b { color: var(--accent); }
 
   .github-link:hover { color: var(--accent); }
 
   .nav-actions {
-    align-self: stretch;
-    justify-self: end;
     display: flex;
     align-items: center;
-    gap: 0;
+    margin-left: 28px;
   }
 
   .github-link {
@@ -122,27 +94,25 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     align-items: center;
     gap: 8px;
     margin: 0;
-    padding: 10px 16px;
-    border: 1px solid var(--accent);
+    padding: 10px 15px;
+    border: 1px solid #536176;
     border-radius: 3px;
-    color: #fff;
-    background: var(--accent);
+    color: #eef3fa;
+    background: #121d2f;
   }
 
   .github-link svg { width: 18px; height: 18px; }
   .github-link b { font-size: 13px; line-height: 1; }
-  .github-link:hover { color: #fff; background: #0057b8; }
+  .github-link:hover { color: #fff; border-color: #2491ff; background: #17263d; }
 
   .data-bus { display: none; }
 
-  @keyframes navBlink { 0%, 68% { opacity: 1; } 69%, 100% { opacity: .25; } }
-
   @media (max-width: 760px) {
-    .nav-shell { width: calc(100% - 28px); height: 60px; grid-template-columns: 1fr auto; }
-    .nav-brand { gap: 10px; padding: 0; }
-    .nav-brand > span { display: none; }
+    .nav-shell { width: calc(100% - 28px); height: 64px; }
+    .nav-brand { padding: 0; }
     nav { display: none; }
-    .github-link { margin: 0; padding: 9px 11px; font-size: 9px; }
+    .nav-actions { margin-left: 16px; }
+    .github-link { margin: 0; padding: 9px 11px; font-size: 10px; }
     .github-link svg { width: 16px; height: 16px; }
   }
 </style>
