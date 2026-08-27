@@ -20,7 +20,16 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
   const sharedObjectStore = page.locator(".storage-diagram:visible");
   await expect(sharedObjectStore).toHaveCount(1);
   await expect(sharedObjectStore).toBeVisible();
-  await expect(page.locator('[aria-label="Object storage containing three Parquet files with one byte range selected"]:visible')).toBeVisible();
+  await expect(
+    page.getByRole("img", {
+      name: "Three query paths share one Parquet index: ParqDB embedded inside an application, a client using Arrow IPC with a ParqDB server, and ParqDB WebAssembly with a cache inside the browser using HTTP range requests",
+    }),
+  ).toBeVisible();
+  await expect(page.locator(".runtime-lane")).toHaveCount(3);
+  await expect(page.locator(".embedded-lane")).toContainText("YOUR APP");
+  await expect(page.locator(".server-lane")).toContainText("ARROW IPC");
+  await expect(page.locator(".browser-lane")).toContainText("WASM + CACHE");
+  await expect(page.locator(".storage-access")).toContainText("HTTP RANGE");
 
   const expectAlignedAscii = async (locator) => {
     const widths = await locator.evaluate((element) =>
@@ -32,26 +41,6 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
     expect(new Set(widths).size).toBe(1);
   };
   await expectAlignedAscii(sharedObjectStore);
-  await expectAlignedAscii(page.locator('[data-architecture-panel="embedded"] .runtime-diagram:visible'));
-
-  const serverArchitecture = page.getByRole("tab", { name: /Client \/ Server/ });
-  await serverArchitecture.click();
-  const serverRuntime = page.locator('[data-architecture-panel="server"] .runtime-diagram:visible');
-  await expect(serverRuntime).toBeVisible();
-  const clientRuntime = page.locator('[data-architecture-panel="server"] .client-diagram:visible');
-  await expect(clientRuntime).toBeVisible();
-  await expectAlignedAscii(serverRuntime);
-  await expectAlignedAscii(clientRuntime);
-
-  const browserArchitecture = page.getByRole("tab", { name: /Browser/ });
-  await browserArchitecture.click();
-  await expect(browserArchitecture).toHaveAttribute("aria-selected", "true");
-  await expect(page.locator("[data-architecture-stage]")).toHaveAttribute("data-mode", "browser");
-  const browserRuntime = page.locator('[data-architecture-panel="browser"] .runtime-diagram:visible');
-  await expect(browserRuntime).toContainText("PARQDB WASM");
-  await expectAlignedAscii(browserRuntime);
-  await expect(sharedObjectStore).toBeVisible();
-  await page.getByRole("tab", { name: /Embedded/ }).click();
 
   const bodyWidth = await page.locator("body").evaluate((element) => element.scrollWidth);
   const viewportWidth = page.viewportSize()?.width ?? bodyWidth;
