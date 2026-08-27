@@ -22,10 +22,14 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
   await expect(sharedObjectStore).toBeVisible();
   await expect(page.getByLabel("Object storage containing index objects and an expanded Parquet file")).toBeVisible();
 
-  const expectAlignedAscii = async (locator, skipLines = 0) => {
+  const expectAlignedAscii = async (locator, startLine = 0, endLine) => {
     const widths = await locator.evaluate(
-      (element, skip) => element.textContent.split("\n").slice(skip).map((line) => [...line].length),
-      skipLines,
+      (element, range) =>
+        element.textContent
+          .split("\n")
+          .slice(range.start, range.end)
+          .map((line) => [...line].length),
+      { start: startLine, end: endLine },
     );
     expect(new Set(widths).size).toBe(1);
   };
@@ -34,7 +38,9 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
 
   const serverArchitecture = page.getByRole("tab", { name: /Client \/ Server/ });
   await serverArchitecture.click();
-  await expectAlignedAscii(page.locator('[data-architecture-panel="server"] .ascii-runtime'), 1);
+  const serverRuntime = page.locator('[data-architecture-panel="server"] .ascii-runtime');
+  await expectAlignedAscii(serverRuntime, 0, 3);
+  await expectAlignedAscii(serverRuntime, 6);
 
   const browserArchitecture = page.getByRole("tab", { name: /Browser/ });
   await browserArchitecture.click();

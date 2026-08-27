@@ -71,7 +71,12 @@ const description =
             </section>
 
             <section id="architecture-panel-server" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-server" data-architecture-panel="server" hidden>
-              <pre class="ascii-runtime" aria-label="A client querying ParqDB server with a server-side page cache"><span class="ascii-client">CLIENT</span> ── API ──▶
+              <pre class="ascii-runtime" aria-label="A client querying ParqDB server with a server-side page cache">      ┌──── <span class="ascii-client">CLIENT</span> ────┐
+      │    <span class="ascii-client">HTTP API</span>    │
+      └───────┬────────┘
+              │
+              │
+              ▼
 ╔═══════ PARQDB SERVER ═══════╗<span class="ascii-shadow">░</span>
 ║                             ║<span class="ascii-shadow">░</span>
 ║  <span class="ascii-engine">PARQDB</span>                     ║<span class="ascii-shadow">░</span>
@@ -97,12 +102,9 @@ const description =
 
           <pre class="ascii-range ascii-range-horizontal" aria-hidden="true">──── <span class="range-out">RANGE</span> ─────▶
 ◀════ <span class="range-in">PAGES</span> ═════</pre>
-          <pre class="ascii-range ascii-range-vertical" aria-hidden="true"> RANGE
-   │
-   ▼
-   ▲
-   │
- PAGES</pre>
+          <pre class="ascii-range ascii-range-vertical" aria-hidden="true"><span class="range-out">RANGE</span>       <span class="range-in">PAGES</span>
+  │           ▲
+  ▼           │</pre>
 
           <pre class="ascii-storage" aria-label="Object storage containing index objects and an expanded Parquet file"><span class="ascii-bucket">╔══════════════ <span class="ascii-engine">OBJECT STORAGE</span> ═══════════════╗</span><span class="ascii-shadow">░</span>
 <span class="ascii-bucket">║</span>                                             <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
@@ -526,7 +528,7 @@ hits = session.<span class="fn">collect</span>(
     .query-card-head { grid-template-columns: 1fr 1fr; }.query-card-head > span:nth-child(2) { display: none; }
     .architecture-tabs { margin-bottom: 16px; }.architecture-tabs button { padding: 10px 3px 9px; font-size: 6.5px; }.architecture-tabs button b { margin-right: 3px; font-size: 5px; }
     .architecture-stage { grid-template-columns: 1fr; min-height: 0; gap: 13px; padding-top: 5px; }
-    .runtime-stage { min-height: 160px; }.ascii-runtime { font-size: 10px; }.ascii-storage { justify-self: center; font-size: 9.5px; }.ascii-range-horizontal { display: none; }.ascii-range-vertical { display: block; font-size: 7px; line-height: 1.05; }.architecture-stage { gap: 9px; }
+    .runtime-stage { min-height: 160px; }.ascii-runtime { font-size: 10px; }.ascii-storage { justify-self: center; font-size: 9.5px; }.ascii-range-horizontal { display: none; }.ascii-range-vertical { display: block; width: 19ch; justify-self: center; font-size: 8px; line-height: 1.2; text-align: left; }.architecture-stage { gap: 9px; }
     .story-footer { gap: 8px; font-size: 7px; }
     .benchmark-grid { grid-template-columns: 1fr 1fr; gap: 28px 0; }.benchmark-grid > * { padding: 0 16px; }.benchmark-grid > *:nth-child(2) { border-right: 0; }.benchmark-grid > *:nth-child(3) { padding-left: 0; }
     .principles, .quickstart { padding-block: 96px; }.principle-grid { margin-top: 50px; }.principle-grid article { padding-inline: 18px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }.principle-grid article:last-child { border-bottom: 0; }

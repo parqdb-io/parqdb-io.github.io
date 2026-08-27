@@ -42,7 +42,6 @@
 body { background-image: none; }
 
 header.header {
-  position: relative;
   border-bottom: 1px solid var(--sl-color-hairline-light);
   background: var(--sl-color-bg-nav);
   backdrop-filter: blur(12px);
