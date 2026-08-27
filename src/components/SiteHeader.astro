@@ -38,28 +38,26 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     position: sticky;
     top: 0;
     z-index: 20;
-    border-bottom: 1px solid var(--ink);
-    background: rgba(238, 233, 220, 0.96);
-    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(29, 29, 31, .1);
+    background: rgba(255, 255, 255, .82);
+    backdrop-filter: saturate(180%) blur(18px);
   }
 
   .nav-shell {
-    width: min(1260px, calc(100% - 32px));
-    height: 72px;
+    width: min(1180px, calc(100% - 32px));
+    height: 64px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr);
     align-items: center;
-    border-inline: 1px solid var(--line);
   }
 
   .nav-brand {
     align-self: stretch;
     display: flex;
     align-items: center;
-    gap: 17px;
-    padding: 0 18px;
-    border-right: 1px solid var(--line);
+    gap: 15px;
+    padding: 0;
   }
 
   .nav-brand > span {
@@ -100,15 +98,14 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     grid-template-columns: auto auto;
     align-content: center;
     gap: 7px;
-    min-width: 112px;
-    padding: 0 18px;
-    border-right: 1px solid var(--line);
+    min-width: auto;
+    padding: 0 15px;
   }
 
-  nav a:first-child { border-left: 1px solid var(--line); }
+  nav a:first-child { border-left: 0; }
   nav a b { color: var(--text-3); font-size: 8px; }
-  nav a:hover { color: var(--paper); background: var(--ink); }
-  nav a:hover b { color: var(--paper-muted); }
+  nav a:hover { color: var(--accent); background: transparent; }
+  nav a:hover b { color: var(--accent); }
 
   .github-link:hover { color: var(--accent); }
 
@@ -125,41 +122,28 @@ const at = (path: string) => `${root}${path.replace(/^\//, "")}`;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin: 0 14px;
-    padding: 10px 15px;
-    border: 1px solid var(--ink);
-    color: var(--paper);
-    background: var(--ink);
+    margin: 0;
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    color: #fff;
+    background: var(--accent);
   }
 
   .github-link svg { width: 18px; height: 18px; }
   .github-link b { font-size: 13px; line-height: 1; }
-  .github-link:hover { color: var(--paper); background: var(--accent); }
+  .github-link:hover { color: #fff; background: #0057b8; }
 
-  .data-bus {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -4px;
-    display: grid;
-    grid-template-columns: 17fr 8fr 31fr 5fr 24fr 15fr;
-    gap: 3px;
-    height: 3px;
-    pointer-events: none;
-  }
-
-  .data-bus span { background: #777d79; }
-  .data-bus span:nth-child(2), .data-bus span:nth-child(5) { background: var(--cyan); }
-  .data-bus span:nth-child(4) { background: var(--accent); }
+  .data-bus { display: none; }
 
   @keyframes navBlink { 0%, 68% { opacity: 1; } 69%, 100% { opacity: .25; } }
 
   @media (max-width: 760px) {
-    .nav-shell { width: 100%; height: 62px; grid-template-columns: 1fr auto; border-inline: 0; }
-    .nav-brand { gap: 10px; padding: 0 10px; border-right: 0; }
+    .nav-shell { width: calc(100% - 24px); height: 60px; grid-template-columns: 1fr auto; }
+    .nav-brand { gap: 10px; padding: 0; }
     .nav-brand > span { display: none; }
     nav { display: none; }
-    .github-link { margin: 0 8px 0 0; padding: 9px 10px; font-size: 9px; }
+    .github-link { margin: 0; padding: 9px 11px; font-size: 9px; }
     .github-link svg { width: 16px; height: 16px; }
   }
 </style>

@@ -40,7 +40,7 @@ export default defineConfig({
       head: [
         {
           tag: "meta",
-          attrs: { name: "theme-color", content: "#eee9dc" },
+          attrs: { name: "theme-color", content: "#f5f5f7" },
         },
         {
           tag: "meta",
