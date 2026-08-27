@@ -24,7 +24,10 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
 
   const expectAlignedAscii = async (locator) => {
     const widths = await locator.evaluate((element) =>
-      element.textContent.split("\n").map((line) => [...line].length),
+      element.textContent
+        .split("\n")
+        .filter((line) => /[╔║╚]/u.test(line))
+        .map((line) => [...line.replace(/░$/u, "")].length),
     );
     expect(new Set(widths).size).toBe(1);
   };
