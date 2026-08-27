@@ -64,13 +64,13 @@ const description =
 ║  PARQDB  │  CACHE  ║░
 ║                    ║░
 ╚════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░</pre>
+<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░░░░░░░░░</span></pre>
               <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗
 ║                    ║░
 ║  PARQDB  │  CACHE  ║░
 ║                    ║░
 ╚════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░</pre>
+<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░░░░░░░░░</span></pre>
             </section>
 
             <section id="architecture-panel-server" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-server" data-architecture-panel="server" hidden>
@@ -78,7 +78,7 @@ const description =
                 <pre class="client-diagram" aria-hidden="true">╔═ CLIENT ═══╗
 ║            ║░
 ╚════════════╝░
- ░░░░░░░░░░░░░░</pre>
+<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░</span></pre>
                 <pre class="server-link" aria-hidden="true">HTTP
  │
  ▼</pre>
@@ -87,7 +87,7 @@ const description =
 ║  PARQDB  │  CACHE  ║░
 ║                    ║░
 ╚════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░</pre>
+<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░░░░░░░░░</span></pre>
               </div>
             </section>
 
@@ -97,13 +97,13 @@ const description =
 ║PARQDB WASM │ CACHE ║░
 ║                    ║░
 ╚════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░</pre>
+<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░░░░░░░░░</span></pre>
               <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗
 ║                    ║░
 ║PARQDB WASM │ CACHE ║░
 ║                    ║░
 ╚════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░</pre>
+<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░░░░░░░░░</span></pre>
             </section>
           </div>
 
@@ -116,19 +116,19 @@ const description =
           <pre class="storage-diagram diagram-desktop" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════════╗
 ║                         ║░
 ║   index-00.parquet  ░░  ║░
-║   index-01.parquet  <span>█</span>░  ║░
+║   index-01.parquet  <span class="selected-range">█</span>░  ║░
 ║   index-02.parquet  ░░  ║░
 ║                         ║░
 ╚═════════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░░░░░░</pre>
+<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
           <pre class="storage-diagram diagram-mobile" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════════╗
 ║                         ║░
 ║   index-00.parquet  ░░  ║░
-║   index-01.parquet  <span>█</span>░  ║░
+║   index-01.parquet  <span class="selected-range">█</span>░  ║░
 ║   index-02.parquet  ░░  ║░
 ║                         ║░
 ╚═════════════════════════╝░
- ░░░░░░░░░░░░░░░░░░░░░░░░░░░</pre>
+<span class="ascii-shadow-bottom"> ░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
         </div>
         <div class="story-footer">
           <span>ONE IMMUTABLE INDEX</span><span>READ ONLY THE HIGHLIGHTED RANGE</span>
@@ -416,10 +416,11 @@ hits = session.<span class="fn">collect</span>(
   .architecture-scene[hidden] { display: none; }
   .runtime-diagram, .client-diagram, .server-link, .range-diagram, .storage-diagram { overflow: visible; margin: 0; padding: 0; border: 0; color: #f5f5f7; background: transparent; font-family: "JetBrains Mono", monospace; font-size: 16px; font-variant-ligatures: none; font-weight: 400; line-height: 1; letter-spacing: 0; white-space: pre; }
   .runtime-diagram { justify-self: center; }
+  .ascii-shadow-bottom { position: relative; top: 3px; }
   .server-runtime { display: grid; justify-items: center; gap: 10px; }
   .server-link { color: #9ca3ad; font-size: 8px; line-height: 1.05; text-align: center; }
   .storage-diagram { justify-self: center; }
-  .storage-diagram span { color: #147ce5; font-weight: 400; }
+  .storage-diagram .selected-range { color: #147ce5; font-weight: 400; }
   .range-diagram { justify-self: stretch; color: #9ca3ad; font-size: 9px; font-weight: 400; line-height: 1.45; text-align: center; }
   .diagram-mobile { display: none; }
   @keyframes sceneIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
