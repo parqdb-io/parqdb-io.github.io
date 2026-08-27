@@ -59,78 +59,79 @@ const description =
         <div class="architecture-stage" data-architecture-stage data-mode="embedded">
           <div class="runtime-stage">
             <section id="architecture-panel-embedded" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-embedded" data-architecture-panel="embedded">
-              <pre class="ascii-runtime" aria-label="ParqDB embedded in the application process with a local page cache">╔════════ APP PROCESS ════════╗<span class="ascii-shadow">░</span>
-║                             ║<span class="ascii-shadow">░</span>
-║  <span class="ascii-engine">PARQDB</span>                     ║<span class="ascii-shadow">░</span>
-║  ┌───────────────────────┐  ║<span class="ascii-shadow">░</span>
-║  │  <span class="ascii-cache">PARQUET PAGE CACHE</span>   │  ║<span class="ascii-shadow">░</span>
-║  └───────────────────────┘  ║<span class="ascii-shadow">░</span>
-║                             ║<span class="ascii-shadow">░</span>
-╚═════════════════════════════╝<span class="ascii-shadow">░</span>
- <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
+              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗░
+║                    ║░
+║       PARQDB       ║░
+║        CACHE       ║░
+║                    ║░
+╚════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░</pre>
+              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB embedded in the application process with a local cache">╔═ APP PROCESS ══════╗░
+║                    ║░
+║       PARQDB       ║░
+║        CACHE       ║░
+║                    ║░
+╚════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░</pre>
             </section>
 
             <section id="architecture-panel-server" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-server" data-architecture-panel="server" hidden>
-              <pre class="ascii-runtime" aria-label="A client querying ParqDB server with a server-side page cache">      ┌──── <span class="ascii-client">CLIENT</span> ────┐
-      │    <span class="ascii-client">HTTP API</span>    │
-      └───────┬────────┘
-              │
-              │
-              ▼
-╔═══════ PARQDB SERVER ═══════╗<span class="ascii-shadow">░</span>
-║                             ║<span class="ascii-shadow">░</span>
-║  <span class="ascii-engine">PARQDB</span>                     ║<span class="ascii-shadow">░</span>
-║  ┌───────────────────────┐  ║<span class="ascii-shadow">░</span>
-║  │  <span class="ascii-cache">PARQUET PAGE CACHE</span>   │  ║<span class="ascii-shadow">░</span>
-║  └───────────────────────┘  ║<span class="ascii-shadow">░</span>
-╚═════════════════════════════╝<span class="ascii-shadow">░</span>
- <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
+              <pre class="runtime-diagram diagram-desktop" aria-label="A client querying ParqDB server with a server-side cache">╔═ CLIENT / SERVER ══╗░
+║                    ║░
+║ CLIENT → PARQDB    ║░
+║        CACHE       ║░
+║                    ║░
+╚════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░</pre>
+              <pre class="runtime-diagram diagram-mobile" aria-label="A client querying ParqDB server with a server-side cache">╔═ CLIENT / SERVER ══╗░
+║                    ║░
+║ CLIENT → PARQDB    ║░
+║        CACHE       ║░
+║                    ║░
+╚════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░</pre>
             </section>
 
             <section id="architecture-panel-browser" class="architecture-scene" role="tabpanel" aria-labelledby="architecture-tab-browser" data-architecture-panel="browser" hidden>
-              <pre class="ascii-runtime" aria-label="ParqDB WebAssembly in a browser tab with a browser page cache">╔════════ BROWSER TAB ════════╗<span class="ascii-shadow">░</span>
-║  ●  ───────────────────     ║<span class="ascii-shadow">░</span>
-║                             ║<span class="ascii-shadow">░</span>
-║  <span class="ascii-engine">PARQDB WASM</span>                ║<span class="ascii-shadow">░</span>
-║  ┌───────────────────────┐  ║<span class="ascii-shadow">░</span>
-║  │  <span class="ascii-cache">PARQUET PAGE CACHE</span>   │  ║<span class="ascii-shadow">░</span>
-║  └───────────────────────┘  ║<span class="ascii-shadow">░</span>
-╚═════════════════════════════╝<span class="ascii-shadow">░</span>
- <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
+              <pre class="runtime-diagram diagram-desktop" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗░
+║                    ║░
+║    PARQDB WASM     ║░
+║        CACHE       ║░
+║                    ║░
+╚════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░</pre>
+              <pre class="runtime-diagram diagram-mobile" aria-label="ParqDB WebAssembly in a browser tab with a browser cache">╔═ BROWSER TAB ══════╗░
+║                    ║░
+║    PARQDB WASM     ║░
+║        CACHE       ║░
+║                    ║░
+╚════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░</pre>
             </section>
           </div>
 
-          <pre class="ascii-range ascii-range-horizontal" aria-hidden="true">──── <span class="range-out">RANGE</span> ─────▶
-◀════ <span class="range-in">PAGES</span> ═════</pre>
-          <pre class="ascii-range ascii-range-vertical" aria-hidden="true"><span class="range-out">RANGE</span>       <span class="range-in">PAGES</span>
-  │           ▲
-  ▼           │</pre>
+          <pre class="range-diagram diagram-desktop" aria-hidden="true">── RANGE ─▶
+◀─ BYTES ──</pre>
+          <pre class="range-diagram diagram-mobile" aria-hidden="true">RANGE
+  │
+  ▼
+BYTES</pre>
 
-          <pre class="ascii-storage" aria-label="Object storage containing index objects and an expanded Parquet file"><span class="ascii-bucket">╔══════════════ <span class="ascii-engine">OBJECT STORAGE</span> ═══════════════╗</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>                                             <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-file-muted">┌──────── PARQUET 00 ───────────────┐</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-file-muted">└───────────────────────────────────┘</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>                                             <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┏━━━━━━━━ <span class="ascii-file">PARQUET 01</span> ━━━━━━━━━━━━━━━┓</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃                                   ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃  RG 0   ░░░ ░░░ ░░░ ░░░ ░░░       ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃  RG 1   ░░░ ░░░ ░░░ ░░░ ░░░       ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃  RG 2   ░░░ ░░░ ░░░ ░░░ ░░░       ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃  <span class="ascii-selected">RG 3</span>   ░░░ <span class="ascii-read">███</span> ░░░ <span class="ascii-read">███</span> ░░░       ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃  RG 4   ░░░ ░░░ ░░░ ░░░ ░░░       ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃  RG 5   ░░░ ░░░ ░░░ ░░░ ░░░       ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃  RG 6   ░░░ ░░░ ░░░ ░░░ ░░░       ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┃                                   ┃</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-parquet">┗━━━━━━━━━━\____/━━━━━━━━━━━━━━━━━━━┛</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>                                             <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-file-muted">┌──────── PARQUET 02 ───────────────┐</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>    <span class="ascii-file-muted">└───────────────────────────────────┘</span>    <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">║</span>                                             <span class="ascii-bucket">║</span><span class="ascii-shadow">░</span>
-<span class="ascii-bucket">╚═════════════════════════════════════════════╝</span><span class="ascii-shadow">░</span>
- <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
+          <pre class="storage-diagram diagram-desktop" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════╗░
+║ index-00.parquet ░░ ║░
+║ index-01.parquet <span>█</span>░ ║░
+║ index-02.parquet ░░ ║░
+╚═════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░░</pre>
+          <pre class="storage-diagram diagram-mobile" aria-label="Object storage containing three Parquet files with one byte range selected">╔═ OBJECT STORAGE ════╗░
+║ index-00.parquet ░░ ║░
+║ index-01.parquet <span>█</span>░ ║░
+║ index-02.parquet ░░ ║░
+╚═════════════════════╝░
+ ░░░░░░░░░░░░░░░░░░░░░░░</pre>
         </div>
         <div class="story-footer">
-          <span>ONE IMMUTABLE INDEX</span><span>READ ONLY THE HIGHLIGHTED PAGES</span>
+          <span>ONE IMMUTABLE INDEX</span><span>READ ONLY THE HIGHLIGHTED RANGE</span>
         </div>
       </div>
     </div>
@@ -254,7 +255,9 @@ documents.<span class="fn">create_index</span>(
     key=[<span class="str">"document_id"</span>],
     config=parqdb.<span class="fn">IVF</span>(nlist=<span class="num">3</span>),
 )
-documents.<span class="fn">wait_for_index</span>(<span class="str">"documents_embedding"</span>)
+documents.<span class="fn">wait_for_index</span>(
+    <span class="str">"documents_embedding"</span>
+)
 
 hits = session.<span class="fn">collect</span>(
     documents.<span class="fn">search</span>([<span class="num">0.2</span>, <span class="num">0.0</span>])
@@ -270,10 +273,11 @@ hits = session.<span class="fn">collect</span>(
     --nlist <span class="num">4096</span> \
     --encoding lvq8 \
     --destination s3://my-bucket/wiki/v1 \
-    --public-url https://data.example.com/wiki/v1
+    --public-url \
+      https://data.example.com/wiki/v1
 
 <span class="comment"># manifest.json is exposed only after every
-# immutable object has been uploaded and verified.</span></code></pre>
+# immutable object is uploaded and verified.</span></code></pre>
     </div>
   </section>
 
@@ -386,46 +390,36 @@ hits = session.<span class="fn">collect</span>(
   .copy-command.copied .check-icon { display: block; color: var(--accent); }
   .hero-index { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 25px; color: #78817e; font-family: monospace; font-size: 9px; letter-spacing: .08em; }
   .hero-index b { color: #4f5c5d; font-weight: 500; }
-  .query-card { position: relative; min-width: 0; padding: 26px 26px 22px; border: 1px solid rgba(29,29,31,.1); border-radius: 28px; background: rgba(255,255,255,.9); box-shadow: 0 26px 70px rgba(20,31,45,.1); }
-  .query-card-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 12px 0; color: #687372; font-family: monospace; font-size: 9px; letter-spacing: .08em; }
+  .query-card { position: relative; min-width: 0; padding: 26px 26px 22px; border: 1px solid #2d3138; border-radius: 28px; color: #f5f5f7; background: #111318; box-shadow: 0 30px 80px rgba(20,31,45,.2); }
+  .query-card-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 12px 0; color: #8f959f; font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: .08em; }
   .query-card-head > div { display: flex; gap: 4px; }
-  .query-card-head i { width: 7px; height: 7px; background: #3b474d; }
+  .query-card-head i { width: 7px; height: 7px; background: #727780; }
   .query-card-head i:first-child { background: var(--orange); }
   .query-card-head i:nth-child(2) { background: var(--accent); }
   .query-card-head .live { justify-self: end; color: var(--accent); }
   .live b { display: inline-block; width: 6px; height: 6px; margin-right: 5px; background: currentColor; }
   .architecture-message { margin: 12px 0 18px; }
-  .architecture-message strong { display: block; color: var(--white); font-size: clamp(20px, 2vw, 27px); font-weight: 850; line-height: 1.03; letter-spacing: -.045em; }
+  .architecture-message strong { display: block; color: #f5f5f7; font-size: clamp(20px, 2vw, 27px); font-weight: 850; line-height: 1.03; letter-spacing: -.045em; }
   .architecture-message strong span { color: var(--accent); }
-  .architecture-tabs { display: grid; grid-template-columns: repeat(3, 1fr); margin: 7px 0 22px; border-bottom: 1px solid var(--line); font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-  .architecture-tabs button { position: relative; padding: 12px 8px 11px; border: 0; border-bottom: 2px solid transparent; color: var(--text-3); background: transparent; font: inherit; font-size: 9px; font-weight: 700; letter-spacing: .055em; cursor: pointer; text-transform: uppercase; }
-  .architecture-tabs button:hover { color: var(--ink); }
+  .architecture-tabs { display: grid; grid-template-columns: repeat(3, 1fr); margin: 7px 0 22px; border-bottom: 1px solid #343942; font-family: "JetBrains Mono", monospace; }
+  .architecture-tabs button { position: relative; padding: 12px 8px 11px; border: 0; border-bottom: 2px solid transparent; color: #8f959f; background: transparent; font: inherit; font-size: 9px; font-weight: 400; letter-spacing: .055em; cursor: pointer; text-transform: uppercase; }
+  .architecture-tabs button:hover { color: #f5f5f7; }
   .architecture-tabs button:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
-  .architecture-tabs button[aria-selected="true"] { border-bottom-color: var(--accent); color: var(--ink); background: rgba(0,102,204,.045); }
-  .architecture-tabs button b { margin-right: 7px; color: var(--accent); font-size: 7px; }
-  .architecture-stage { display: grid; grid-template-columns: minmax(190px, .85fr) 80px minmax(250px, 1.15fr); min-height: 152px; align-items: center; gap: 0; isolation: isolate; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+  .architecture-tabs button[aria-selected="true"] { border-bottom-color: #147ce5; color: #fff; background: #1a1d23; }
+  .architecture-tabs button b { margin-right: 7px; color: var(--accent); font-size: 7px; font-weight: 400; }
+  .architecture-stage { display: grid; grid-template-columns: minmax(170px, .85fr) 92px minmax(220px, 1.15fr); min-height: 190px; align-items: center; gap: 14px; isolation: isolate; }
   .runtime-stage, .architecture-scene { min-width: 0; }
-  .runtime-stage { display: grid; min-height: 142px; place-items: center; }
+  .runtime-stage { display: grid; min-height: 160px; place-items: center; }
   .architecture-scene { animation: sceneIn 160ms ease-out; }
   .architecture-scene[hidden] { display: none; }
-  .ascii-runtime, .ascii-storage, .ascii-range { overflow: visible; margin: 0; padding: 0; border: 0; border-radius: 0; color: var(--text-2); background: transparent; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: clamp(8.5px, .72vw, 10px); font-variant-ligatures: none; font-weight: 600; line-height: 1.48; letter-spacing: 0; white-space: pre; }
-  .ascii-runtime { width: max-content; max-width: 100%; color: var(--ink); font-size: clamp(10.5px, .9vw, 12.5px); font-weight: 700; line-height: 1; }
-  .ascii-storage { justify-self: start; color: var(--text-2); font-size: clamp(9.2px, .76vw, 10.7px); line-height: 1; }
-  .ascii-engine, .ascii-file { color: var(--cyan); font-weight: 800; }
-  .ascii-bucket { color: var(--ink); font-weight: 900; -webkit-text-stroke: .2px currentColor; }
-  .ascii-parquet { color: #394649; font-weight: 700; }
-  .ascii-file-muted { color: #969b96; font-weight: 600; }
-  .ascii-cache, .ascii-selected, .ascii-footer { color: var(--accent); font-weight: 800; }
-  .ascii-read { display: inline-block; width: 3ch; height: 1em; color: transparent; background: var(--accent); box-shadow: inset 0 0 0 1px rgba(238,236,218,.34); font-weight: 400; line-height: 1; vertical-align: top; }
-  .ascii-client { color: var(--accent); font-weight: 800; }
-  .ascii-shadow { color: #afb0a8; font-weight: 500; }
-  .ascii-storage .ascii-shadow { color: #b8b8bd; }
-  .ascii-range { justify-self: stretch; color: #697572; font-size: 8.5px; line-height: 1.5; text-align: center; }
-  .ascii-range .range-out { color: var(--cyan); font-weight: 900; }
-  .ascii-range .range-in { color: var(--accent); font-weight: 900; }
-  .ascii-range-vertical { display: none; }
+  .runtime-diagram, .range-diagram, .storage-diagram { overflow: visible; margin: 0; padding: 0; border: 0; color: #f5f5f7; background: transparent; font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 1vw, 15px); font-variant-ligatures: none; font-weight: 400; line-height: 1; letter-spacing: 0; white-space: pre; }
+  .runtime-diagram { justify-self: center; }
+  .storage-diagram { justify-self: center; }
+  .storage-diagram span { color: #147ce5; font-weight: 400; }
+  .range-diagram { justify-self: stretch; color: #9ca3ad; font-size: 9px; font-weight: 400; line-height: 1.45; text-align: center; }
+  .diagram-mobile { display: none; }
   @keyframes sceneIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-  .story-footer { display: flex; justify-content: space-between; padding: 13px 0 0; color: #697572; font-family: monospace; font-size: 8px; letter-spacing: .09em; }
+  .story-footer { display: flex; justify-content: space-between; padding: 13px 0 0; color: #8f959f; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: .09em; }
   .benchmark-bar { padding: 32px 0 23px; border-bottom: 1px solid var(--line); color: var(--ink); background: #fff; }
   .benchmark-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
   .benchmark-grid > * { padding: 0 28px; border-right: 1px solid rgba(10,14,18,.35); color: var(--ink); text-decoration: none; }
@@ -442,7 +436,7 @@ hits = session.<span class="fn">collect</span>(
   .principle-grid article { position: relative; min-height: 370px; padding: 38px 30px 31px; border: 1px solid #e5e5ea; border-radius: 22px; background: #f5f5f7; transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease; }
   .principle-grid article:hover { background: #fff; box-shadow: 0 18px 46px rgba(0,0,0,.07); transform: translateY(-3px); }
   .feature-index { position: absolute; top: 15px; right: 17px; color: var(--text-3); font-family: monospace; font-size: 9px; }
-  .feature-ascii { min-height: 66px; overflow: visible; margin: 0 0 32px; padding: 0; border: 0; color: var(--accent); background: transparent; font-size: 9px; font-weight: 750; line-height: 1.35; letter-spacing: 0; }
+  .feature-ascii { min-height: 66px; overflow: visible; margin: 0 0 32px; padding: 0; border: 0; color: var(--accent); background: transparent; font-family: "JetBrains Mono", monospace; font-size: 9px; font-weight: 400; line-height: 1.35; letter-spacing: 0; }
   .feature-ascii span { color: var(--text-3); font-weight: 400; }
   .pruning-ascii b { color: #0057b8; background: #dcecff; }
   .relational-ascii { color: var(--accent); }
@@ -515,6 +509,7 @@ hits = session.<span class="fn">collect</span>(
 
   @media (max-width: 1320px) {
     .hero-grid { grid-template-columns: 1fr; max-width: 920px; }.query-card { width: 100%; max-width: 900px; justify-self: center; }
+    .runtime-diagram, .storage-diagram { font-size: 15px; }
   }
   @media (max-width: 980px) {
     .principle-grid { grid-template-columns: 1fr; }.principle-grid article { min-height: 300px; } article p { min-height: 0; }
@@ -528,13 +523,15 @@ hits = session.<span class="fn">collect</span>(
     h1 { font-size: clamp(46px, 15vw, 66px); }.hero-copy > p { font-size: 17px; }
     .query-card-head { grid-template-columns: 1fr 1fr; }.query-card-head > span:nth-child(2) { display: none; }
     .architecture-tabs { margin-bottom: 16px; }.architecture-tabs button { padding: 10px 3px 9px; font-size: 6.5px; }.architecture-tabs button b { margin-right: 3px; font-size: 5px; }
-    .architecture-stage { grid-template-columns: 1fr; min-height: 0; gap: 13px; padding-top: 5px; }
-    .runtime-stage { min-height: 160px; }.ascii-runtime { font-size: clamp(8px, 2.35vw, 9.5px); }.ascii-storage { max-width: 100%; justify-self: center; font-size: clamp(7.2px, 2.3vw, 9px); }.ascii-range-horizontal { display: none; }.ascii-range-vertical { display: block; width: 19ch; justify-self: center; font-size: 8px; line-height: 1.2; text-align: left; }.architecture-stage { gap: 9px; }
+    .architecture-stage { grid-template-columns: 1fr; min-height: 0; gap: 18px; padding-top: 5px; }
+    .runtime-stage { min-height: 0; }.diagram-desktop { display: none; }.diagram-mobile { display: block; }
+    .runtime-diagram, .storage-diagram { justify-self: center; font-size: clamp(12px, 4vw, 15px); }
+    .range-diagram { justify-self: center; font-size: 9px; line-height: 1.1; }
     .story-footer { gap: 8px; font-size: 7px; }
     .benchmark-grid { grid-template-columns: 1fr 1fr; gap: 28px 0; }.benchmark-grid > * { padding: 0 16px; }.benchmark-grid > *:nth-child(2) { border-right: 0; }.benchmark-grid > *:nth-child(3) { padding-left: 0; }
     .principles, .quickstart { padding-block: 96px; }.principle-grid { margin-top: 50px; }.principle-grid article { padding-inline: 18px; }
     .architecture { padding-block: 96px; }.runtime-map { grid-template-columns: 1fr; gap: 16px; }.map-connector { width: 1px; height: 45px; margin: 0 auto; }.map-connector::after { top: auto; right: -3px; bottom: -1px; border-top: 6px solid #9fb6b6; border-inline: 3px solid transparent; border-bottom: 0; }.map-connector b { top: 14px; left: 12px; transform: none; }.runtime-nodes { grid-column: auto; grid-template-columns: 1fr; margin-top: 10px; }
-    .quickstart { gap: 52px; }.code-window pre { min-height: 0; padding: 20px; font-size: 10px; }
+    .quickstart { gap: 52px; }.code-window pre { min-height: 0; padding: 20px; font-size: clamp(9px, 2.7vw, 10px); }
     .browser-feature { padding: 0 0 100px; }.browser-panel { gap: 48px; min-height: auto; padding: 32px 20px; }.trace-row { grid-template-columns: 45px 1fr 38px; }.trace-row code { display: none; }.browser-actions { align-items: flex-start; flex-direction: column; }
     .final-cta { padding-block: 100px; }.final-cta > div { align-items: stretch; flex-direction: column; }.final-cta .button { width: 100%; }
   }
