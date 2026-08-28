@@ -34,8 +34,16 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
   await expectAlignedAscii(sharedObjectStore);
   await expectAlignedAscii(page.locator('[data-architecture-panel="embedded"] .runtime-diagram:visible'));
 
+  const architectureHeights = async () =>
+    page.locator(".query-card").evaluate((card) => ({
+      card: card.getBoundingClientRect().height,
+      stage: card.querySelector("[data-architecture-stage]").getBoundingClientRect().height,
+    }));
+  const initialHeights = await architectureHeights();
+
   const serverArchitecture = page.getByRole("tab", { name: /Client \/ Server/ });
   await serverArchitecture.click();
+  expect(await architectureHeights()).toEqual(initialHeights);
   const serverRuntime = page.locator('[data-architecture-panel="server"] .runtime-diagram:visible');
   await expect(serverRuntime).toBeVisible();
   const clientRuntime = page.locator('[data-architecture-panel="server"] .client-diagram:visible');
@@ -45,6 +53,7 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
 
   const browserArchitecture = page.getByRole("tab", { name: /Browser/ });
   await browserArchitecture.click();
+  expect(await architectureHeights()).toEqual(initialHeights);
   await expect(browserArchitecture).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("[data-architecture-stage]")).toHaveAttribute("data-mode", "browser");
   const browserRuntime = page.locator('[data-architecture-panel="browser"] .runtime-diagram:visible');
