@@ -34,7 +34,7 @@ import "../styles/fonts.css";
       <section class="hero">
         <div class="hero-shell">
           <article class="hero-copy">
-            <div class="eyebrow">Open vector search infrastructure</div>
+            <div class="eyebrow"><span class="tetromino piece-t" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Open vector search infrastructure</div>
             <h1>Billion-scale<br />vector search,<br /><em>built on Parquet.</em></h1>
             <p>One open index for embedded apps, query servers, and the browser. Search data larger than memory without moving it into another proprietary system.</p>
             <div class="actions">
@@ -55,61 +55,62 @@ import "../styles/fonts.css";
               <button type="button" role="tab" aria-selected="false" data-runtime="browser"><span>03</span><strong>Browser</strong></button>
             </div>
             <div class="ascii-stage">
+              <pre class="storage-scene" aria-label="Object storage containing three Parquet files whose selected pages light up">╔═ OBJECT STORAGE ═══════════╗
+║                            ║░
+║ centroids.parquet  <span class="byte-row" data-byte-row><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i></span> ║░
+║ postings-0042      <span class="byte-row" data-byte-row><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i></span> ║░
+║ source.parquet     <span class="byte-row" data-byte-row><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i><i>░</i></span> ║░
+║                            ║░
+╚════════════════════════════╝░
+ <span class="ascii-shadow">░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
+              <div class="drop-channel" aria-hidden="true">
+                <span class="range-caption">HTTP RANGE · SELECTED PAGES</span>
+                <span class="falling-piece shape-t"><i></i><i></i><i></i><i></i></span>
+                <span class="drop-guide">│<br />│<br />▼</span>
+                <span class="cache-line"></span>
+              </div>
               <div class="runtime-scenes">
-                <pre class="runtime-scene scene-embedded" aria-label="ParqDB embedded with its page cache">╔═ APP PROCESS ══════╗
+                <pre class="runtime-scene scene-embedded" aria-label="Selected pages falling into ParqDB embedded with its cache">╔═ APP PROCESS ══════╗
 ║                    ║░
 ║  PARQDB  │  CACHE  ║░
 ║                    ║░
 ╚════════════════════╝░
  <span>░░░░░░░░░░░░░░░░░░░░░░</span></pre>
-                <pre class="runtime-scene scene-server" aria-label="A client querying a ParqDB server">   ╔═ CLIENT ═════╗
-   ║              ║░
-   ╚══════════════╝░
-          │ HTTP
-          ▼
-╔═ PARQDB SERVER ═══╗
-║  ENGINE  │ CACHE  ║░
-╚═══════════════════╝░
- <span>░░░░░░░░░░░░░░░░░░░░░</span></pre>
-                <pre class="runtime-scene scene-browser" aria-label="ParqDB WebAssembly running with a browser page cache">╔═ BROWSER TAB ══════╗
+                <pre class="runtime-scene scene-server" aria-label="Selected pages falling into a ParqDB query server">╔═ PARQDB SERVER ════╗
+║                    ║░
+║  ENGINE  │  CACHE  ║░
+║                    ║░
+╚════════════════════╝░
+ <span>░░░░░░░░░░░░░░░░░░░░░░</span></pre>
+                <pre class="runtime-scene scene-browser" aria-label="Selected pages falling into ParqDB WebAssembly in a browser tab">╔═ BROWSER TAB ══════╗
 ║                    ║░
 ║ PARQDB WASM│ CACHE ║░
 ║                    ║░
 ╚════════════════════╝░
  <span>░░░░░░░░░░░░░░░░░░░░░░</span></pre>
               </div>
-              <pre class="range-link" aria-hidden="true">── RANGE ─▶
-◀─ PAGES ──</pre>
-              <pre class="storage-scene" aria-label="Object storage containing three Parquet files, with four pages selected from each file">╔═ OBJECT STORAGE ═══════════╗
-║                            ║░
-║ centroids.parquet  ░░░░<b>████</b> ║░
-║ postings-0042      ░░<b>████</b>░░ ║░
-║ source.parquet     <b>████</b>░░░░ ║░
-║                            ║░
-╚════════════════════════════╝░
- <span>░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</span></pre>
             </div>
-            <footer class="art-foot"><span>HTTP RANGE</span><b>READ 12 PAGES · SKIP THE REST</b><span>PARQUET</span></footer>
+            <footer class="art-foot"><span>OBJECT STORAGE</span><b>RANGE → ROTATE → LOCK</b><span>CLIENT CACHE</span></footer>
           </aside>
         </div>
 
         <div class="proof-line" aria-label="SIFT1B benchmark results">
-          <div><span>DATASET</span><strong>SIFT1B</strong></div><div><span>INDEX</span><strong>IVF–LVQ8</strong></div><div><span>LATENCY</span><strong>63.05 ms</strong></div><div><span>RECALL@10</span><strong>90.3%</strong></div><div><span>QUERY LIMIT</span><strong>2 cores · 4 GB</strong></div><a href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results/linux-x86_64-2026-08-17"><span>RAW RESULTS</span><strong>Inspect ↗</strong></a>
+          <div class="metric metric-dataset"><span>DATASET</span><strong>SIFT1B</strong></div><div class="metric metric-index"><span>INDEX</span><strong>IVF–LVQ8</strong></div><div class="metric metric-latency"><span>LATENCY</span><strong>63.05 ms</strong></div><div class="metric metric-recall"><span>RECALL@10</span><strong>90.3%</strong></div><div class="metric metric-limit"><span>QUERY LIMIT</span><strong>2 cores · 4 GB</strong></div><a class="metric metric-results" href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results/linux-x86_64-2026-08-17"><span>RAW RESULTS</span><strong>Inspect ↗</strong></a>
         </div>
       </section>
 
       <section class="thesis">
         <header class="thesis-copy">
-          <span>WHY PARQDB / 03</span><h2>The index is data.<br />The engine stays open.</h2><p>ParqDB keeps vector search inside the data ecosystem you already use. Inspect it, publish it, cache it, and query it where the work happens.</p>
+          <span class="section-label"><span class="tetromino piece-l" aria-hidden="true"><i></i><i></i><i></i><i></i></span>WHY PARQDB / 03</span><h2>The index is data.<br />The engine stays open.</h2><p>ParqDB keeps vector search inside the data ecosystem you already use. Inspect it, publish it, cache it, and query it where the work happens.</p>
         </header>
         <div class="sequence">
-          <article><span class="sequence-index">01</span><div class="sequence-visual files-visual" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h3>Everything is Parquet.</h3><p>Source tables and vector indexes stay in a standard, inspectable columnar format.</p></div></article>
-          <article><span class="sequence-index">02</span><div class="sequence-visual prune-visual" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h3>Read only what survives.</h3><p>Route, prune, and fetch selected pages instead of loading the entire index.</p></div></article>
-          <article><span class="sequence-index">03</span><div class="sequence-visual runtime-visual" aria-hidden="true"><i>PY</i><i>API</i><i>WASM</i></div><div><h3>Query where the work happens.</h3><p>The same immutable index serves embedded, client-server, and browser workloads.</p></div></article>
+          <article class="feature-l"><span class="sequence-index">01</span><div class="sequence-visual files-visual tetromino piece-l" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div><h3>Everything is Parquet.</h3><p>Source tables and vector indexes stay in a standard, inspectable columnar format.</p></div></article>
+          <article class="feature-s"><span class="sequence-index">02</span><div class="sequence-visual prune-visual tetromino piece-s" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div><h3>Read only what survives.</h3><p>Route, prune, and fetch selected pages instead of loading the entire index.</p></div></article>
+          <article class="feature-t"><span class="sequence-index">03</span><div class="sequence-visual runtime-visual tetromino piece-t" aria-hidden="true"><i>PY</i><i>API</i><i>WASM</i><i>↯</i></div><div><h3>Query where the work happens.</h3><p>The same immutable index serves embedded, client-server, and browser workloads.</p></div></article>
         </div>
       </section>
     </main>
-    <footer class="site-footer"><Brand variant="dark" /><span>Visual direction experiment · /vision</span><a href="https://github.com/parqdb-io/parqdb">GitHub ↗</a></footer>
+    <footer class="site-footer"><span class="footer-stack" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><Brand variant="dark" /><span>Visual direction experiment · /vision</span><a href="https://github.com/parqdb-io/parqdb">GitHub ↗</a></footer>
 
     <script>
       const art = document.querySelector<HTMLElement>(".index-art");
@@ -119,6 +120,48 @@ import "../styles/fonts.css";
         art?.setAttribute("data-active", button.dataset.runtime ?? "embedded");
         art?.classList.remove("route-pulse"); if (art) void art.offsetWidth; art?.classList.add("route-pulse");
       }));
+
+      const sourceRows = [...document.querySelectorAll<HTMLElement>("[data-byte-row]")];
+      const fallingPiece = document.querySelector<HTMLElement>(".falling-piece");
+      const cacheLine = document.querySelector<HTMLElement>(".cache-line");
+      const shapes = ["i", "o", "t", "l", "j", "s", "z"];
+      const wait = (milliseconds: number) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+      const clearSource = () => sourceRows.forEach((row) => row.querySelectorAll("i").forEach((cell) => cell.classList.remove("hot")));
+
+      const runTransfers = async () => {
+        if (!fallingPiece || !cacheLine || sourceRows.length === 0) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          sourceRows[1]?.querySelectorAll("i").forEach((cell, index) => cell.classList.toggle("hot", index >= 2 && index < 6));
+          fallingPiece.className = "falling-piece shape-t parked";
+          return;
+        }
+        while (document.body.contains(fallingPiece)) {
+          clearSource();
+          const source = sourceRows[Math.floor(Math.random() * sourceRows.length)];
+          const offset = Math.floor(Math.random() * 5);
+          source?.querySelectorAll("i").forEach((cell, index) => cell.classList.toggle("hot", index >= offset && index < offset + 4));
+          await wait(320);
+
+          const shape = shapes[Math.floor(Math.random() * shapes.length)];
+          const startRotation = Math.floor(Math.random() * 4) * 90;
+          const turns = 1 + Math.floor(Math.random() * 3);
+          fallingPiece.className = `falling-piece shape-${shape}`;
+          const fall = fallingPiece.animate([
+            { opacity: 0, transform: `translate(-50%, -26px) rotate(${startRotation}deg)` },
+            { opacity: 1, transform: `translate(-50%, -8px) rotate(${startRotation}deg)`, offset: .16 },
+            { opacity: 1, transform: `translate(-50%, 58px) rotate(${startRotation + turns * 72}deg)`, offset: .68 },
+            { opacity: 1, transform: `translate(-50%, 92px) rotate(${startRotation + turns * 90}deg)` },
+          ], { duration: 1550, easing: "cubic-bezier(.28,.72,.18,1)", fill: "forwards" });
+          await fall.finished.catch(() => undefined);
+          cacheLine.classList.remove("clearing"); void cacheLine.offsetWidth; cacheLine.classList.add("clearing");
+          await wait(420);
+          fall.cancel();
+          fallingPiece.style.opacity = "0";
+          clearSource();
+          await wait(520);
+        }
+      };
+      runTransfers();
     </script>
   </body>
 </html>
@@ -133,27 +176,36 @@ import "../styles/fonts.css";
   :global(:focus-visible) { outline: 3px solid #76beff; outline-offset: 4px; }
   .skip-link { position: fixed; top: -80px; left: 20px; z-index: 100; padding: 12px 16px; color: #fff; background: #0066cc; }.skip-link:focus { top: 12px; }
 
-  .topbar { color: #edf5ff; background: #071321; }
-  .topbar-inner { display: grid; width: min(1280px, calc(100% - 48px)); height: 74px; align-items: center; margin-inline: auto; grid-template-columns: 1fr auto 1fr; }
+  .tetromino { --cell: 7px; --gap: 2px; display: grid; width: calc(var(--cell) * 3 + var(--gap) * 2); height: calc(var(--cell) * 3 + var(--gap) * 2); flex: 0 0 auto; grid-template: repeat(3, var(--cell)) / repeat(3, var(--cell)); gap: var(--gap); }
+  .tetromino i { width: var(--cell); height: var(--cell); background: currentColor; }
+  .piece-t i:nth-child(1) { grid-area: 1 / 1; }.piece-t i:nth-child(2) { grid-area: 1 / 2; }.piece-t i:nth-child(3) { grid-area: 1 / 3; }.piece-t i:nth-child(4) { grid-area: 2 / 2; }
+  .piece-l i:nth-child(1) { grid-area: 1 / 1; }.piece-l i:nth-child(2) { grid-area: 2 / 1; }.piece-l i:nth-child(3) { grid-area: 3 / 1; }.piece-l i:nth-child(4) { grid-area: 3 / 2; }
+  .piece-s i:nth-child(1) { grid-area: 1 / 2; }.piece-s i:nth-child(2) { grid-area: 1 / 3; }.piece-s i:nth-child(3) { grid-area: 2 / 1; }.piece-s i:nth-child(4) { grid-area: 2 / 2; }
+
+  .topbar { position: relative; color: #edf5ff; background: #071321; }
+  .topbar-inner { position: relative; display: grid; width: min(1280px, calc(100% - 48px)); height: 74px; align-items: center; margin-inline: auto; border-bottom: 1px solid #162b42; grid-template-columns: 1fr auto 1fr; }
+  .topbar-inner::after { content: ""; position: absolute; right: 0; bottom: -1px; width: 84px; height: 3px; background: linear-gradient(90deg, #7259e8 0 24%, transparent 24% 27%, #249eff 27% 51%, transparent 51% 54%, #249eff 54% 78%, transparent 78% 81%, #249eff 81%); }
   .topbar :global(.brand) { justify-self: start; }
   nav { display: flex; align-items: center; gap: 34px; }
   nav a { position: relative; padding-block: 26px; color: #a9b8ca; font-family: "JetBrains Mono", monospace; font-size: 13px; font-weight: 700; }
-  nav a::after { content: ""; position: absolute; bottom: 18px; left: 0; width: 34px; height: 4px; background: repeating-linear-gradient(90deg, #32a8ff 0 6px, transparent 6px 9px); transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
-  nav a:hover { color: #fff; }nav a:hover::after { transform: scaleX(1); }
-  .github { display: inline-flex; min-height: 42px; align-items: center; justify-self: end; gap: 9px; padding-right: 13px; border: 1px solid #3d4d62; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; }
-  .github svg { width: 40px; height: 40px; padding: 10px; border-right: 1px solid #3d4d62; }.github:hover { border-color: #76beff; background: #10243b; }
+  nav a::after { content: ""; position: absolute; bottom: 14px; left: calc(50% - 9px); width: 5px; height: 5px; background: #32a8ff; box-shadow: 6px 0 #32a8ff, 12px 0 #32a8ff, 6px 6px #32a8ff; opacity: 0; transform: translateY(-8px); transition: opacity 150ms ease, transform 180ms cubic-bezier(.2,.8,.2,1); }
+  nav a:nth-child(2)::after { box-shadow: 0 6px #32a8ff, 0 12px #32a8ff, 6px 12px #32a8ff; }
+  nav a:nth-child(3)::after { box-shadow: 6px 0 #32a8ff, -6px 6px #32a8ff, 0 6px #32a8ff; }
+  nav a:hover { color: #fff; }nav a:hover::after { opacity: 1; transform: translateY(0); }
+  .github { display: inline-flex; min-height: 42px; align-items: center; justify-self: end; gap: 9px; padding-right: 13px; border: 1px solid #3d4d62; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; box-shadow: 4px 4px 0 #142b45; transition: transform 160ms ease, box-shadow 160ms ease; }
+  .github svg { width: 40px; height: 40px; padding: 10px; border-right: 1px solid #3d4d62; }.github:hover { border-color: #76beff; background: #10243b; box-shadow: 2px 2px 0 #249eff; transform: translate(2px,2px); }
 
   .hero { padding-top: 30px; color: #eef5fc; background: #071321; }
   .hero-shell { display: grid; width: min(1280px, calc(100% - 48px)); min-height: 690px; align-items: stretch; margin-inline: auto; grid-template-columns: .94fr 1.06fr; }
   .hero-copy { display: flex; min-width: 0; padding: 54px 64px 52px 0; flex-direction: column; }
-  .eyebrow { display: flex; align-items: center; gap: 20px; color: #89a0b9; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .eyebrow { display: flex; align-items: center; gap: 18px; color: #89a0b9; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }.eyebrow .tetromino { color: #249eff; animation: gravity-lock 620ms cubic-bezier(.2,.8,.2,1) both; }
   h1 { margin: 52px 0 0; color: #f6f8fb; font-size: clamp(57px, 5.25vw, 79px); font-weight: 780; line-height: .91; letter-spacing: -.07em; }h1 em { color: #32a8ff; font-style: normal; }
   .hero-copy > p { max-width: 610px; margin: 30px 0 0; color: #9dafc2; font-size: 17px; line-height: 1.58; }
   .actions { display: flex; align-items: center; gap: 26px; margin-top: 34px; }
-  .primary-action { display: grid; min-height: 48px; color: #fff; background: #0066cc; grid-template-columns: 150px 48px; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; }
-  .primary-action span, .primary-action b { display: flex; align-items: center; justify-content: center; border: 1px solid #57aaff; }.primary-action b { border-left: 0; font-size: 18px; transition: transform 180ms ease; }.primary-action:hover b { transform: translate(3px, -3px); }
+  .primary-action { display: grid; min-height: 48px; color: #fff; background: #0066cc; box-shadow: 6px 6px 0 #163e6c; grid-template-columns: 150px 48px; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; transition: transform 160ms ease, box-shadow 160ms ease; }
+  .primary-action span, .primary-action b { display: flex; align-items: center; justify-content: center; border: 1px solid #57aaff; }.primary-action b { border-left: 0; font-size: 18px; }.primary-action:hover { box-shadow: 2px 2px 0 #249eff; transform: translate(4px,4px); }
   .text-action { color: #dce8f4; font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 700; }.text-action span { display: inline-block; margin-left: 5px; transition: transform 180ms ease; }.text-action:hover span { transform: translate(3px, -3px); }
-  .install { display: flex; align-items: center; gap: 12px; margin-top: auto; padding-top: 32px; border-top: 1px solid #273b52; color: #dbe8f5; }.install > span { color: #32a8ff; }.install code { font-family: "JetBrains Mono", monospace; font-size: 13px; }.install b { margin-left: auto; color: #7f93aa; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: .1em; }
+  .install { display: grid; min-height: 48px; align-items: stretch; margin-top: auto; border: 1px solid #273b52; color: #dbe8f5; grid-template-columns: 48px 1fr auto; }.install > span { display: grid; border-right: 1px solid #273b52; color: #32a8ff; place-items: center; }.install code { display: flex; align-items: center; padding-inline: 14px; font-family: "JetBrains Mono", monospace; font-size: 13px; }.install b { display: flex; align-items: center; padding-inline: 14px; border-left: 1px solid #273b52; color: #7f93aa; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: .1em; }
 
   .index-art { --active-x: 16.667%; position: relative; display: flex; min-width: 0; overflow: hidden; padding: 30px 28px 24px; border-left: 1px solid #293d54; background: radial-gradient(circle at 70% 52%, rgba(34,112,188,.13), transparent 39%); flex-direction: column; }
   .index-art[data-active="server"] { --active-x: 50%; }.index-art[data-active="browser"] { --active-x: 83.333%; }
@@ -163,45 +215,64 @@ import "../styles/fonts.css";
   .runtime-row { position: relative; display: grid; overflow: hidden; margin-top: 24px; border-top: 1px solid #31475f; border-bottom: 1px solid #31475f; grid-template-columns: repeat(3, 1fr); }
   .runtime-row::after { content: ""; position: absolute; z-index: 3; right: 0; bottom: 0; left: 0; height: 3px; background: #d9efff; opacity: 0; transform: scaleX(0); transform-origin: left; }
   .route-pulse .runtime-row::after { animation: line-clear 520ms cubic-bezier(.2,.8,.2,1) both; }
-  .runtime-row button { display: grid; padding: 12px 10px; border: 0; border-right: 1px solid #31475f; color: #8195ac; background: transparent; text-align: left; cursor: pointer; }.runtime-row button:last-child { border-right: 0; }
+  .runtime-row button { position: relative; display: grid; padding: 12px 10px 15px; border: 0; border-right: 1px solid #31475f; color: #8195ac; background: transparent; text-align: left; cursor: pointer; }.runtime-row button:last-child { border-right: 0; }
   .runtime-row span { font-family: "JetBrains Mono", monospace; font-size: 8px; }.runtime-row strong { margin-top: 7px; font-size: 11px; }.runtime-row button:hover { color: #dcecff; background: #0e2238; }.runtime-row button.active { color: #fff; background: #0066cc; }
+  .runtime-row button.active::after { content: ""; position: absolute; right: 10px; bottom: 6px; width: 4px; height: 4px; background: #d9efff; box-shadow: -5px 0 #d9efff, -10px 0 #d9efff, -5px -5px #d9efff; animation: gravity-lock 320ms cubic-bezier(.2,.8,.2,1) both; }
 
-  .ascii-stage { display: grid; min-height: 420px; align-items: center; margin-top: 12px; padding-block: 28px 18px; grid-template-columns: minmax(170px, .9fr) 82px minmax(245px, 1.1fr); gap: 13px; flex: 1; }
-  .runtime-scenes { display: grid; min-height: 235px; place-items: center; }
-  .runtime-scene, .range-link, .storage-scene { overflow: visible; margin: 0; padding: 0; border: 0; color: #eaf3fb; background: transparent; font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.06vw, 15px); font-variant-ligatures: none; font-weight: 400; line-height: 1.04; letter-spacing: 0; white-space: pre; }
+  .ascii-stage { display: grid; min-height: 440px; align-content: center; justify-items: center; margin-top: 10px; padding-block: 22px 12px; grid-template-rows: 142px 136px 116px; flex: 1; }
+  .runtime-scenes { display: grid; min-height: 116px; place-items: center; }
+  .runtime-scene, .storage-scene { overflow: visible; margin: 0; padding: 0; border: 0; color: #eaf3fb; background: transparent; font-family: "JetBrains Mono", monospace; font-size: clamp(10px, .94vw, 13px); font-variant-ligatures: none; font-weight: 400; line-height: 1.04; letter-spacing: 0; white-space: pre; }
   .runtime-scene { visibility: hidden; grid-area: 1 / 1; opacity: 0; transform: translateY(8px); transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms; }
-  .runtime-scene span, .storage-scene span { position: relative; top: 3px; color: #46576b; }
+  .runtime-scene span, .ascii-shadow { position: relative; top: 3px; color: #46576b; }
   .index-art[data-active="embedded"] .scene-embedded, .index-art[data-active="server"] .scene-server, .index-art[data-active="browser"] .scene-browser { visibility: visible; opacity: 1; transform: translateY(0); transition-delay: 0s; }
-  .scene-server { font-size: clamp(9px, .88vw, 12px); line-height: 1; }
-  .range-link { color: #8297ae; font-size: 9px; line-height: 1.5; text-align: center; }
-  .storage-scene { justify-self: end; }
-  .storage-scene b { color: #55b7ff; font-weight: 400; text-shadow: 0 0 12px rgba(50,168,255,.6); }
-  .route-pulse .storage-scene b { animation: page-lock 520ms cubic-bezier(.2,.8,.2,1) both; }
+  .storage-scene { justify-self: center; }
+  .byte-row i { color: #53667b; font-style: normal; transition: color 120ms ease, text-shadow 120ms ease; }.byte-row i.hot { color: #55b7ff; text-shadow: 0 0 10px rgba(50,168,255,.9); animation: source-read 360ms ease both; }
+  .drop-channel { position: relative; width: min(270px, 80%); height: 136px; border-inline: 1px dashed #233c56; }
+  .range-caption { position: absolute; top: 56px; right: calc(50% + 42px); color: #687f97; font-family: "JetBrains Mono", monospace; font-size: 7px; letter-spacing: .08em; white-space: nowrap; transform: rotate(-90deg); }
+  .drop-guide { position: absolute; top: 20px; left: calc(50% - 3px); color: #334e68; font-family: "JetBrains Mono", monospace; font-size: 8px; line-height: 2.3; text-align: center; }
+  .falling-piece { position: absolute; z-index: 2; top: 0; left: 50%; width: 40px; height: 40px; opacity: 0; transform-origin: 20px 20px; }
+  .falling-piece i { position: absolute; width: 9px; height: 9px; border: 1px solid #9dd8ff; background: #249eff; box-shadow: inset 0 -2px 0 #0870c9, 0 0 8px rgba(36,158,255,.3); }
+  .shape-i i:nth-child(1) { left: 0; top: 10px; }.shape-i i:nth-child(2) { left: 10px; top: 10px; }.shape-i i:nth-child(3) { left: 20px; top: 10px; }.shape-i i:nth-child(4) { left: 30px; top: 10px; }
+  .shape-o i:nth-child(1) { left: 10px; top: 0; }.shape-o i:nth-child(2) { left: 20px; top: 0; }.shape-o i:nth-child(3) { left: 10px; top: 10px; }.shape-o i:nth-child(4) { left: 20px; top: 10px; }
+  .shape-t i:nth-child(1) { left: 0; top: 0; }.shape-t i:nth-child(2) { left: 10px; top: 0; }.shape-t i:nth-child(3) { left: 20px; top: 0; }.shape-t i:nth-child(4) { left: 10px; top: 10px; }
+  .shape-l i:nth-child(1) { left: 0; top: 0; }.shape-l i:nth-child(2) { left: 0; top: 10px; }.shape-l i:nth-child(3) { left: 0; top: 20px; }.shape-l i:nth-child(4) { left: 10px; top: 20px; }
+  .shape-j i:nth-child(1) { left: 10px; top: 0; }.shape-j i:nth-child(2) { left: 10px; top: 10px; }.shape-j i:nth-child(3) { left: 10px; top: 20px; }.shape-j i:nth-child(4) { left: 0; top: 20px; }
+  .shape-s i:nth-child(1) { left: 10px; top: 0; }.shape-s i:nth-child(2) { left: 20px; top: 0; }.shape-s i:nth-child(3) { left: 0; top: 10px; }.shape-s i:nth-child(4) { left: 10px; top: 10px; }
+  .shape-z i:nth-child(1) { left: 0; top: 0; }.shape-z i:nth-child(2) { left: 10px; top: 0; }.shape-z i:nth-child(3) { left: 10px; top: 10px; }.shape-z i:nth-child(4) { left: 20px; top: 10px; }
+  .falling-piece.parked { opacity: 1; transform: translate(-50%, 92px); }.cache-line { position: absolute; right: calc(50% - 58px); bottom: 4px; left: calc(50% - 58px); height: 9px; border: 1px solid #29445f; background: repeating-linear-gradient(90deg, #17314d 0 9px, transparent 9px 11px); }.cache-line.clearing { animation: cache-clear 420ms ease both; }
   .art-foot { display: flex; min-height: 34px; align-items: center; justify-content: space-between; border-top: 1px solid #31475f; color: #8296ad; font-family: "JetBrains Mono", monospace; font-size: 8px; }.art-foot b { color: #a9bed3; font-weight: 400; }.art-foot span:last-child { color: #32a8ff; }
 
-  .proof-line { position: relative; display: grid; width: min(1280px, calc(100% - 48px)); min-height: 90px; margin-inline: auto; border-top: 1px solid #31475f; border-inline: 1px solid #31475f; grid-template-columns: repeat(6, 1fr); }
-  .proof-line > * { display: flex; min-width: 0; justify-content: center; padding: 19px 20px; border-right: 1px solid #31475f; color: #eff6ff; flex-direction: column; }.proof-line > *:last-child { border-right: 0; }
+  .proof-line { position: relative; display: grid; width: min(1280px, calc(100% - 48px)); min-height: 108px; align-items: end; margin-inline: auto; border-inline: 1px solid #31475f; grid-template-columns: repeat(6, 1fr); }
+  .proof-line > * { position: relative; display: flex; min-width: 0; min-height: 88px; justify-content: center; padding: 19px 20px; border-top: 1px solid #31475f; border-right: 1px solid #31475f; border-bottom: 1px solid #31475f; color: #eff6ff; background: #09182a; flex-direction: column; }.proof-line > *:last-child { border-right: 0; }
+  .proof-line > *:nth-child(2), .proof-line > *:nth-child(4), .proof-line > *:nth-child(5) { min-height: 108px; background: #0b1b2f; }
+  .proof-line > *::after { content: ""; position: absolute; top: 8px; right: 8px; width: 4px; height: 4px; color: #334a64; background: currentColor; box-shadow: -5px 0 currentColor, -10px 0 currentColor, -5px 5px currentColor; }
+  .proof-line > *:nth-child(2)::after { box-shadow: 0 5px currentColor, 0 10px currentColor, 5px 10px currentColor; }.proof-line > *:nth-child(3)::after { box-shadow: 5px 0 currentColor, -5px 5px currentColor, 0 5px currentColor; }
   .proof-line span { color: #8296ac; font-family: "JetBrains Mono", monospace; font-size: 8px; font-weight: 700; letter-spacing: .08em; }.proof-line strong { margin-top: 8px; font-size: 16px; }.proof-line a { color: #b9dcff; background: #0e2136; }
 
-  .thesis { display: grid; width: min(1280px, calc(100% - 48px)); margin: 120px auto 132px; grid-template-columns: .84fr 1.16fr; }.thesis-copy { padding: 18px 70px 0 0; }
-  .thesis-copy > span, .sequence-index { color: #0066cc; font-family: "JetBrains Mono", monospace; font-size: 9px; font-weight: 700; letter-spacing: .1em; }.thesis-copy h2 { margin: 28px 0 0; font-size: clamp(49px, 5vw, 72px); line-height: .92; letter-spacing: -.065em; }.thesis-copy p { max-width: 540px; margin: 28px 0 0; color: #596777; font-size: 17px; line-height: 1.65; }
-  .sequence { border-top: 1px solid #aeb8c3; }.sequence article { display: grid; min-height: 190px; align-items: center; padding: 28px 0; border-bottom: 1px solid #aeb8c3; grid-template-columns: 48px 210px 1fr; gap: 24px; }.sequence article > div:last-child { padding-right: 18px; }
+  .thesis { display: grid; width: min(1280px, calc(100% - 48px)); margin: 120px auto 132px; grid-template-columns: .82fr 1.18fr; gap: 48px; }.thesis-copy { padding: 18px 34px 0 0; }
+  .thesis-copy > span, .sequence-index { color: #0066cc; font-family: "JetBrains Mono", monospace; font-size: 9px; font-weight: 700; letter-spacing: .1em; }.section-label { display: flex; align-items: center; gap: 16px; }.section-label .tetromino { color: #0066cc; }.thesis-copy h2 { margin: 28px 0 0; font-size: clamp(49px, 5vw, 72px); line-height: .92; letter-spacing: -.065em; }.thesis-copy p { max-width: 540px; margin: 28px 0 0; color: #596777; font-size: 17px; line-height: 1.65; }
+  .sequence { display: grid; align-content: start; gap: 8px; }.sequence article { position: relative; display: grid; min-height: 172px; align-items: center; padding: 26px 24px; border: 1px solid #bec7d0; background: #f8f9f7; grid-template-columns: 42px 170px 1fr; gap: 20px; transition: transform 180ms ease, border-color 180ms ease; }.sequence article:hover { z-index: 2; border-color: #6d9dd0; transform: translateY(-4px); }.sequence article > div:last-child { padding-right: 4px; }
+  .sequence .feature-l { margin-right: 64px; }.sequence .feature-s { margin-left: 64px; }.sequence .feature-t { margin-inline: 32px; }
+  .sequence article::after { content: ""; position: absolute; width: 17px; height: 17px; border: 1px solid #bec7d0; background: #f8f9f7; }.sequence .feature-l::after { right: -18px; bottom: -1px; border-left: 0; }.sequence .feature-s::after { top: -1px; left: -18px; border-right: 0; }.sequence .feature-t::after { right: calc(50% - 9px); bottom: -18px; border-top: 0; }
   .sequence h3 { margin: 0; font-size: 25px; line-height: 1.05; letter-spacing: -.04em; }.sequence p { max-width: 390px; margin: 12px 0 0; color: #5d6977; font-size: 14px; line-height: 1.55; }
-  .sequence-visual { display: grid; gap: 4px; }.files-visual, .prune-visual { grid-template-columns: repeat(4, 1fr); }.sequence-visual i { display: flex; height: 31px; align-items: center; justify-content: center; background: #dce3ea; font-style: normal; }
-  .files-visual i:nth-child(4), .files-visual i:nth-child(5) { background: #0066cc; }.prune-visual i { transition: opacity 180ms ease, transform 180ms ease; }.prune-visual i:not(:nth-child(3)):not(:nth-child(7)) { opacity: .18; transform: scale(.72); }.prune-visual i:nth-child(3), .prune-visual i:nth-child(7) { background: #32a8ff; }
-  .runtime-visual { grid-template-columns: repeat(3, 1fr); }.runtime-visual i { color: #fff; background: #0c2035; font-family: "JetBrains Mono", monospace; font-size: 8px; }.runtime-visual i:last-child { color: #0a1728; background: #b9e3ff; }
-  .site-footer { display: grid; min-height: 110px; align-items: center; padding: 0 max(24px, calc((100vw - 1280px) / 2)); color: #8292a5; background: #071321; grid-template-columns: 1fr auto 1fr; font-family: "JetBrains Mono", monospace; font-size: 9px; }.site-footer > a:last-child { justify-self: end; color: #dceaff; }
+  .sequence-visual { --cell: 42px; --gap: 4px; color: #0066cc; }.sequence-visual i { display: flex; align-items: center; justify-content: center; background: currentColor; font-style: normal; }
+  .prune-visual { color: #32a8ff; }.runtime-visual { color: #0c2035; }.runtime-visual i { color: #fff; font-family: "JetBrains Mono", monospace; font-size: 7px; }.runtime-visual i:nth-child(3) { background: #47aef7; }.runtime-visual i:last-child { color: #0a1728; background: #b9e3ff; }
+  .site-footer { position: relative; display: grid; min-height: 128px; align-items: center; overflow: hidden; padding: 18px max(24px, calc((100vw - 1280px) / 2)) 0; color: #8292a5; background: #071321; grid-template-columns: 1fr auto 1fr; font-family: "JetBrains Mono", monospace; font-size: 9px; }.site-footer > a:last-child { justify-self: end; color: #dceaff; }
+  .footer-stack { position: absolute; top: 0; right: max(24px, calc((100vw - 1280px) / 2)); left: max(24px, calc((100vw - 1280px) / 2)); display: grid; height: 10px; grid-template-columns: repeat(12, 1fr); gap: 3px; }.footer-stack i { background: #19334f; }.footer-stack i:nth-child(3), .footer-stack i:nth-child(4), .footer-stack i:nth-child(7), .footer-stack i:nth-child(10) { background: #249eff; }.footer-stack i:nth-child(5) { grid-column: span 2; }.footer-stack i:nth-child(7) { grid-column: span 3; }
 
+  @keyframes gravity-lock { 0% { opacity: 0; transform: translateY(-16px); } 70% { opacity: 1; transform: translateY(2px); } 100% { opacity: 1; transform: translateY(0); } }
   @keyframes page-lock { 0% { opacity: 0; filter: blur(2px); } 55% { opacity: 1; color: #fff; } 100% { opacity: 1; filter: blur(0); } }
+  @keyframes source-read { 0% { opacity: .35; } 50% { opacity: 1; color: #fff; } 100% { opacity: 1; } }
+  @keyframes cache-clear { 0% { background-color: #17314d; transform: scaleX(.3); } 45% { border-color: #d8efff; background-color: #55b7ff; box-shadow: 0 0 18px rgba(85,183,255,.75); transform: scaleX(1); } 100% { border-color: #29445f; background-color: #17314d; box-shadow: none; transform: scaleX(1); } }
   @keyframes line-clear { 0% { opacity: 0; transform: scaleX(0); } 45% { opacity: 1; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(1); } }
 
-  @media (max-width: 1040px) { .hero-shell { grid-template-columns: .9fr 1.1fr; }.hero-copy { padding-right: 36px; }h1 { font-size: clamp(51px, 6.1vw, 68px); }.sequence article { grid-template-columns: 40px 170px 1fr; gap: 16px; } }
+  @media (max-width: 1040px) { .hero-shell { grid-template-columns: .9fr 1.1fr; }.hero-copy { padding-right: 36px; }h1 { font-size: clamp(51px, 6.1vw, 68px); }.sequence article { grid-template-columns: 34px 142px 1fr; gap: 14px; }.sequence-visual { --cell: 35px; }.sequence .feature-l { margin-right: 36px; }.sequence .feature-s { margin-left: 36px; }.sequence .feature-t { margin-inline: 18px; } }
   @media (max-width: 760px) {
     .topbar-inner { width: calc(100% - 28px); height: 66px; grid-template-columns: 1fr auto; }.topbar :global(.brand), .topbar :global(.brand img) { width: 112px; }nav { display: none; }.github { min-height: 38px; padding-right: 10px; font-size: 9px; }.github svg { width: 36px; height: 36px; }
     .hero { padding-top: 8px; }.hero-shell { display: block; width: calc(100% - 28px); }.hero-copy { min-height: 660px; padding: 48px 0 34px; }h1 { margin-top: 46px; font-size: clamp(47px, 13vw, 60px); }.hero-copy > p { font-size: 15px; }.actions { align-items: flex-start; flex-direction: column; gap: 20px; }.primary-action { width: 100%; grid-template-columns: 1fr 48px; }.install { margin-top: auto; }.install b { display: none; }
-    .index-art { min-height: 620px; padding: 28px 14px 18px; border-top: 1px solid #293d54; border-left: 0; }.ascii-stage { min-height: 450px; padding-block: 34px 20px; grid-template-columns: 1fr; grid-template-rows: 145px 50px 1fr; gap: 12px; }.runtime-scenes { min-height: 145px; }.runtime-scene { font-size: clamp(10px, 3.45vw, 14px); }.scene-server { font-size: clamp(8px, 2.8vw, 11px); }.range-link { transform: rotate(90deg); }.storage-scene { justify-self: center; font-size: clamp(9px, 2.8vw, 12px); }.art-foot b { display: none; }
-    .proof-line { width: calc(100% - 28px); grid-template-columns: repeat(2, 1fr); }.proof-line > * { min-height: 82px; border-bottom: 1px solid #31475f; }.proof-line > *:nth-child(2n) { border-right: 0; }.proof-line > *:nth-last-child(-n+2) { border-bottom: 0; }
-    .thesis { display: block; width: calc(100% - 28px); margin-block: 88px; }.thesis-copy { padding: 0 0 54px; }.thesis-copy h2 { font-size: 48px; }.sequence article { min-height: 0; padding: 28px 0 34px; grid-template-columns: 32px 1fr; gap: 22px 14px; }.sequence-visual { grid-column: 2; width: min(230px, 100%); }.sequence article > div:last-child { grid-column: 2; padding-right: 0; }.site-footer { min-height: 140px; padding: 24px 18px; grid-template-columns: 1fr auto; }.site-footer > span { display: none; }
+    .index-art { min-height: 650px; padding: 28px 14px 18px; border-top: 1px solid #293d54; border-left: 0; }.ascii-stage { min-height: 470px; padding-block: 28px 16px; grid-template-rows: 140px 142px 116px; }.runtime-scenes { min-height: 116px; }.runtime-scene, .storage-scene { font-size: clamp(9px, 2.8vw, 12px); }.drop-channel { width: min(250px, 76%); height: 142px; }.art-foot b { display: none; }
+    .proof-line { width: calc(100% - 28px); grid-template-columns: repeat(2, 1fr); }.proof-line > *, .proof-line > *:nth-child(2), .proof-line > *:nth-child(4), .proof-line > *:nth-child(5) { min-height: 82px; border-bottom: 1px solid #31475f; }.proof-line > *:nth-child(2n) { border-right: 0; }.proof-line > *:nth-last-child(-n+2) { border-bottom: 0; }
+    .thesis { display: block; width: calc(100% - 28px); margin-block: 88px; }.thesis-copy { padding: 0 0 54px; }.thesis-copy h2 { font-size: 48px; }.sequence article { min-height: 0; margin: 0; padding: 26px 18px 30px; grid-template-columns: 32px 1fr; gap: 22px 14px; }.sequence article::after { display: none; }.sequence-visual { --cell: 34px; grid-column: 2; }.sequence article > div:last-child { grid-column: 2; padding-right: 0; }.site-footer { min-height: 140px; padding: 28px 18px 18px; grid-template-columns: 1fr auto; }.site-footer > span:not(.footer-stack) { display: none; }.footer-stack { right: 18px; left: 18px; }
   }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 </style>
