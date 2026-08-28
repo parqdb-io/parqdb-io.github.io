@@ -2,13 +2,12 @@
 import Brand from "../components/Brand.astro";
 import "../styles/fonts.css";
 
-const pageRows = [
-  { name: "centroids.parquet", hot: [8, 9] },
-  { name: "postings-0042.parquet", hot: [5, 6, 7, 8] },
-  { name: "source.parquet", hot: [9, 10] },
+const cells = Array.from({ length: 8 });
+const files = [
+  { key: "centroids", name: "centroids.parquet", hot: 6 },
+  { key: "postings", name: "postings-0042.parquet", hot: 4 },
+  { key: "source", name: "source.parquet", hot: 2 },
 ];
-
-const cells = Array.from({ length: 12 });
 ---
 
 <!doctype html>
@@ -17,21 +16,18 @@ const cells = Array.from({ length: 12 });
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="robots" content="noindex" />
-    <meta name="theme-color" content="#081321" />
-    <meta name="description" content="ParqDB visual direction experiment." />
+    <meta name="theme-color" content="#071321" />
+    <meta name="description" content="A visual direction experiment for ParqDB." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>ParqDB — Parquet Blocks</title>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-
     <header class="topbar">
       <div class="topbar-inner">
         <Brand variant="dark" />
         <nav aria-label="Primary navigation">
-          <a href="/docs">Docs</a>
-          <a href="https://search.parqdb.io/">Live demo</a>
-          <a href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results">Benchmarks</a>
+          <a href="/docs">Docs</a><a href="https://search.parqdb.io/">Live demo</a><a href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results">Benchmarks</a>
         </nav>
         <a class="github" href="https://github.com/parqdb-io/parqdb">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2.23c-3.22.7-3.9-1.37-3.9-1.37-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.16 1.18A10.9 10.9 0 0 1 12 6.1c.98 0 1.95.13 2.87.39 2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.71 5.39-5.29 5.68.42.36.79 1.06.79 2.14v3.18c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z" /></svg>
@@ -42,339 +38,154 @@ const cells = Array.from({ length: 12 });
 
     <main id="main">
       <section class="hero">
-        <div class="hero-board">
-          <article class="copy-panel">
-            <div class="kicker"><i aria-hidden="true"></i><span>Open vector search infrastructure</span></div>
-            <h1>Billion-scale vector search, <em>built on Parquet.</em></h1>
+        <div class="hero-shell">
+          <article class="hero-copy">
+            <div class="eyebrow"><span class="mini-piece" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Open vector search infrastructure</div>
+            <h1>Billion-scale<br />vector search,<br /><em>built on Parquet.</em></h1>
             <p>One open index for embedded apps, query servers, and the browser. Search data larger than memory without moving it into another proprietary system.</p>
             <div class="actions">
-              <a class="block-action block-action-primary" href="/docs/getting-started"><span>Get started</span><b aria-hidden="true">→</b></a>
-              <a class="block-action block-action-quiet" href="https://github.com/parqdb-io/parqdb"><span>View source</span><b aria-hidden="true">↗</b></a>
+              <a class="primary-action" href="/docs/getting-started"><span>Get started</span><b aria-hidden="true">→</b></a>
+              <a class="text-action" href="https://github.com/parqdb-io/parqdb">View source <span aria-hidden="true">↗</span></a>
             </div>
+            <div class="install"><span>$</span><code>pip install parqdb</code><b>PYTHON · ARROW</b></div>
           </article>
 
-          <div class="install-panel">
-            <span class="panel-index">01 / INSTALL</span>
-            <div class="command"><b>$</b><code>pip install parqdb</code></div>
-            <span class="install-note">Python · Arrow-native · embedded</span>
-          </div>
-
-          <a class="proof-panel" href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results/linux-x86_64-2026-08-17">
-            <span class="panel-index">02 / PROVEN</span>
-            <strong>1B</strong>
-            <span>vectors · 63.05 ms</span>
-            <b aria-hidden="true">↗</b>
-          </a>
-
-          <aside class="index-panel" aria-label="One Parquet index queried by three runtimes">
-            <div class="index-head">
-              <div>
-                <span class="panel-index">SHARED INDEX / LIVE</span>
-                <h2>Query the same bytes anywhere.</h2>
-              </div>
-              <span class="open-state"><i></i> OPEN</span>
+          <aside class="index-art" data-active="embedded" aria-label="Three Parquet files in object storage queried by embedded, server, and browser runtimes">
+            <header class="art-head">
+              <div><span>ONE IMMUTABLE INDEX</span><strong>OBJECT STORAGE</strong></div>
+              <span class="live"><i></i> OPEN</span>
+            </header>
+            <div class="runtime-row" role="tablist" aria-label="Query runtime">
+              <button class="active" type="button" role="tab" aria-selected="true" data-runtime="embedded"><span>01</span><strong>Embedded</strong></button>
+              <button type="button" role="tab" aria-selected="false" data-runtime="server"><span>02</span><strong>Server</strong></button>
+              <button type="button" role="tab" aria-selected="false" data-runtime="browser"><span>03</span><strong>Browser</strong></button>
             </div>
-
-            <div class="runtime-switch" role="tablist" aria-label="Query runtime">
-              <button class="runtime active" type="button" role="tab" aria-selected="true" data-runtime="embedded">
-                <span>01</span><strong>Embedded</strong><small>in process</small>
-              </button>
-              <button class="runtime" type="button" role="tab" aria-selected="false" data-runtime="server">
-                <span>02</span><strong>Server</strong><small>Arrow IPC</small>
-              </button>
-              <button class="runtime" type="button" role="tab" aria-selected="false" data-runtime="browser">
-                <span>03</span><strong>Browser</strong><small>WASM</small>
-              </button>
-            </div>
-
-            <div class="route" data-route>
-              <div class="runtime-stems" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
-              <div class="page-flight" aria-hidden="true"><i></i><i></i><i></i></div>
-              <div class="range-read"><span>HTTP RANGE</span><b>selected pages only</b></div>
-            </div>
-
-            <div class="object-store">
-              <div class="store-label"><span>OBJECT STORAGE</span><b>PARQUET</b></div>
-              <div class="files">
-                {pageRows.map((row, rowIndex) => (
-                  <div class="file-row">
-                    <span class="file-name">{row.name}</span>
-                    <span class="page-strip" role="img" aria-label={`${row.name}; selected pages ${row.hot.join(", ")}`}>
-                      {cells.map((_, index) => (
-                        <i class:list={[row.hot.includes(index) && "hot"]} style={`--cell-delay:${rowIndex * 80 + index * 22}ms`}></i>
-                      ))}
-                    </span>
+            <div class="stack-stage">
+              <div class="runtime-bus" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
+              <div class="vector-path" aria-hidden="true"><i class="segment-a"></i><i class="segment-b"></i></div>
+              {files.map((file, rowIndex) => (
+                <div class={`file-band band-${file.key}`}>
+                  <span>{file.name}</span>
+                  <div class="page-row" role="img" aria-label={`${file.name}; page ${file.hot + 1} selected`}>
+                    {cells.map((_, index) => <i class:list={[index === file.hot && "selected"]} style={`--delay:${rowIndex * 90 + index * 28}ms`}></i>)}
                   </div>
-                ))}
-              </div>
-              <div class="store-foot"><span>NO PROPRIETARY BLOB</span><span>NO DATA COPY</span></div>
+                </div>
+              ))}
+              <div class="return-packet" aria-hidden="true"><i></i><i></i><i></i></div>
             </div>
+            <footer class="art-foot"><span>HTTP RANGE</span><b>3 FILES · 8 SELECTED PAGES</b><span>PARQUET</span></footer>
           </aside>
         </div>
 
-        <div class="metric-strip" aria-label="SIFT1B benchmark summary">
-          <div><span>DATASET</span><strong>SIFT1B</strong></div>
-          <div><span>INDEX</span><strong>IVF–LVQ8</strong></div>
-          <div><span>RECALL@10</span><strong>90.3%</strong></div>
-          <div><span>QUERY LIMIT</span><strong>2 cores · 4 GB</strong></div>
-          <a href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results/linux-x86_64-2026-08-17"><span>RAW RESULTS</span><strong>Inspect ↗</strong></a>
+        <div class="proof-line" aria-label="SIFT1B benchmark results">
+          <div><span>DATASET</span><strong>SIFT1B</strong></div><div><span>INDEX</span><strong>IVF–LVQ8</strong></div><div><span>LATENCY</span><strong>63.05 ms</strong></div><div><span>RECALL@10</span><strong>90.3%</strong></div><div><span>QUERY LIMIT</span><strong>2 cores · 4 GB</strong></div><a href="https://github.com/parqdb-io/parqdb/tree/main/benchmarks/results/linux-x86_64-2026-08-17"><span>RAW RESULTS</span><strong>Inspect ↗</strong></a>
         </div>
       </section>
 
-      <section class="system">
-        <div class="system-intro">
-          <span class="section-number">03 / WHY PARQDB</span>
-          <h2>The index is data.<br />The engine stays open.</h2>
-          <p>ParqDB keeps vector search inside the data ecosystem you already use. Every part of the system remains inspectable, movable, and composable.</p>
-        </div>
-
-        <div class="system-blocks">
-          <article class="system-card card-format">
-            <span>OPEN FORMAT</span>
-            <div class="mini-files" aria-hidden="true">
-              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-            </div>
-            <h3>Everything is Parquet.</h3>
-            <p>Source data and vector indexes use a standard columnar format—not private binary blobs.</p>
-          </article>
-          <article class="system-card card-prune">
-            <span>BOUNDED I/O</span>
-            <div class="prune-demo" aria-hidden="true">
-              <b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
-            </div>
-            <h3>Read what survives pruning.</h3>
-            <p>Route to clusters, prune files and row groups, then fetch only the selected pages.</p>
-          </article>
-          <article class="system-card card-runtime">
-            <span>ANY RUNTIME</span>
-            <div class="runtime-list" aria-hidden="true"><b>PY</b><b>API</b><b>WASM</b></div>
-            <h3>Build once. Query anywhere.</h3>
-            <p>The same immutable index serves embedded, client-server, and browser workloads.</p>
-          </article>
+      <section class="thesis">
+        <header class="thesis-copy">
+          <span>WHY PARQDB / 03</span><h2>The index is data.<br />The engine stays open.</h2><p>ParqDB keeps vector search inside the data ecosystem you already use. Inspect it, publish it, cache it, and query it where the work happens.</p>
+        </header>
+        <div class="sequence">
+          <article><span class="sequence-index">01</span><div class="sequence-visual files-visual" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h3>Everything is Parquet.</h3><p>Source tables and vector indexes stay in a standard, inspectable columnar format.</p></div></article>
+          <article><span class="sequence-index">02</span><div class="sequence-visual prune-visual" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div><h3>Read only what survives.</h3><p>Route, prune, and fetch selected pages instead of loading the entire index.</p></div></article>
+          <article><span class="sequence-index">03</span><div class="sequence-visual runtime-visual" aria-hidden="true"><i>PY</i><i>API</i><i>WASM</i></div><div><h3>Query where the work happens.</h3><p>The same immutable index serves embedded, client-server, and browser workloads.</p></div></article>
         </div>
       </section>
     </main>
-
-    <footer>
-      <Brand variant="dark" />
-      <span>Visual direction experiment · /vision</span>
-      <a href="https://github.com/parqdb-io/parqdb">GitHub ↗</a>
-    </footer>
+    <footer class="site-footer"><Brand variant="dark" /><span>Visual direction experiment · /vision</span><a href="https://github.com/parqdb-io/parqdb">GitHub ↗</a></footer>
 
     <script>
-      const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-runtime]")];
-      const panel = document.querySelector<HTMLElement>(".index-panel");
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          buttons.forEach((item) => {
-            const selected = item === button;
-            item.classList.toggle("active", selected);
-            item.setAttribute("aria-selected", String(selected));
-          });
-          panel?.setAttribute("data-active", button.dataset.runtime ?? "embedded");
-          panel?.classList.remove("pulse");
-          if (panel) void panel.offsetWidth;
-          panel?.classList.add("pulse");
-        });
-      });
+      const art = document.querySelector<HTMLElement>(".index-art");
+      const runtimes = [...document.querySelectorAll<HTMLButtonElement>("[data-runtime]")];
+      runtimes.forEach((button) => button.addEventListener("click", () => {
+        runtimes.forEach((item) => { const active = item === button; item.classList.toggle("active", active); item.setAttribute("aria-selected", String(active)); });
+        art?.setAttribute("data-active", button.dataset.runtime ?? "embedded");
+        art?.classList.remove("route-pulse"); if (art) void art.offsetWidth; art?.classList.add("route-pulse");
+      }));
     </script>
   </body>
 </html>
 
 <style>
   :global(*) { box-sizing: border-box; }
-  :global(html) { background: #081321; scroll-behavior: smooth; }
-  :global(body) { margin: 0; min-width: 320px; color: #0a1728; background: #f4f5f1; font-family: Inter, ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  :global(html) { background: #071321; scroll-behavior: smooth; }
+  :global(body) { margin: 0; min-width: 320px; color: #091627; background: #f3f4f0; font-family: Inter, ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   :global(a) { color: inherit; text-decoration: none; }
   :global(button) { font: inherit; }
   :global(::selection) { color: #fff; background: #0066cc; }
-  :global(:focus-visible) { outline: 3px solid #69b9ff; outline-offset: 4px; }
+  :global(:focus-visible) { outline: 3px solid #76beff; outline-offset: 4px; }
+  .skip-link { position: fixed; top: -80px; left: 20px; z-index: 100; padding: 12px 16px; color: #fff; background: #0066cc; }.skip-link:focus { top: 12px; }
 
-  .skip-link { position: fixed; top: -80px; left: 20px; z-index: 100; padding: 12px 16px; color: #fff; background: #0066cc; }
-  .skip-link:focus { top: 12px; }
-
-  .topbar { position: relative; z-index: 10; color: #edf5ff; background: #081321; }
+  .topbar { color: #edf5ff; background: #071321; }
   .topbar-inner { display: grid; width: min(1280px, calc(100% - 48px)); height: 74px; align-items: center; margin-inline: auto; grid-template-columns: 1fr auto 1fr; }
   .topbar :global(.brand) { justify-self: start; }
   nav { display: flex; align-items: center; gap: 34px; }
-  nav a { position: relative; padding: 26px 0 24px; color: #aab7c8; font-family: "JetBrains Mono", monospace; font-size: 13px; font-weight: 700; }
-  nav a::after { content: ""; position: absolute; right: 0; bottom: 18px; left: 0; height: 2px; background: #2d8cff; transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
-  nav a:hover { color: #fff; }
-  nav a:hover::after { transform: scaleX(1); }
-  .github { display: inline-flex; min-height: 42px; align-items: center; justify-self: end; gap: 9px; padding: 0 13px 0 0; border: 1px solid #394a61; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; transition: border-color 160ms ease, background 160ms ease; }
-  .github svg { width: 40px; height: 40px; padding: 10px; border-right: 1px solid #394a61; }
-  .github:hover { border-color: #69b9ff; background: #10243b; }
+  nav a { position: relative; padding-block: 26px; color: #a9b8ca; font-family: "JetBrains Mono", monospace; font-size: 13px; font-weight: 700; }
+  nav a::after { content: ""; position: absolute; right: 0; bottom: 19px; left: 0; height: 2px; background: #32a8ff; transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
+  nav a:hover { color: #fff; }nav a:hover::after { transform: scaleX(1); }
+  .github { display: inline-flex; min-height: 42px; align-items: center; justify-self: end; gap: 9px; padding-right: 13px; border: 1px solid #3d4d62; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; }
+  .github svg { width: 40px; height: 40px; padding: 10px; border-right: 1px solid #3d4d62; }.github:hover { border-color: #76beff; background: #10243b; }
 
-  .hero { padding: 22px 0 0; color: #e9f1fb; background: #081321; }
-  .hero-board { display: grid; width: min(1280px, calc(100% - 48px)); min-height: 626px; margin-inline: auto; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(8, minmax(70px, 1fr)); gap: 2px; background: #27384c; }
-  .copy-panel, .install-panel, .proof-panel, .index-panel { position: relative; min-width: 0; overflow: hidden; }
+  .hero { padding-top: 30px; color: #eef5fc; background: #071321; }
+  .hero-shell { display: grid; width: min(1280px, calc(100% - 48px)); min-height: 690px; align-items: stretch; margin-inline: auto; grid-template-columns: .94fr 1.06fr; }
+  .hero-copy { display: flex; min-width: 0; padding: 54px 64px 52px 0; flex-direction: column; }
+  .eyebrow { display: flex; align-items: center; gap: 20px; color: #89a0b9; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .mini-piece { display: grid; width: 32px; height: 21px; grid-template-columns: repeat(3, 9px); grid-template-rows: repeat(2, 9px); gap: 3px; }.mini-piece i { background: #1687ee; }.mini-piece i:nth-child(4) { grid-column: 2; }
+  h1 { margin: 52px 0 0; color: #f6f8fb; font-size: clamp(57px, 5.25vw, 79px); font-weight: 780; line-height: .91; letter-spacing: -.07em; }h1 em { color: #32a8ff; font-style: normal; }
+  .hero-copy > p { max-width: 610px; margin: 30px 0 0; color: #9dafc2; font-size: 17px; line-height: 1.58; }
+  .actions { display: flex; align-items: center; gap: 26px; margin-top: 34px; }
+  .primary-action { display: grid; min-height: 48px; color: #fff; background: #0066cc; grid-template-columns: 150px 48px; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; }
+  .primary-action span, .primary-action b { display: flex; align-items: center; justify-content: center; border: 1px solid #57aaff; }.primary-action b { border-left: 0; font-size: 18px; transition: transform 180ms ease; }.primary-action:hover b { transform: translate(3px, -3px); }
+  .text-action { color: #dce8f4; font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 700; }.text-action span { display: inline-block; margin-left: 5px; transition: transform 180ms ease; }.text-action:hover span { transform: translate(3px, -3px); }
+  .install { display: flex; align-items: center; gap: 12px; margin-top: auto; padding-top: 32px; border-top: 1px solid #273b52; color: #dbe8f5; }.install > span { color: #32a8ff; }.install code { font-family: "JetBrains Mono", monospace; font-size: 13px; }.install b { margin-left: auto; color: #7f93aa; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: .1em; }
 
-  .copy-panel { display: flex; padding: 48px 52px; color: #0a1728; background: #f4f5f1; flex-direction: column; grid-column: 1 / 8; grid-row: 1 / 7; }
-  .copy-panel::after { content: ""; position: absolute; right: 0; bottom: 0; width: 16px; height: 16px; background: #0066cc; box-shadow: -16px 0 #0066cc, 0 -16px #0066cc, -16px -16px #0066cc; }
-  .kicker { display: flex; align-items: center; gap: 12px; color: #39617f; font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-  .kicker i { width: 10px; height: 10px; background: #0066cc; box-shadow: 10px 0 #0066cc, 20px 0 #0066cc, 10px 10px #0066cc; }
-  h1 { max-width: 750px; margin: 48px 0 0; font-size: clamp(52px, 5.15vw, 78px); font-weight: 780; line-height: .93; letter-spacing: -.067em; }
-  h1 em { display: block; color: #0066cc; font-style: normal; }
-  .copy-panel > p { max-width: 650px; margin: 28px 0 0; color: #526275; font-size: 17px; line-height: 1.55; }
-  .actions { display: flex; gap: 12px; margin-top: auto; padding-top: 28px; }
-  .block-action { display: inline-grid; min-height: 48px; align-items: stretch; grid-template-columns: auto 48px; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 700; }
-  .block-action span, .block-action b { display: flex; align-items: center; justify-content: center; border: 1px solid currentColor; }
-  .block-action span { min-width: 140px; padding-inline: 20px; }
-  .block-action b { border-left: 0; font-size: 18px; transition: transform 180ms cubic-bezier(.2,.8,.2,1); }
-  .block-action:hover b { transform: translate(3px, -3px); }
-  .block-action-primary { color: #fff; background: #0066cc; }
-  .block-action-quiet { color: #0a1728; background: transparent; }
+  .index-art { --active-x: 16.667%; position: relative; display: flex; min-width: 0; overflow: hidden; padding: 30px 28px 24px; border-left: 1px solid #293d54; background: radial-gradient(circle at 70% 52%, rgba(34,112,188,.13), transparent 39%); flex-direction: column; }
+  .index-art[data-active="server"] { --active-x: 50%; }.index-art[data-active="browser"] { --active-x: 83.333%; }
+  .art-head { display: flex; align-items: flex-start; justify-content: space-between; }.art-head > div { display: grid; gap: 8px; }
+  .art-head span, .art-head strong, .live { font-family: "JetBrains Mono", monospace; font-size: 9px; letter-spacing: .1em; }.art-head span { color: #788ca3; }.art-head strong { color: #aebed0; }
+  .live { display: inline-flex; align-items: center; gap: 8px; color: #8fcaff; }.live i { width: 7px; height: 7px; background: #32a8ff; box-shadow: 0 0 0 5px rgba(50,168,255,.12); }
+  .runtime-row { display: grid; margin-top: 24px; border-top: 1px solid #31475f; border-bottom: 1px solid #31475f; grid-template-columns: repeat(3, 1fr); }
+  .runtime-row button { display: grid; padding: 12px 10px; border: 0; border-right: 1px solid #31475f; color: #8195ac; background: transparent; text-align: left; cursor: pointer; }.runtime-row button:last-child { border-right: 0; }
+  .runtime-row span { font-family: "JetBrains Mono", monospace; font-size: 8px; }.runtime-row strong { margin-top: 7px; font-size: 11px; }.runtime-row button:hover { color: #dcecff; background: #0e2238; }.runtime-row button.active { color: #fff; background: #0066cc; }
 
-  .panel-index { color: inherit; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: .11em; opacity: .66; }
-  .install-panel { display: flex; padding: 22px 28px; color: #fff; background: #0066cc; flex-direction: column; grid-column: 1 / 5; grid-row: 7 / 9; }
-  .install-panel .panel-index { color: #fff; opacity: 1; }
-  .command { display: flex; align-items: center; gap: 12px; margin-top: auto; font-size: 18px; }
-  .command b { color: #b9dcff; }
-  .command code { font-family: "JetBrains Mono", monospace; font-size: 15px; }
-  .install-note { margin-top: 9px; color: #fff; font-family: "JetBrains Mono", monospace; font-size: 9px; text-transform: uppercase; }
+  .stack-stage { position: relative; min-height: 470px; margin-top: 10px; flex: 1; }
+  .runtime-bus { position: absolute; z-index: 1; top: 0; right: 4%; left: 4%; height: 48px; }.runtime-bus i { position: absolute; top: 0; width: 1px; height: 25px; background: #3b526b; }.runtime-bus i:nth-child(1) { left: 13.2%; }.runtime-bus i:nth-child(2) { left: 50%; }.runtime-bus i:nth-child(3) { right: 13.2%; }.runtime-bus b { position: absolute; top: 24px; right: 13.2%; left: 13.2%; height: 1px; background: #3b526b; }
+  .runtime-bus::after { content: ""; position: absolute; top: 0; left: var(--active-x); width: 1px; height: 48px; background: #32a8ff; box-shadow: 0 0 12px rgba(50,168,255,.7); transition: left 260ms cubic-bezier(.2,.8,.2,1); }
+  .file-band { position: absolute; right: 2%; left: 2%; }.band-centroids { top: 23%; left: 14%; }.band-postings { top: 48%; right: 12%; }.band-source { top: 73%; left: 10%; }
+  .file-band > span { display: block; margin-bottom: 7px; color: #8297ae; font-family: "JetBrains Mono", monospace; font-size: 8px; }
+  .page-row { display: grid; width: 84%; gap: 5px; grid-template-columns: repeat(8, minmax(0, 1fr)); }.band-centroids .page-row { color: #315f9c; }.band-postings .page-row { color: #6146b6; }.band-source .page-row { color: #087cab; }
+  .page-row i { aspect-ratio: 1.25; border: 1px solid color-mix(in srgb, currentColor 78%, white 22%); background: color-mix(in srgb, currentColor 68%, #071321 32%); box-shadow: inset 0 -8px 0 rgba(4,12,22,.2); animation: block-lock 520ms cubic-bezier(.2,.8,.2,1) var(--delay) both; }
+  .page-row i.selected { position: relative; z-index: 3; border-color: #d7efff; background: #32a8ff; box-shadow: inset 0 -8px 0 #0876cf, 0 0 0 4px rgba(50,168,255,.08), 0 0 22px rgba(50,168,255,.28); }
+  .vector-path i { position: absolute; z-index: 2; height: 2px; background: #d9efff; box-shadow: 0 0 10px rgba(118,190,255,.55); transform-origin: left center; }.segment-a { top: 79%; left: 36%; width: 26%; transform: rotate(-64deg); }.segment-b { top: 55%; left: 47%; width: 42%; transform: rotate(-35deg); }
+  .return-packet { position: absolute; z-index: 4; top: 23%; left: 80%; width: 26px; height: 26px; }.return-packet i { position: absolute; width: 10px; height: 10px; background: #d9efff; box-shadow: 0 0 12px rgba(50,168,255,.6); animation: return-pages 3.6s cubic-bezier(.45,0,.2,1) infinite; }.return-packet i:nth-child(2) { left: 12px; animation-delay: 90ms; }.return-packet i:nth-child(3) { top: 12px; left: 12px; animation-delay: 180ms; }
+  .route-pulse .page-row i.selected { animation: selected-pulse 620ms ease both; }
+  .art-foot { display: flex; min-height: 34px; align-items: center; justify-content: space-between; border-top: 1px solid #31475f; color: #8296ad; font-family: "JetBrains Mono", monospace; font-size: 8px; }.art-foot b { color: #a9bed3; font-weight: 400; }.art-foot span:last-child { color: #32a8ff; }
 
-  .proof-panel { display: grid; padding: 20px 26px; color: #0a1728; background: #cce8ff; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; grid-column: 5 / 8; grid-row: 7 / 9; }
-  .proof-panel .panel-index { grid-column: 1 / -1; }
-  .proof-panel strong { align-self: end; font-size: 58px; line-height: .8; letter-spacing: -.06em; }
-  .proof-panel > span:not(.panel-index) { align-self: end; margin-left: 2px; color: #47647e; font-family: "JetBrains Mono", monospace; font-size: 10px; }
-  .proof-panel > b { align-self: end; font-size: 20px; transition: transform 180ms ease; }
-  .proof-panel:hover > b { transform: translate(3px, -3px); }
+  .proof-line { display: grid; width: min(1280px, calc(100% - 48px)); min-height: 90px; margin-inline: auto; border-top: 1px solid #31475f; border-inline: 1px solid #31475f; grid-template-columns: repeat(6, 1fr); }
+  .proof-line > * { display: flex; min-width: 0; justify-content: center; padding: 19px 20px; border-right: 1px solid #31475f; color: #eff6ff; flex-direction: column; }.proof-line > *:last-child { border-right: 0; }
+  .proof-line span { color: #8296ac; font-family: "JetBrains Mono", monospace; font-size: 8px; font-weight: 700; letter-spacing: .08em; }.proof-line strong { margin-top: 8px; font-size: 16px; }.proof-line a { color: #b9dcff; background: #0e2136; }
 
-  .index-panel { display: flex; padding: 30px 28px 24px; color: #eaf2fc; background-color: #101f32; background-image: linear-gradient(rgba(161,190,224,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(161,190,224,.06) 1px, transparent 1px); background-size: 40px 40px; flex-direction: column; grid-column: 8 / 13; grid-row: 1 / 9; }
-  .index-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
-  .index-head h2 { max-width: 420px; margin: 10px 0 0; font-size: clamp(26px, 2.6vw, 38px); line-height: 1.02; letter-spacing: -.045em; }
-  .open-state { display: inline-flex; align-items: center; gap: 7px; color: #8fc8ff; font-family: "JetBrains Mono", monospace; font-size: 9px; font-weight: 700; }
-  .open-state i { width: 7px; height: 7px; background: #2d8cff; box-shadow: 0 0 0 4px rgba(45,140,255,.14); }
+  .thesis { display: grid; width: min(1280px, calc(100% - 48px)); margin: 120px auto 132px; grid-template-columns: .84fr 1.16fr; }.thesis-copy { padding: 18px 70px 0 0; }
+  .thesis-copy > span, .sequence-index { color: #0066cc; font-family: "JetBrains Mono", monospace; font-size: 9px; font-weight: 700; letter-spacing: .1em; }.thesis-copy h2 { margin: 28px 0 0; font-size: clamp(49px, 5vw, 72px); line-height: .92; letter-spacing: -.065em; }.thesis-copy p { max-width: 540px; margin: 28px 0 0; color: #596777; font-size: 17px; line-height: 1.65; }
+  .sequence { border-top: 1px solid #aeb8c3; }.sequence article { display: grid; min-height: 190px; align-items: center; padding: 28px 0; border-bottom: 1px solid #aeb8c3; grid-template-columns: 48px 210px 1fr; gap: 24px; }.sequence article > div:last-child { padding-right: 18px; }
+  .sequence h3 { margin: 0; font-size: 25px; line-height: 1.05; letter-spacing: -.04em; }.sequence p { max-width: 390px; margin: 12px 0 0; color: #5d6977; font-size: 14px; line-height: 1.55; }
+  .sequence-visual { display: grid; gap: 4px; }.files-visual, .prune-visual { grid-template-columns: repeat(4, 1fr); }.sequence-visual i { display: flex; height: 31px; align-items: center; justify-content: center; background: #dce3ea; font-style: normal; }
+  .files-visual i:nth-child(4), .files-visual i:nth-child(5) { background: #0066cc; }.prune-visual i { transition: opacity 180ms ease, transform 180ms ease; }.prune-visual i:not(:nth-child(3)):not(:nth-child(7)) { opacity: .18; transform: scale(.72); }.prune-visual i:nth-child(3), .prune-visual i:nth-child(7) { background: #32a8ff; }
+  .runtime-visual { grid-template-columns: repeat(3, 1fr); }.runtime-visual i { color: #fff; background: #0c2035; font-family: "JetBrains Mono", monospace; font-size: 8px; }.runtime-visual i:last-child { color: #0a1728; background: #b9e3ff; }
+  .site-footer { display: grid; min-height: 110px; align-items: center; padding: 0 max(24px, calc((100vw - 1280px) / 2)); color: #8292a5; background: #071321; grid-template-columns: 1fr auto 1fr; font-family: "JetBrains Mono", monospace; font-size: 9px; }.site-footer > a:last-child { justify-self: end; color: #dceaff; }
 
-  .runtime-switch { display: grid; margin-top: 32px; border: 1px solid #425168; grid-template-columns: repeat(3, 1fr); }
-  .runtime { display: grid; min-width: 0; padding: 13px 11px; border: 0; border-right: 1px solid #425168; color: #8e9cad; background: rgba(8,19,33,.7); text-align: left; cursor: pointer; transition: color 160ms ease, background 160ms ease; }
-  .runtime:last-child { border-right: 0; }
-  .runtime > span { color: #5c6c80; font-family: "JetBrains Mono", monospace; font-size: 8px; }
-  .runtime strong { margin-top: 12px; font-size: 12px; }
-  .runtime small { margin-top: 2px; font-family: "JetBrains Mono", monospace; font-size: 8px; }
-  .runtime:hover { color: #e9f4ff; background: #182c46; }
-  .runtime.active { color: #fff; background: #0066cc; }
-  .runtime.active > span { color: #fff; }
+  @keyframes block-lock { from { opacity: 0; transform: translateY(-22px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes return-pages { 0%, 10% { opacity: 0; transform: translate(0, 0); } 20% { opacity: 1; } 72% { opacity: 1; transform: translate(-115px, -130px); } 82%, 100% { opacity: 0; transform: translate(-115px, -130px); } }
+  @keyframes selected-pulse { 0%, 100% { transform: translateY(0); } 48% { transform: translateY(-9px); } }
 
-  .route { position: relative; min-height: 184px; flex: 1 1 auto; }
-  .route::after { content: ""; position: absolute; top: 43px; bottom: 30px; left: 50%; width: 1px; background: linear-gradient(#2d8cff, #526177 28%, #526177 72%, #2d8cff); }
-  .runtime-stems { position: absolute; top: 0; right: 10%; left: 10%; height: 44px; }
-  .runtime-stems i { position: absolute; top: 0; width: 1px; height: 28px; background: #526177; transition: background 160ms ease, box-shadow 160ms ease; }
-  .runtime-stems i:nth-child(1) { left: 11%; }
-  .runtime-stems i:nth-child(2) { left: 50%; }
-  .runtime-stems i:nth-child(3) { right: 11%; }
-  .runtime-stems b { position: absolute; top: 27px; right: 11%; left: 11%; height: 1px; background: #526177; }
-  .runtime-stems b::after { content: ""; position: absolute; top: 0; left: 50%; width: 1px; height: 17px; background: #2d8cff; }
-  .index-panel:not([data-active]), .index-panel[data-active="embedded"] { --stem: 11%; }
-  .index-panel[data-active="server"] { --stem: 50%; }
-  .index-panel[data-active="browser"] { --stem: 89%; }
-  .runtime-stems::after { content: ""; position: absolute; top: 0; left: var(--stem); width: 1px; height: 28px; background: #69b9ff; box-shadow: 0 0 14px #2d8cff; transition: left 260ms cubic-bezier(.2,.8,.2,1); }
-  .page-flight { position: absolute; z-index: 1; top: 58px; bottom: 46px; left: calc(50% - 16px); width: 32px; }
-  .page-flight i { position: absolute; bottom: 0; width: 9px; height: 9px; background: #2d8cff; box-shadow: inset 0 -2px #9dccff, 0 0 12px rgba(45,140,255,.42); animation: page-return 3.2s cubic-bezier(.45,0,.2,1) infinite; }
-  .page-flight i:nth-child(1) { left: 5px; }
-  .page-flight i:nth-child(2) { left: 16px; animation-delay: 90ms; }
-  .page-flight i:nth-child(3) { left: 16px; bottom: 11px; animation-delay: 180ms; }
-  .range-read { position: absolute; right: 0; bottom: 5px; left: 0; display: flex; align-items: center; justify-content: space-between; color: #6f829a; font-family: "JetBrains Mono", monospace; font-size: 8px; }
-  .range-read b { color: #9fb1c5; font-weight: 400; }
-
-  .object-store { margin-top: auto; border: 1px solid #53647a; background: rgba(8,19,33,.86); box-shadow: 7px 7px 0 rgba(99,143,193,.18); }
-  .store-label, .store-foot { display: flex; align-items: center; justify-content: space-between; font-family: "JetBrains Mono", monospace; }
-  .store-label { min-height: 38px; padding: 0 14px; border-bottom: 1px solid #53647a; font-size: 9px; }
-  .store-label b { color: #69b9ff; }
-  .files { padding: 14px; }
-  .file-row { display: grid; align-items: center; gap: 12px; grid-template-columns: minmax(0, 1fr) 180px; }
-  .file-row + .file-row { margin-top: 10px; }
-  .file-name { overflow: hidden; color: #a9b7c7; font-family: "JetBrains Mono", monospace; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
-  .page-strip { display: grid; gap: 3px; grid-template-columns: repeat(12, 1fr); }
-  .page-strip i { height: 17px; background: #2c3a4d; animation: page-lock 540ms cubic-bezier(.2,.8,.2,1) var(--cell-delay) both; }
-  .page-strip i.hot { background: #2d8cff; box-shadow: inset 0 -4px 0 #69b9ff; }
-  .store-foot { min-height: 34px; padding: 0 14px; border-top: 1px solid #53647a; color: #6e7f94; font-size: 7px; }
-  .pulse .page-strip i.hot { animation: page-pulse 620ms ease both; }
-
-  .metric-strip { display: grid; width: min(1280px, calc(100% - 48px)); min-height: 92px; margin-inline: auto; border-inline: 1px solid #304157; color: #b5c2d1; grid-template-columns: repeat(5, 1fr); }
-  .metric-strip > * { display: flex; min-width: 0; justify-content: center; padding: 20px 24px; border-right: 1px solid #304157; flex-direction: column; }
-  .metric-strip > *:last-child { border-right: 0; }
-  .metric-strip span { color: #8fa3ba; font-family: "JetBrains Mono", monospace; font-size: 8px; font-weight: 700; letter-spacing: .09em; }
-  .metric-strip strong { margin-top: 7px; color: #eff6ff; font-size: 17px; }
-  .metric-strip a { color: #9dccff; background: #10233b; }
-
-  .system { display: grid; width: min(1280px, calc(100% - 48px)); margin: 110px auto 120px; grid-template-columns: repeat(12, minmax(0, 1fr)); }
-  .system-intro { padding: 0 52px 54px 0; grid-column: 1 / 7; }
-  .section-number { color: #0066cc; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 700; letter-spacing: .11em; }
-  .system-intro h2 { margin: 26px 0 0; font-size: clamp(48px, 5vw, 72px); line-height: .94; letter-spacing: -.065em; }
-  .system-intro p { max-width: 570px; margin: 28px 0 0; color: #5b6878; font-size: 17px; line-height: 1.65; }
-  .system-blocks { display: grid; border-top: 1px solid #aeb8c3; border-left: 1px solid #aeb8c3; grid-template-columns: repeat(2, 1fr); grid-column: 7 / 13; }
-  .system-card { min-height: 288px; padding: 28px; border-right: 1px solid #aeb8c3; border-bottom: 1px solid #aeb8c3; }
-  .system-card > span { color: #647183; font-family: "JetBrains Mono", monospace; font-size: 9px; font-weight: 700; letter-spacing: .1em; }
-  .system-card h3 { margin: 34px 0 0; font-size: 24px; line-height: 1.05; letter-spacing: -.035em; }
-  .system-card p { margin: 13px 0 0; color: #5b6673; font-size: 14px; line-height: 1.55; }
-  .card-format { grid-column: 1 / -1; min-height: 260px; }
-  .mini-files { display: grid; max-width: 420px; margin-top: 34px; gap: 5px; grid-template-columns: repeat(8, 1fr); }
-  .mini-files i { height: 34px; background: #dce3ea; }
-  .mini-files i:nth-child(4), .mini-files i:nth-child(5) { background: #0066cc; }
-  .prune-demo { display: grid; margin-top: 38px; gap: 4px; grid-template-columns: repeat(5, 1fr); }
-  .prune-demo b { height: 18px; background: #dce3ea; }
-  .prune-demo b:nth-child(3), .prune-demo b:nth-child(8) { background: #0066cc; }
-  .runtime-list { display: flex; margin-top: 34px; gap: 5px; }
-  .runtime-list b { display: flex; width: 54px; height: 40px; align-items: center; justify-content: center; color: #fff; background: #0d2035; font-family: "JetBrains Mono", monospace; font-size: 9px; }
-  .runtime-list b:nth-child(3) { color: #0a1728; background: #cce8ff; }
-
-  footer { display: grid; min-height: 110px; align-items: center; padding: 0 max(24px, calc((100vw - 1280px) / 2)); color: #8e9daf; background: #081321; grid-template-columns: 1fr auto 1fr; font-family: "JetBrains Mono", monospace; font-size: 9px; }
-  footer > a:last-child { justify-self: end; color: #dceaff; }
-
-  @keyframes page-lock { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes page-pulse { 0%, 100% { transform: translateY(0); box-shadow: inset 0 -4px 0 #69b9ff; } 45% { transform: translateY(-8px); box-shadow: inset 0 -4px 0 #b9dcff, 0 8px 18px rgba(45,140,255,.35); } }
-  @keyframes page-return { 0%, 12% { opacity: 0; transform: translateY(0); } 24% { opacity: 1; } 74% { opacity: 1; transform: translateY(calc(-100% - 78px)); } 84%, 100% { opacity: 0; transform: translateY(calc(-100% - 78px)); } }
-
-  @media (max-width: 1050px) {
-    .hero-board { min-height: 0; grid-template-rows: auto; }
-    .copy-panel { min-height: 560px; grid-column: 1 / 8; grid-row: 1; }
-    .install-panel { min-height: 142px; grid-column: 1 / 5; grid-row: 2; }
-    .proof-panel { min-height: 142px; grid-column: 5 / 8; grid-row: 2; }
-    .index-panel { min-height: 704px; grid-column: 8 / 13; grid-row: 1 / 3; }
-    .file-row { grid-template-columns: 1fr; gap: 6px; }
-    .system-intro { grid-column: 1 / 6; }
-    .system-blocks { grid-column: 6 / 13; }
-  }
-
+  @media (max-width: 1040px) { .hero-shell { grid-template-columns: .9fr 1.1fr; }.hero-copy { padding-right: 36px; }h1 { font-size: clamp(51px, 6.1vw, 68px); }.sequence article { grid-template-columns: 40px 170px 1fr; gap: 16px; } }
   @media (max-width: 760px) {
-    .topbar-inner { width: calc(100% - 28px); height: 66px; grid-template-columns: 1fr auto; }
-    .topbar :global(.brand) { width: 112px; }
-    .topbar :global(.brand img) { width: 112px; }
-    nav { display: none; }
-    .github { min-height: 38px; padding-right: 10px; font-size: 9px; }
-    .github svg { width: 36px; height: 36px; }
-
-    .hero { padding-top: 12px; }
-    .hero-board { width: calc(100% - 20px); display: flex; background: transparent; flex-direction: column; gap: 2px; }
-    .copy-panel { min-height: 610px; padding: 34px 24px 32px; }
-    h1 { margin-top: 44px; font-size: clamp(45px, 14vw, 62px); }
-    .copy-panel > p { font-size: 15px; }
-    .actions { align-items: stretch; flex-direction: column; }
-    .block-action { width: 100%; }
-    .block-action span { min-width: 0; }
-    .install-panel, .proof-panel { min-height: 142px; }
-    .index-panel { min-height: 650px; padding: 28px 18px 22px; order: 4; }
-    .index-head h2 { font-size: 31px; }
-    .runtime { padding: 12px 8px; }
-    .runtime strong { font-size: 10px; }
-    .file-row { grid-template-columns: 1fr; }
-    .metric-strip { width: calc(100% - 20px); grid-template-columns: repeat(2, 1fr); }
-    .metric-strip > * { min-height: 86px; border-bottom: 1px solid #304157; }
-    .metric-strip > *:nth-child(2n) { border-right: 0; }
-    .metric-strip > *:last-child { grid-column: 1 / -1; border-bottom: 0; }
-
-    .system { width: calc(100% - 28px); margin-block: 82px; display: block; }
-    .system-intro { padding: 0 0 50px; }
-    .system-intro h2 { font-size: 48px; }
-    .system-blocks { grid-template-columns: 1fr; }
-    .card-format { grid-column: auto; }
-    .system-card { min-height: 260px; }
-    footer { min-height: 150px; padding: 26px 20px; grid-template-columns: 1fr auto; }
-    footer > span { display: none; }
+    .topbar-inner { width: calc(100% - 28px); height: 66px; grid-template-columns: 1fr auto; }.topbar :global(.brand), .topbar :global(.brand img) { width: 112px; }nav { display: none; }.github { min-height: 38px; padding-right: 10px; font-size: 9px; }.github svg { width: 36px; height: 36px; }
+    .hero { padding-top: 8px; }.hero-shell { display: block; width: calc(100% - 28px); }.hero-copy { min-height: 660px; padding: 48px 0 34px; }h1 { margin-top: 46px; font-size: clamp(47px, 13vw, 60px); }.hero-copy > p { font-size: 15px; }.actions { align-items: flex-start; flex-direction: column; gap: 20px; }.primary-action { width: 100%; grid-template-columns: 1fr 48px; }.install { margin-top: auto; }.install b { display: none; }
+    .index-art { min-height: 620px; padding: 28px 14px 18px; border-top: 1px solid #293d54; border-left: 0; }.stack-stage { min-height: 430px; }.file-band { right: 0; left: 0; }.band-centroids { left: 10%; }.band-postings { right: 8%; }.band-source { left: 7%; }.page-row { width: 90%; gap: 3px; }.return-packet { left: 78%; }.art-foot b { display: none; }
+    .proof-line { width: calc(100% - 28px); grid-template-columns: repeat(2, 1fr); }.proof-line > * { min-height: 82px; border-bottom: 1px solid #31475f; }.proof-line > *:nth-child(2n) { border-right: 0; }.proof-line > *:nth-last-child(-n+2) { border-bottom: 0; }
+    .thesis { display: block; width: calc(100% - 28px); margin-block: 88px; }.thesis-copy { padding: 0 0 54px; }.thesis-copy h2 { font-size: 48px; }.sequence article { min-height: 0; padding: 28px 0 34px; grid-template-columns: 32px 1fr; gap: 22px 14px; }.sequence-visual { grid-column: 2; width: min(230px, 100%); }.sequence article > div:last-child { grid-column: 2; padding-right: 0; }.site-footer { min-height: 140px; padding: 24px 18px; grid-template-columns: 1fr auto; }.site-footer > span { display: none; }
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 </style>
