@@ -11,6 +11,13 @@ test("homepage presents the product and primary paths", async ({ page }, testInf
     }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: /Get started/ }).first()).toBeVisible();
+
+  const heroActions = page.locator(".hero-actions a");
+  await expect(heroActions).toHaveCount(3);
+  await expect(heroActions.nth(0)).toHaveText("Live demo");
+  await expect(heroActions.nth(0)).toHaveAttribute("href", "https://search.parqdb.io/");
+  await expect(heroActions.nth(1)).toHaveText(/Get started/);
+  await expect(heroActions.nth(2)).toHaveText(/Star on GitHub/);
   await expect(page.getByText("63.05 ms")).toBeVisible();
   await expect(page.getByText("Object storage becomes the query endpoint.")).toBeVisible();
 
