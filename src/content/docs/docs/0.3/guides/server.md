@@ -111,7 +111,7 @@ Expected output:
 [{'ready': 1}]
 ```
 
-Install the same ParqDB pre-release in the client and server environments.
+Install the same ParqDB version in the client and server environments.
 Cross-version client/server compatibility is not yet a stable guarantee.
 
 ## Build and Query an Index

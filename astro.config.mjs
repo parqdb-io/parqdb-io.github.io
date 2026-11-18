@@ -9,6 +9,13 @@ export default defineConfig({
   site,
   base,
   trailingSlash: "never",
+  redirects: {
+    "/docs/guides/local": "/docs/guides/embedded",
+    "/docs/0.3/guides/local": "/docs/0.3/guides/embedded",
+    "/docs/0.2/guides/local": "/docs/0.2/guides/embedded",
+    "/docs/latest": "/docs",
+    "/docs/0.3.0": "/docs/0.3",
+  },
   integrations: [
     starlight({
       title: "ParqDB",

@@ -3,7 +3,7 @@ title: Versions and compatibility
 description: Understand documentation snapshots, package releases, catalog metadata, and index format versions.
 ---
 
-ParqDB is pre-release software. The project versions its Python package, public
+ParqDB 0.3.0 is the first stable release of the 0.3 line. The project versions its Python package, public
 documentation, catalog schema, transport protocol, and persisted index formats
 independently because they change on different schedules.
 
@@ -19,10 +19,11 @@ documentation, so an old page cannot silently outrank current guidance.
 
 ## Package releases
 
-Python package versions identify installable releases. Pin an exact pre-release
+Python package versions identify installable releases. Pin an exact version
 in reproducible environments and review the
 [GitHub release notes](https://github.com/parqdb-io/parqdb/releases) before
-upgrading. The latest development documentation can describe changes that are
+upgrading. Use `python -m pip install --pre parqdb` only when you intentionally
+want a future pre-release. The latest development documentation can describe changes that are
 not present in an older installed wheel.
 
 ## Persisted format versions
@@ -54,6 +55,6 @@ behavior is implemented, tested, and documented.
 5. Keep source data and immutable index objects recoverable until validation
    completes.
 
-Pre-release upgrades may require a rebuild or migration. Do not infer
+Upgrades within or across release lines may require a rebuild or migration. Do not infer
 compatibility from a shared major version alone; use the release notes and
 persisted-format specifications.
